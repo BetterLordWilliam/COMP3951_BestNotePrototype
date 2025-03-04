@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BestNote_3951.Views.FileStructureView">
-    <VerticalStackLayout>
-        <Label 
-            Text="FileStructure Pane"
-            FontSize="Title"
-            HorizontalOptions="Center" />
-        <!-- UI goes all up in here -->
+<!-- 
+  This ContentView displays the file structure pane.
+  It uses a CollectionView to list all files provided by the ViewModel.
+  We use a Border to outline each BestFile item.
+-->
+<ContentView 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="BestNote_3951.Views.FileStructureView">
+    <VerticalStackLayout Padding="10">
+        <Label Text="File Structure"
+           FontSize="Title"
+           HorizontalOptions="Center" />
+        <!-- This binds to the Files property in the ViewModel -->
+        <CollectionView ItemsSource="{Binding Files}"
+                    SelectionMode="Single"
+                    SelectionChanged="CollectionView_SelectionChanged">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <!-- Defines the size of each item in the file structure list-->
+                    <Border Stroke="Gray" StrokeThickness="1" Margin="5" Padding="5">
+                        <!-- Binds the Name property to the label text-->
+                        <Label Text="{Binding Name}" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentView>
