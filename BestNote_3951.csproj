@@ -66,10 +66,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModels\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="Views\EmbeddedPdfView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

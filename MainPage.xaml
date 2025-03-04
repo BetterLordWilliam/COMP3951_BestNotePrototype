@@ -5,17 +5,36 @@
     xmlns:views="clr-namespace:BestNote_3951.Views"
     x:Class="BestNote_3951.MainPage">
 
-    <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
-        <!-- Markdown Editor in top left -->
-        <views:MarkdownEditorView Grid.Row="0" Grid.Column="0" />
+    <Grid>
+        <!-- Define three columns:
+             Left (fixed width for file structure),
+             Middle (flexible for main editor),
+             Right (fixed or flexible, split into two rows) -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <!-- File structure pane -->
+            <ColumnDefinition Width="*" />
+            <!-- Markdown editor pane -->
+            <ColumnDefinition Width="300" />
+            <!-- Right pane for renderer & PDF -->
+        </Grid.ColumnDefinitions>
 
-        <!-- Markdown Renderer in top right -->
-        <views:MarkdownRendererView Grid.Row="0" Grid.Column="1" />
+        <!-- Left Column: File Structure -->
+        <views:FileStructureView Grid.Column="0" />
 
-        <!-- Embedded PDF in bottom left -->
-        <views:EmbeddedPdfView Grid.Row="1" Grid.Column="0" />
+        <!-- Middle Column: Markdown Editor -->
+        <views:MarkdownEditorView Grid.Column="1" />
 
-        <!-- File Structure in bottom right -->
-        <views:FileStructureView Grid.Row="1" Grid.Column="1" />
+        <!-- Right Column: Nested grid for Markdown Renderer and Embed PDF -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!-- Top Row: Markdown Renderer -->
+            <views:MarkdownRendererView Grid.Row="0" />
+            <!-- Bottom Row: Embedded PDF -->
+            <views:EmbeddedPdfView Grid.Row="1" />
+        </Grid>
     </Grid>
 </ContentPage>
