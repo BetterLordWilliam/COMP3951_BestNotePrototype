@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Syncfusion.Maui.Core.Hosting;
 
 namespace BestNote_3951
 {
@@ -17,6 +18,7 @@ namespace BestNote_3951
 
 #if DEBUG
     		builder.Logging.AddDebug();
+            builder.ConfigureSyncfusionCore();
 #endif
 
             return builder.Build();

@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
              x:Class="BestNote_3951.Views.EmbeddedPdfView">
-    <VerticalStackLayout Padding="20">
-        <Label 
-            Text="Embedded PDF Pane"
-            FontSize="Title"
-            HorizontalOptions="Center" />
+    
+        
         <!-- UI goes all up in here -->
-    </VerticalStackLayout>
+    
+    <!-- This part is not working!!!
+    <ContentView.BindingContext>
+        <local:EmbeddedPdfViewModel x:Name="viewModel" />
+    </ContentView.BindingContext>-->
+
+    <ContentView.Content>
+            <syncfusion:SfPdfViewer x:Name="pdfViewer" DocumentSource="{Binding PdfDocumentStream}">
+            </syncfusion:SfPdfViewer>
+        </ContentView.Content>
+
+    
+
+
 </ContentView>
