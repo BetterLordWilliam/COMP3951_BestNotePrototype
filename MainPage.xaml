@@ -15,18 +15,22 @@
             <!-- File structure pane -->
             <ColumnDefinition Width="*" />
             <!-- Markdown editor pane -->
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="300"/>
             <!-- Right pane for renderer & PDF -->
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
         <!-- Left Column: File Structure -->
-        <views:FileStructureView Grid.Column="0" />
+        <views:FileStructureView Grid.Row="0" Grid.Column="0"/>
 
         <!-- Middle Column: Markdown Editor -->
-        <views:MarkdownEditorView Grid.Column="1" />
+        <views:MarkdownEditorView Grid.Row="0" Grid.Column="1" />
 
         <!-- Right Column: Nested grid for Markdown Renderer and Embed PDF -->
-        <Grid Grid.Column="2">
+        <Grid Grid.Row="0" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />

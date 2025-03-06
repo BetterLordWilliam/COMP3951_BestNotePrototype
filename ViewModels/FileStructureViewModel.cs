@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using Syncfusion.Maui.TreeView;
+
 using BestNote_3951.Models;
 
 namespace BestNote_3951.ViewModels
@@ -16,13 +18,59 @@ namespace BestNote_3951.ViewModels
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
-        public ObservableCollection<BestFile> Files { get; } = new ObservableCollection<BestFile>
+
+        private ObservableCollection<BestFile> fileSystem;
+
+        public ObservableCollection<BestFile> FileSystem
         {
-            new BestFile { Name = "comp3951notes.md", Path = "/docs/document1.md", FileType = "md" },
-            new BestFile { Name = "comp3721notes.md", Path = "/docs/document2.md", FileType = "md" },
-            new BestFile { Name = "textbook.pdf", Path = "/docs/presentation.pdf", FileType = "pdf" },
-            new BestFile { Name = "quakelogo.png", Path = "/images/image1.png", FileType = "png" }
-        };
+            get => fileSystem;
+            set => SetProperty(ref fileSystem, value);
+        }
+
+        public FileStructureViewModel()
+        {
+            GenerateSource();
+        }
+
+        /// <summary>
+        /// Testing method to generate items for the tree view model.
+        /// </summary>
+        private void GenerateSource()
+        {
+            var fileSystemTest = new ObservableCollection<BestFile>();
+
+            var folder = new BestFile { ItemName = "MyNotes", ImageIcon = "folder_icon.png" };
+            var folder1 = new BestFile { ItemName = "MyBetterNotes", ImageIcon = "folder_icon.png" };
+
+            var doc = new BestFile { ItemName = "comp3951notes.md" , ImageIcon = "md_file.png" };
+            var doc1 = new BestFile { ItemName = "comp3721notes.md" , ImageIcon = "md_file.png" };
+            var doc2 = new BestFile { ItemName = "textbook.pdf" , ImageIcon = "md_file.png" };
+            var doc3 = new BestFile { ItemName = "quakelogo.png", ImageIcon = "md_file.png" };
+            var doc4 = new BestFile { ItemName = "comp3951notes.md", ImageIcon = "md_file.png" };
+            var doc5 = new BestFile { ItemName = "comp3721notes.md", ImageIcon = "md_file.png" };
+            var doc6 = new BestFile { ItemName = "textbook.pdf", ImageIcon = "md_file.png" };
+            var doc7 = new BestFile { ItemName = "quakelogo.png", ImageIcon = "md_file.png" };
+
+            var sub1 = new BestFile { ItemName = "SillyNotes.md" , ImageIcon = "md_file.png" };
+            var sub2 = new BestFile { ItemName = "SeriousNodes.md", ImageIcon = "md_file.png" };
+            folder.SubFiles = new ObservableCollection<BestFile>
+            {
+                sub1,
+                sub2
+            };
+
+            fileSystemTest.Add(doc);
+            fileSystemTest.Add(doc1);
+            fileSystemTest.Add(folder1);
+            fileSystemTest.Add(doc2);
+            fileSystemTest.Add(doc3);
+            fileSystemTest.Add(folder);
+            fileSystemTest.Add(doc4);
+            fileSystemTest.Add(doc5);
+            fileSystemTest.Add(doc6);
+
+            FileSystem = fileSystemTest;
+        }
 
         /// <summary>
         /// Handles the open file logic (eventually)
@@ -35,6 +83,17 @@ namespace BestNote_3951.ViewModels
         public void OpenFile(BestFile file)
         {
             // TODO: open file logic
+        }
+
+        /// <summary>
+        /// TESTING METHOD FOR ADDING FILES, ONLY UI.
+        /// </summary>
+        [RelayCommand]
+        public void AddFile()
+        {
+            Console.WriteLine("Called ");
+            // 🙂
+            FileSystem.Add(new BestFile { ItemName = "💀💀💀💀", ImageIcon = "md_file.png"});
         }
     }
 }

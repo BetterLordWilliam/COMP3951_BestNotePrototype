@@ -1,4 +1,4 @@
-using BestNote_3951.ViewModels;
+﻿using BestNote_3951.ViewModels;
 
 namespace BestNote_3951.Views
 {
@@ -12,6 +12,7 @@ namespace BestNote_3951.Views
         {
             InitializeComponent();
             BindingContext = new FileStructureViewModel();
+            Console.WriteLine("Called ");
         }
 
         /// <summary>

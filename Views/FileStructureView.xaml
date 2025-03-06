@@ -7,24 +7,49 @@
 <ContentView 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
     x:Class="BestNote_3951.Views.FileStructureView">
-    <VerticalStackLayout Padding="10">
-        <Label Text="File Structure"
-           FontSize="Title"
-           HorizontalOptions="Center" />
-        <!-- This binds to the Files property in the ViewModel -->
-        <CollectionView ItemsSource="{Binding Files}"
-                    SelectionMode="Single"
-                    SelectionChanged="CollectionView_SelectionChanged">
-            <CollectionView.ItemTemplate>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <!-- File System Menu -->
+        <VerticalStackLayout x:Name="treeMenu" Grid.Column="0" Grid.Row="0">
+            <Entry Placeholder="Search Folders and Files"></Entry>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                <Button IsEnabled="False" Text="Add Folder"></Button>
+                <Button IsEnabled="True" Text="Add File" Command="{Binding AddFileCommand}"></Button>
+            </StackLayout>
+        </VerticalStackLayout>
+        
+        <!-- BsetFile tree -->
+        <!-- TODO: Make it so you can add things -->
+        <!-- TODO: Make it bind to application data directory on app load -->
+        <syncfusion:SfTreeView x:Name="treeView"
+                               Grid.Column="0"
+                               Grid.Row="1"
+                               ItemsSource="{Binding FileSystem}"
+                               ChildPropertyName="SubFiles">
+            <!-- BackgroundColor="Red" -->
+            <!-- What is shown for each of the data we are bound to -->
+            <syncfusion:SfTreeView.ItemTemplate>
                 <DataTemplate>
-                    <!-- Defines the size of each item in the file structure list-->
-                    <Border Stroke="Gray" StrokeThickness="1" Margin="5" Padding="5">
-                        <!-- Binds the Name property to the label text-->
-                        <Label Text="{Binding Name}" />
-                    </Border>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" VerticalOptions="Center" >
+                            <Image Source="{Binding ImageIcon}" HeightRequest="20" />
+                            <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
+                        </StackLayout>
+                    </ViewCell>
                 </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+            </syncfusion:SfTreeView.ItemTemplate>
+        </syncfusion:SfTreeView>
+    </Grid>
+    
 </ContentView>
