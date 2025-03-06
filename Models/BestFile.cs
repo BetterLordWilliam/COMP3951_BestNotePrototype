@@ -52,10 +52,7 @@ namespace BestNote_3951.Models
         public event PropertyChangedEventHandler? PropertyChanged;
         public void RaisedOnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

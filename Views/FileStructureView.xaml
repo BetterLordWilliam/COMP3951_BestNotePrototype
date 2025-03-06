@@ -21,10 +21,12 @@
         </Grid.RowDefinitions>
         
         <!-- File System Menu -->
-        <VerticalStackLayout x:Name="treeMenu" Grid.Column="0" Grid.Row="0">
-            <Entry Placeholder="Search Folders and Files"></Entry>
+        <VerticalStackLayout x:Name="treeMenu"
+                             Grid.Column="0"
+                             Grid.Row="0">
+            <Entry Placeholder="Search Folders and Files..." MaxLength="30"></Entry>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
-                <Button IsEnabled="False" Text="Add Folder"></Button>
+                <Button IsEnabled="True" Text="Add Folder"></Button>
                 <Button IsEnabled="True" Text="Add File" Command="{Binding AddFileCommand}"></Button>
             </StackLayout>
         </VerticalStackLayout>

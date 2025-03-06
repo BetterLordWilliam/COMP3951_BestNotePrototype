@@ -12,7 +12,6 @@ namespace BestNote_3951.Views
         {
             InitializeComponent();
             BindingContext = new FileStructureViewModel();
-            Console.WriteLine("Called ");
         }
 
         /// <summary>

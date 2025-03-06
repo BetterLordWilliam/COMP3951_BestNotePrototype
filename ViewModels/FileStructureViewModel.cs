@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Syncfusion.Maui.TreeView;
-
 using BestNote_3951.Models;
 
 namespace BestNote_3951.ViewModels
@@ -27,15 +27,18 @@ namespace BestNote_3951.ViewModels
             set => SetProperty(ref fileSystem, value);
         }
 
+        public ICommand AddFileCommand { get; private set; }
+
         public FileStructureViewModel()
         {
-            GenerateSource();
+            AddFileCommand = new Command(() => FileSystem.Add(new BestFile { ItemName = "💀💀💀💀", ImageIcon = "md_file.png" }));
+            fileSystem = GenerateSource();
         }
 
         /// <summary>
         /// Testing method to generate items for the tree view model.
         /// </summary>
-        private void GenerateSource()
+        private ObservableCollection<BestFile> GenerateSource()
         {
             var fileSystemTest = new ObservableCollection<BestFile>();
 
@@ -69,7 +72,7 @@ namespace BestNote_3951.ViewModels
             fileSystemTest.Add(doc5);
             fileSystemTest.Add(doc6);
 
-            FileSystem = fileSystemTest;
+            return fileSystemTest;
         }
 
         /// <summary>
@@ -88,7 +91,6 @@ namespace BestNote_3951.ViewModels
         /// <summary>
         /// TESTING METHOD FOR ADDING FILES, ONLY UI.
         /// </summary>
-        [RelayCommand]
         public void AddFile()
         {
             Console.WriteLine("Called ");
