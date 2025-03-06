@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Reflection;
 using System.ComponentModel;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BestNote_3951.ViewModels
 {
@@ -9,26 +11,62 @@ namespace BestNote_3951.ViewModels
         //[ObservableProperty]
         //private string pdfPath = "Enter PDF file path here.";
 
-        private Stream pdfDocumentStream;
-
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
+        //[ObservableProperty]
+        //private Stream pdfDocumentStream;
 
         /// <summary>
         /// Gets or sets the stream of the currently loaded PDF document.
         /// </summary>
-        public Stream PdfDocumentStream
+        [ObservableProperty]
+        public Stream _pdfDocumentStream;
+
+        public ICommand OpenPdfCommand { get; private set; }
+
+
+        /// <summary>
+	    /// Creates a file picker that allows the user to select a file chos
+	    /// </summary>
+        //[RelayCommand]
+	    async void OpenDocument()
+	    {
+		    FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
+		    {
+			    {DevicePlatform.iOS, new[] {"public.pdf"} },
+			    {DevicePlatform.Android, new[] {"application/pdf"} },
+			    {DevicePlatform.WinUI, new[] {"pdf"} },
+			    {DevicePlatform.MacCatalyst, new[] {"pdf"} }
+		});
+		    PickOptions options = new()
+		    {
+			    PickerTitle = "Please select a PDF file",
+			    FileTypes = pdfFileType,
+		    };
+		    await PickAndShow(options);
+	    }
+
+        public async Task PickAndShow(PickOptions options)
         {
-            get
+            try
             {
-                return pdfDocumentStream;
+                var result = await FilePicker.Default.PickAsync(options);
+                if (result != null)
+                {
+                    PdfDocumentStream = await result.OpenReadAsync();
+                    //this.pdfViewer.DocumentSource = PdfDocumentStream;
+                }
             }
-            set
+            catch (Exception ex)
             {
-                pdfDocumentStream = value;
-                OnPropertyChanged(nameof(PdfDocumentStream));
+                String message;
+                if (ex != null && String.IsNullOrEmpty(ex.Message) == false)
+                {
+                    message = ex.Message;
+                }
+                else
+                {
+                    message = "File open failed";
+                }
+                Application.Current?.MainPage?.DisplayAlert("Error", message, "OK");
             }
         }
 
@@ -38,9 +76,10 @@ namespace BestNote_3951.ViewModels
         public EmbeddedPdfViewModel()
         {
             //InitializeComponent();
+            OpenPdfCommand = new Command(() => OpenDocument());
             //BindingContext = new FileStructureViewModel();
             // Load the embedded PDF document stream.
-            pdfDocumentStream = typeof(App).GetTypeInfo().Assembly.GetManifestResourceStream("C:\\Users\\olivi\\Documents\\CST_Term3\\COMP_3951\\3951_CourseOutline.pdf");
+            //pdfDocumentStream = typeof(App).GetTypeInfo().Assembly.GetManifestResourceStream("C:\\Users\\olivi\\Documents\\CST_Term3\\COMP_3951\\3951_CourseOutline.pdf");
         }
 
 

@@ -3,34 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
              x:Class="BestNote_3951.Views.EmbeddedPdfView"
-             >
+             xmlns:local="clr-namespace:BestNote_3951.ViewModels"
+             x:DataType="local:EmbeddedPdfViewModel">
     
         
         <!-- UI goes all up in here -->
     
-    <!-- This part is not working!!!
-    <ContentView.BindingContext>
-        <local:EmbeddedPdfViewModel x:Name="viewModel" />
-    </ContentView.BindingContext>-->
+ 
 
-    <VerticalStackLayout HorizontalOptions="Center" WidthRequest="200">
+    <VerticalStackLayout HorizontalOptions="Center" WidthRequest="200" >
+
+        <VerticalStackLayout.BindingContext>
+            <local:EmbeddedPdfViewModel/>
+        </VerticalStackLayout.BindingContext>
+        
+  
         <ScrollView HorizontalScrollBarVisibility="Always"
                     Orientation="Both">
 
             <HorizontalStackLayout x:Name="Toolbar">
-                <Label
+                <!--<Label
                     FontSize="Medium"
                     Text="Open PDF"
                     TextColor="Black"
-                    VerticalOptions="Center"/>
+                    VerticalOptions="Center"/>-->
 
-                <ImageButton x:Name="openFile"
+                <Button x:Name="openFile"
                              Margin="10,10,10,10"
-                             Clicked="openFile_Clicked"
+                             Command="{Binding OpenPdfCommand}"
                              HeightRequest="40"
-                             Source="dotnet_bot.png"
                              VerticalOptions="Center"
-                             WidthRequest="40" />
+                             Text="Open PDF"
+                             WidthRequest="100" />
 
             </HorizontalStackLayout>
         </ScrollView>
@@ -38,6 +42,7 @@
                                 HeightRequest="500" 
                                 IsOutlineViewVisible="True"
                                 ShowScrollHead="True"  
+                                EnableDocumentLinkNavigation="True"
                                 DocumentSource="{Binding PdfDocumentStream}"/>
 
     </VerticalStackLayout>
