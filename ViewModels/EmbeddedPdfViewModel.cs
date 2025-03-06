@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace BestNote_3951.ViewModels
 {
-    public partial class EmbeddedPdfViewModel : INotifyPropertyChanged
+    public partial class EmbeddedPdfViewModel : ObservableObject
     {
         //[ObservableProperty]
         //private string pdfPath = "Enter PDF file path here.";
@@ -43,14 +43,7 @@ namespace BestNote_3951.ViewModels
             pdfDocumentStream = typeof(App).GetTypeInfo().Assembly.GetManifestResourceStream("C:\\Users\\olivi\\Documents\\CST_Term3\\COMP_3951\\3951_CourseOutline.pdf");
         }
 
-        /// <summary>
-        /// Raises the <see cref="PropertyChanged"/> event for the specified property name.
-        /// </summary>
-        /// <param name="name">The name of the property that changed.</param>
-        public void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+
     }
 }
 
