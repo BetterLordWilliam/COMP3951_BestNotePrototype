@@ -20,13 +20,13 @@ namespace BestNote_3951.ViewModels
         [ObservableProperty]
         public Stream _pdfDocumentStream;
 
-        public ICommand OpenPdfCommand { get; private set; }
+        //public ICommand OpenPdfCommand { get; private set; }
 
 
         /// <summary>
 	    /// Creates a file picker that allows the user to select a file chos
 	    /// </summary>
-        //[RelayCommand]
+        [RelayCommand]
 	    async void OpenDocument()
 	    {
 		    FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
@@ -74,12 +74,8 @@ namespace BestNote_3951.ViewModels
         /// Initializes a new instance of the <see cref="PdfViewerViewModel"/> class.
         /// </summary>
         public EmbeddedPdfViewModel()
-        {
-            //InitializeComponent();
-            OpenPdfCommand = new Command(() => OpenDocument());
-            //BindingContext = new FileStructureViewModel();
-            // Load the embedded PDF document stream.
-            //pdfDocumentStream = typeof(App).GetTypeInfo().Assembly.GetManifestResourceStream("C:\\Users\\olivi\\Documents\\CST_Term3\\COMP_3951\\3951_CourseOutline.pdf");
+        { 
+            
         }
 
 

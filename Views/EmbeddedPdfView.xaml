@@ -8,29 +8,84 @@
     
         
         <!-- UI goes all up in here -->
-    
- 
 
-    <VerticalStackLayout HorizontalOptions="Center" WidthRequest="200" >
+
+
+    <VerticalStackLayout Width="300">
 
         <VerticalStackLayout.BindingContext>
             <local:EmbeddedPdfViewModel/>
         </VerticalStackLayout.BindingContext>
-        
-  
-        <ScrollView HorizontalScrollBarVisibility="Always"
+
+
+        <!--<ScrollView HorizontalScrollBarVisibility="Always"
                     Orientation="Both">
 
             <HorizontalStackLayout x:Name="Toolbar">
-                <!--<Label
+                <Label
                     FontSize="Medium"
                     Text="Open PDF"
                     TextColor="Black"
-                    VerticalOptions="Center"/>-->
+                    VerticalOptions="Center"/>
 
                 <Button x:Name="openFile"
                              Margin="10,10,10,10"
-                             Command="{Binding OpenPdfCommand}"
+                             Command="{Binding OpenDocumentCommand}"
+                             HeightRequest="40"
+                             VerticalOptions="Center"
+                             Text="Open PDF"
+                             WidthRequest="100" />
+
+            </HorizontalStackLayout>
+        </ScrollView>-->
+            <Button x:Name="openFile"
+                             Margin="10,10,10,10"
+                             Command="{Binding OpenDocumentCommand}"
+                             HeightRequest="40"
+                             VerticalOptions="Center"
+                             Text="Open PDF"
+                             WidthRequest="100" />
+            <syncfusion:SfPdfViewer x:Name="pdfViewer"
+                                HeightRequest="300"
+                                IsOutlineViewVisible="{Binding OutlineViewVisible}"
+                                ShowScrollHead="False"
+                                ShowToolbars="False"
+                                EnableDocumentLinkNavigation="True"
+                                DocumentSource="{Binding PdfDocumentStream}" 
+                                ZoomMode="FitToWidth"/>
+
+    </VerticalStackLayout>
+
+
+
+
+    <!--<Grid>
+        <Grid.BindingContext>
+            <local:EmbeddedPdfViewModel/>
+        </Grid.BindingContext>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <ScrollView HorizontalScrollBarVisibility="Always"
+                    Orientation="Both"
+                    Grid.Row="0"
+                    Grid.Column="0" HorizontalOptions="Fill">
+
+            <HorizontalStackLayout x:Name="Toolbar" HorizontalOptions="Fill">
+                <Label
+                    FontSize="Medium"
+                    Text="Open PDF"
+                    TextColor="Black"
+                    VerticalOptions="Center"/>
+
+                <Button x:Name="openFile"
+                             Margin="10,10,10,10"
+                             Command="{Binding OpenDocumentCommand}"
                              HeightRequest="40"
                              VerticalOptions="Center"
                              Text="Open PDF"
@@ -39,22 +94,19 @@
             </HorizontalStackLayout>
         </ScrollView>
         <syncfusion:SfPdfViewer x:Name="pdfViewer"
-                                HeightRequest="500" 
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                HeightRequest="100" 
+                                Width="10"
                                 IsOutlineViewVisible="True"
-                                ShowScrollHead="True"  
+                                ShowScrollHead="True"
                                 EnableDocumentLinkNavigation="True"
-                                DocumentSource="{Binding PdfDocumentStream}"/>
+                                DocumentSource="{Binding PdfDocumentStream}" 
+                                ClipToBounds="True" 
+                                HorizontalOptions="Fill" 
+                                ZoomMode="FitToWidth"/>
+    </Grid>-->
 
-    </VerticalStackLayout>
-
-    <!--<ContentView.Content>
-            <syncfusion:SfPdfViewer x:Name="pdfViewer" DocumentSource="{Binding PdfDocumentStream}">
-            </syncfusion:SfPdfViewer>
-    
-     DocumentSource="{Binding PdfDocumentStream}
-        </ContentView.Content>-->
-
-    
 
 
 </ContentView>
