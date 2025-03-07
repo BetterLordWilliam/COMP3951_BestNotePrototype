@@ -38,18 +38,27 @@
 
             </HorizontalStackLayout>
         </ScrollView>-->
-            <Button x:Name="openFile"
+        <HorizontalStackLayout x:Name="Toolbar">
+                    <Button x:Name="openFile"
                              Margin="10,10,10,10"
                              Command="{Binding OpenDocumentCommand}"
                              HeightRequest="40"
                              VerticalOptions="Center"
                              Text="Open PDF"
                              WidthRequest="100" />
-            <syncfusion:SfPdfViewer x:Name="pdfViewer"
+        <Button x:Name="addLink"
+                             Margin="10,10,10,10"
+                             HeightRequest="40"
+                             VerticalOptions="Center"
+                             Text="Add Link"
+                             WidthRequest="100" />
+        </HorizontalStackLayout>
+
+        <syncfusion:SfPdfViewer x:Name="pdfViewer"
                                 HeightRequest="300"
-                                IsOutlineViewVisible="{Binding OutlineViewVisible}"
+                                IsOutlineViewVisible="True"
                                 ShowScrollHead="False"
-                                ShowToolbars="False"
+                                ShowToolbars="True"
                                 EnableDocumentLinkNavigation="True"
                                 DocumentSource="{Binding PdfDocumentStream}" 
                                 ZoomMode="FitToWidth"/>

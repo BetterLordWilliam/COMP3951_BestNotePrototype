@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using BestNote_3951.ViewModels;
 
 /// <summary>
@@ -16,8 +17,24 @@ public partial class EmbeddedPdfView : ContentView
 	public EmbeddedPdfView()
 	{
 		InitializeComponent();
-		//BindingContext = new EmbeddedPdfViewModel();
-	}
+		BindingContext = new EmbeddedPdfViewModel();
+		var printer = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Print");
+        var annotations = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Annotations");
+        var prevPage = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Previous page");
+        var nextPage = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Next page");
+        var pageLayout = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Page layout mode");
+
+        if (printer != null && annotations != null && prevPage != null && nextPage != null && pageLayout != null)
+		{
+			printer.IsVisible = false;
+			annotations.IsVisible = false;
+			prevPage.IsVisible = false;
+			nextPage.IsVisible = false;
+			pageLayout.IsVisible = false;
+        }
+
+    }
+
 
 	///// <summary>
 	///// Creates a file picker that allows the user to select a file chos
