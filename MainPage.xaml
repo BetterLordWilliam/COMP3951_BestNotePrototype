@@ -3,42 +3,37 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:BestNote_3951.Views"
+    xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="BestNote_3951.MainPage">
 
-    <Grid>
-        <!-- Define three columns:
-             Left (fixed width for file structure),
-             Middle (flexible for main editor),
-             Right (fixed or flexible, split into two rows) -->
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <!-- File structure pane -->
-            <ColumnDefinition Width="*" />
-            <!-- Markdown editor pane -->
-            <ColumnDefinition Width="300"/>
-            <!-- Right pane for renderer & PDF -->
-        </Grid.ColumnDefinitions>
+    <ContentPage.BindingContext>
+        <viewmodels:MainPageViewModel />
+    </ContentPage.BindingContext>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Border Stroke="#474747"
+            StrokeThickness="2"
+            StrokeShape="RoundRectangle 0,0,5,5"
+            Padding="8,8">
 
-        <!-- Left Column: File Structure -->
-        <views:FileStructureView Grid.Row="0" Grid.Column="0"/>
+        <toolkit:DockLayout VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalSpacing="5"
+                            HorizontalSpacing="5">
 
-        <!-- Middle Column: Markdown Editor -->
-        <views:MarkdownEditorView Grid.Row="0" Grid.Column="1" />
+            <!-- <views:Header toolkit:DockLayout.DockPosition="Top"
+                                  HorizontalOptions="Fill"
+                                  MaximumHeightRequest="150" /> -->
 
-        <!-- Right Column: Nested grid for Markdown Renderer and Embed PDF -->
-        <Grid Grid.Row="0" Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <!-- Top Row: Markdown Renderer -->
-            <views:MarkdownRendererView Grid.Row="0" />
-            <!-- Bottom Row: Embedded PDF -->
-            <views:EmbeddedPdfView Grid.Row="1" />
-        </Grid>
-    </Grid>
+            <views:FileStructureView BindingContext="{Binding FileStructureViewModel}"
+                                       toolkit:DockLayout.DockPosition="Left"
+                                       VerticalOptions="Fill"
+                                       MaximumWidthRequest="250" />
+
+            <views:MainPanel toolkit:DockLayout.DockPosition="None"
+                                VerticalOptions="Fill"
+                                HorizontalOptions="Fill" />
+
+        </toolkit:DockLayout>
+    </Border>
 </ContentPage>

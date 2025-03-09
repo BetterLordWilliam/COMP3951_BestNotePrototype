@@ -11,7 +11,6 @@ namespace BestNote_3951.Views
         public FileStructureView()
         {
             InitializeComponent();
-            BindingContext = new FileStructureViewModel();
         }
 
         /// <summary>

@@ -8,50 +8,51 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
-    x:Class="BestNote_3951.Views.FileStructureView">
+    x:Class="BestNote_3951.Views.FileStructureView"
+    x:Name="this">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        
-        <!-- File System Menu -->
-        <VerticalStackLayout x:Name="treeMenu"
-                             Grid.Column="0"
-                             Grid.Row="0">
-            <Entry Placeholder="Search Folders and Files..." MaxLength="30"></Entry>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
-                <Button IsEnabled="True" Text="Add Folder"></Button>
-                <Button IsEnabled="True" Text="Add File" Command="{Binding AddFileCommand}"></Button>
-            </StackLayout>
-        </VerticalStackLayout>
-        
-        <!-- BsetFile tree -->
-        <!-- TODO: Make it so you can add things -->
-        <!-- TODO: Make it bind to application data directory on app load -->
-        <syncfusion:SfTreeView x:Name="treeView"
-                               Grid.Column="0"
+    <Border Stroke="#2e2e2e">
+
+        <Grid RowDefinitions="Auto,*"
+                VerticalOptions="Fill"
+              BindingContext="{Binding BindingContext, Source={x:Reference this}}">
+            
+            <VerticalStackLayout Grid.Row="0">
+                <Label Text="File Manager Options"/>
+                <ScrollView Orientation="Horizontal">
+                    <HorizontalStackLayout Spacing="5"
+                                    Padding="5">
+                        <Button x:Name="addFile" IsEnabled="True" Text="Add File" Command="{Binding AddFileCommand}"></Button>
+                        <Button x:Name="addFolder" IsEnabled="True" Text="Add Folder" Command="{Binding AddFolderCommand}"></Button>
+                        <Button x:Name="deleteItem" IsEnabled="False" Text="Delete"></Button>
+                    </HorizontalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
+
+            <!-- BsetFile tree -->
+            <!-- TODO: Make it so you can add things -->
+            <!-- TODO: Make it bind to application data directory on app load -->
+            <syncfusion:SfTreeView 
                                Grid.Row="1"
+                               x:Name="treeView"
                                ItemsSource="{Binding FileSystem}"
                                ChildPropertyName="SubFiles">
-            <!-- BackgroundColor="Red" -->
-            <!-- What is shown for each of the data we are bound to -->
-            <syncfusion:SfTreeView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Orientation="Horizontal" VerticalOptions="Center" >
-                            <Image Source="{Binding ImageIcon}" HeightRequest="20" />
-                            <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </syncfusion:SfTreeView.ItemTemplate>
-        </syncfusion:SfTreeView>
-    </Grid>
-    
+                
+                <!-- BackgroundColor="Red" -->
+                <!-- What is shown for each of the data we are bound to -->
+                <syncfusion:SfTreeView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" VerticalOptions="Center" >
+                                <Image Source="{Binding ImageIcon}" HeightRequest="20" />
+                                <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfTreeView.ItemTemplate>
+            </syncfusion:SfTreeView>
+
+        </Grid>
+    </Border>
+
 </ContentView>

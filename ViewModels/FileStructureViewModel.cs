@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Syncfusion.Maui.TreeView;
 using BestNote_3951.Models;
+using BestNote_3951.Services;
 
 namespace BestNote_3951.ViewModels
 {
@@ -14,25 +15,19 @@ namespace BestNote_3951.ViewModels
     /// </summary>
     public partial class FileStructureViewModel : ObservableObject
     {
+        private FileManagerService fileManagerService;
+
         /// <summary>
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
 
-        private ObservableCollection<BestFile> fileSystem;
+        public ObservableCollection<BestFile> FileSystem { get; set; }
 
-        public ObservableCollection<BestFile> FileSystem
+        public FileStructureViewModel(FileManagerService bfs)
         {
-            get => fileSystem;
-            set => SetProperty(ref fileSystem, value);
-        }
-
-        public ICommand AddFileCommand { get; private set; }
-
-        public FileStructureViewModel()
-        {
-            AddFileCommand = new Command(() => FileSystem.Add(new BestFile { ItemName = "💀💀💀💀", ImageIcon = "md_file.png" }));
-            fileSystem = GenerateSource();
+            FileSystem = GenerateSource();
+            fileManagerService = bfs;
         }
 
         /// <summary>
@@ -40,7 +35,7 @@ namespace BestNote_3951.ViewModels
         /// </summary>
         private ObservableCollection<BestFile> GenerateSource()
         {
-            var fileSystemTest = new ObservableCollection<BestFile>();
+            var FileSystemTest = new ObservableCollection<BestFile>();
 
             var folder = new BestFile { ItemName = "MyNotes", ImageIcon = "folder_icon.png" };
             var folder1 = new BestFile { ItemName = "MyBetterNotes", ImageIcon = "folder_icon.png" };
@@ -62,17 +57,17 @@ namespace BestNote_3951.ViewModels
                 sub2
             };
 
-            fileSystemTest.Add(doc);
-            fileSystemTest.Add(doc1);
-            fileSystemTest.Add(folder1);
-            fileSystemTest.Add(doc2);
-            fileSystemTest.Add(doc3);
-            fileSystemTest.Add(folder);
-            fileSystemTest.Add(doc4);
-            fileSystemTest.Add(doc5);
-            fileSystemTest.Add(doc6);
+            FileSystemTest.Add(doc);
+            FileSystemTest.Add(doc1);
+            FileSystemTest.Add(folder1);
+            FileSystemTest.Add(doc2);
+            FileSystemTest.Add(doc3);
+            FileSystemTest.Add(folder);
+            FileSystemTest.Add(doc4);
+            FileSystemTest.Add(doc5);
+            FileSystemTest.Add(doc6);
 
-            return fileSystemTest;
+            return FileSystemTest;
         }
 
         /// <summary>
@@ -88,13 +83,21 @@ namespace BestNote_3951.ViewModels
             // TODO: open file logic
         }
 
+        [RelayCommand]
+        public void AddFolder(BestFile file)
+        {
+            Debug.WriteLine("Add folder called. ");
+            fileManagerService.AddFolder("Will Test");
+        }
+
         /// <summary>
         /// TESTING METHOD FOR ADDING FILES, ONLY UI.
         /// </summary>
+        [RelayCommand]
         public void AddFile()
         {
-            Console.WriteLine("Called ");
-            // 🙂
+            Debug.WriteLine("Add file called. ");
+            fileManagerService.AddFile("Will Test File");
             FileSystem.Add(new BestFile { ItemName = "💀💀💀💀", ImageIcon = "md_file.png"});
         }
     }
