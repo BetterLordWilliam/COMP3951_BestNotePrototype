@@ -1,14 +1,17 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    SOURCES: 
+    Used the Syncfusion PDF Viewer documentation for .NET MAUI:
+    https://help.syncfusion.com/maui/pdf-viewer/getting-started
+    -->
+    
+    
+    <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
              x:Class="BestNote_3951.Views.EmbeddedPdfView"
              xmlns:local="clr-namespace:BestNote_3951.ViewModels"
              x:DataType="local:EmbeddedPdfViewModel">
-    
-        
-        <!-- UI goes all up in here -->
-
 
 
     <VerticalStackLayout Width="300">
@@ -17,16 +20,15 @@
             <local:EmbeddedPdfViewModel/>
         </VerticalStackLayout.BindingContext>
 
-
         <HorizontalStackLayout x:Name="Toolbar">
-                    <Button x:Name="openFile"
+            <Button x:Name="openFile"
                              Margin="10,10,10,10"
                              Command="{Binding OpenDocumentCommand}"
                              HeightRequest="40"
                              VerticalOptions="Center"
                              Text="Open PDF"
                              WidthRequest="100" />
-                    <Button x:Name="addLink"
+            <Button x:Name="addLink"
                              Margin="10,10,10,10"
                              Command="{Binding CreateResourceLinkCommand}"
                              HeightRequest="40"
@@ -52,58 +54,5 @@
                                 />
 
     </VerticalStackLayout>
-
-
-
-
-    <!--<Grid>
-        <Grid.BindingContext>
-            <local:EmbeddedPdfViewModel/>
-        </Grid.BindingContext>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="5*"/>
-        </Grid.RowDefinitions>
-
-        <ScrollView HorizontalScrollBarVisibility="Always"
-                    Orientation="Both"
-                    Grid.Row="0"
-                    Grid.Column="0" HorizontalOptions="Fill">
-
-            <HorizontalStackLayout x:Name="Toolbar" HorizontalOptions="Fill">
-                <Label
-                    FontSize="Medium"
-                    Text="Open PDF"
-                    TextColor="Black"
-                    VerticalOptions="Center"/>
-
-                <Button x:Name="openFile"
-                             Margin="10,10,10,10"
-                             Command="{Binding OpenDocumentCommand}"
-                             HeightRequest="40"
-                             VerticalOptions="Center"
-                             Text="Open PDF"
-                             WidthRequest="100" />
-
-            </HorizontalStackLayout>
-        </ScrollView>
-        <syncfusion:SfPdfViewer x:Name="pdfViewer"
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                HeightRequest="100" 
-                                Width="10"
-                                IsOutlineViewVisible="True"
-                                ShowScrollHead="True"
-                                EnableDocumentLinkNavigation="True"
-                                DocumentSource="{Binding PdfDocumentStream}" 
-                                ClipToBounds="True" 
-                                HorizontalOptions="Fill" 
-                                ZoomMode="FitToWidth"/>
-    </Grid>-->
-
-
 
 </ContentView>

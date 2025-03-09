@@ -5,9 +5,9 @@ using BestNote_3951.ViewModels;
 using Syncfusion.Maui.PdfViewer;
 
 /// <summary>
-/// Sources:
-/// followed this tutorial on youtube:
-/// https://www.youtube.com/watch?v=E_-g-GcQZRE&list=PL5IWFN3_TaPrE_3Y10N2XReOe57CpnMjy&index=6
+/// SOURCES:
+/// Used the following Syncfusion PDF viewer documentatiion to customize the toolbar:
+/// https://help.syncfusion.com/maui/pdf-viewer/toolbar
 /// </summary>
 namespace BestNote_3951.Views;
 
@@ -16,6 +16,10 @@ namespace BestNote_3951.Views;
 /// </summary>
 public partial class EmbeddedPdfView : ContentView
 {
+    /// <summary>
+    /// Initializes this EmbeddedPdfView, binds this EmbeddedPdfView to the EmbeddedPdfViewModel
+    /// and customizes the PDF viewer tool bar.
+    /// </summary>
 	public EmbeddedPdfView()
 	{
 		InitializeComponent();
@@ -47,6 +51,7 @@ public partial class EmbeddedPdfView : ContentView
     }
 
 	
+    // Just for testing purposes!!!
     private void Bookmarks_Clicked(object sender, EventArgs e)
     {
         pdfViewer.GoToBookmark(new Bookmark("olivia test", 2));

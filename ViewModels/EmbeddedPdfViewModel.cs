@@ -8,7 +8,15 @@ using System.Collections.ObjectModel;
 using BestNote_3951.Models;
 using Syncfusion.Maui.PdfViewer;
 
-
+/// <summary>
+/// SOURCES:
+/// Followed this YouTube tutorial to open and display the PDF (see OpenDocument and PickAndShow)
+/// https://www.youtube.com/watch?v=E_-g-GcQZRE&list=PL5IWFN3_TaPrE_3Y10N2XReOe57CpnMjy&index=6
+/// 
+/// Used the Syncfusion PDF Viewer documentation for .NET MAUI:
+/// https://help.syncfusion.com/maui/pdf-viewer/getting-started
+/// https://help.syncfusion.com/maui/pdf-viewer/custom-bookmark
+/// </summary>
 namespace BestNote_3951.ViewModels
 {
     public partial class EmbeddedPdfViewModel : ObservableObject
