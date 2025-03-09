@@ -13,43 +13,47 @@ namespace BestNote_3951.ViewModels
 {
     public partial class EmbeddedPdfViewModel : ObservableObject
     {
-        //[ObservableProperty]
-        //private string pdfPath = "Enter PDF file path here.";
-
-        //[ObservableProperty]
-        //private Stream pdfDocumentStream;
-
-        private BestNote_3951.Views.EmbeddedPdfView _embeddedPdfView;
 
         /// <summary>
-        /// Gets or sets the stream of the currently loaded PDF document.
+        /// Gets and sets the stream of the currently loaded PDF document. Has a binding relationship
+        /// with the EmbeddedPdfView pdfViewer DocumentStream property.
         /// </summary>
         [ObservableProperty]
-        public Stream _pdfDocumentStream;
+        public Stream? _pdfDocumentStream;
+
 
         /// <summary>
-        /// Gets or sets the stream of the currently loaded PDF document.
+        /// Gets and sets the path of the Pdf document.
         /// </summary>
         public String PdfPath;
 
-        //public ICommand OpenPdfCommand { get; private set; }
+
+        /// <summary>
+        /// Gets and sets the page number of the PDF. Has a two-way binding relationship with the 
+        /// EmbeddedPdfView pdfViewer PageNumber property.
+        /// </summary>
+        [ObservableProperty]
+        public int _pageNum;
 
 
-        //internal ObservableCollection<Bookmark> Bookmarks { get; } = new ObservableCollection<Bookmark>();
-
+        /// <summary>
+        /// A collection of ResourceLink objects.
+        /// </summary>
+        internal Collection<ResourceLink> ResourceLinks;
        
 
+        /// <summary>
+        /// Creates a new ResourceLink object and adds it to the ResourceLink collection for this
+        /// PDF.
+        /// </summary>
         [RelayCommand]
         internal void CreateResourceLink()
         {
-            if (PdfPath != null)
+            if (PdfPath != null && PdfPath != "")
             {
-                //Debug.WriteLine("in create resource link");
-                int pageNumber = _embeddedPdfView.getPageNumber();
-                //String name = "My Bookmark";
-                //_embeddedPdfView.addBookmark(new Bookmark(name, pageNumber));
-                //Bookmarks.Add(new Bookmark(name, pageNumber));
-                
+                int pageNumber = PageNum;
+                String name = "BestNoteBookmark";
+                ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));              
             }
 
         }
@@ -76,6 +80,14 @@ namespace BestNote_3951.ViewModels
 		    await PickAndShow(options);
 	    }
 
+
+        /// <summary>
+        /// Displays a FilePicker object for the user to select a pdf file from. Sets the
+        /// PdfDocumentStream to the chosen PDF file and the PdfPath to the path of the 
+        /// chosen PDF file.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public async Task PickAndShow(PickOptions options)
         {
             try
@@ -84,9 +96,7 @@ namespace BestNote_3951.ViewModels
                 if (result != null)
                 {
                     PdfPath = result.FullPath;
-                    //Console.WriteLine("file " + filename);
                     PdfDocumentStream = await result.OpenReadAsync();
-                    //this.pdfViewer.DocumentSource = PdfDocumentStream;
                 }
             }
             catch (Exception ex)
@@ -104,17 +114,16 @@ namespace BestNote_3951.ViewModels
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfViewerViewModel"/> class.
-        /// </summary>
-        public EmbeddedPdfViewModel(BestNote_3951.Views.EmbeddedPdfView myView)
-        {
-            _embeddedPdfView = myView;
-        }
 
+        /// <summary>
+        /// Initializes PageNum to be 0, PdfPath to be an empty string, and ResourceLinks to be
+        /// a new empty collection of ResourceLink objects.
+        /// </summary>
         public EmbeddedPdfViewModel()
         {
-
+            PageNum = 0;
+            PdfPath = "";
+            ResourceLinks = new Collection<ResourceLink>();
         }
 
 

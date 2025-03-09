@@ -18,26 +18,6 @@
         </VerticalStackLayout.BindingContext>
 
 
-        <!--<ScrollView HorizontalScrollBarVisibility="Always"
-                    Orientation="Both">
-
-            <HorizontalStackLayout x:Name="Toolbar">
-                <Label
-                    FontSize="Medium"
-                    Text="Open PDF"
-                    TextColor="Black"
-                    VerticalOptions="Center"/>
-
-                <Button x:Name="openFile"
-                             Margin="10,10,10,10"
-                             Command="{Binding OpenDocumentCommand}"
-                             HeightRequest="40"
-                             VerticalOptions="Center"
-                             Text="Open PDF"
-                             WidthRequest="100" />
-
-            </HorizontalStackLayout>
-        </ScrollView>-->
         <HorizontalStackLayout x:Name="Toolbar">
                     <Button x:Name="openFile"
                              Margin="10,10,10,10"
@@ -46,13 +26,18 @@
                              VerticalOptions="Center"
                              Text="Open PDF"
                              WidthRequest="100" />
-        <Button x:Name="addLink"
+                    <Button x:Name="addLink"
                              Margin="10,10,10,10"
                              Command="{Binding CreateResourceLinkCommand}"
                              HeightRequest="40"
                              VerticalOptions="Center"
                              Text="Add Link"
                              WidthRequest="100" />
+            <Button x:Name="Bookmarks"
+                   Text="1"
+                   Clicked="Bookmarks_Clicked" 
+                   IsVisible="False"
+                         />
         </HorizontalStackLayout>
 
         <syncfusion:SfPdfViewer x:Name="pdfViewer"
@@ -63,6 +48,7 @@
                                 EnableDocumentLinkNavigation="True"
                                 DocumentSource="{Binding PdfDocumentStream}" 
                                 ZoomMode="FitToWidth"
+                                PageNumber ="{Binding PageNum, Mode=TwoWay}"
                                 />
 
     </VerticalStackLayout>

@@ -3,21 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Syncfusion.Maui.PdfViewer;
 
 namespace BestNote_3951.Models
 {
+    /// <summary>
+    /// The ResourceLink class represents the link between a BestFile and its PDF resource. It 
+    /// contains a path to the PDF path that it is linking to, as well as a Bookmark with the page
+    /// number that the the Bookmark is linked to.
+    /// </summary>
     internal class ResourceLink
     {
-        public string Name { get; set; }
 
-        public int PageNumber { get; set; }
+        /// <summary>
+        /// The Bookmark containing the page number and name of the link.
+        /// </summary>
+        public Bookmark ResourceBookmark { get; set; }
 
+        /// <summary>
+        /// The path of the PDF resource that this resource is referencing.
+        /// </summary>
         public string ResourcePath { get; set; }
 
-        public ResourceLink(String name, int pageNum, String resourcePath)
+        /// <summary>
+        /// Initializes the ResourceBookmark and ResourcePath fields with the passed parameters.
+        /// </summary>
+        /// <param name="resourceBookmark">a Bookmark object</param>
+        /// <param name="resourcePath">a String representing the path to a PDF</param>
+        public ResourceLink(Bookmark resourceBookmark, String resourcePath)
         {
-            Name = name;
-            PageNumber = pageNum;
+            ResourceBookmark = resourceBookmark;
             ResourcePath = resourcePath;
         }
     }
