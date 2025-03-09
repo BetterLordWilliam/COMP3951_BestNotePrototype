@@ -3,6 +3,11 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using System.Diagnostics;
+using System.Collections.ObjectModel;
+using BestNote_3951.Models;
+using Syncfusion.Maui.PdfViewer;
+
 
 namespace BestNote_3951.ViewModels
 {
@@ -14,13 +19,40 @@ namespace BestNote_3951.ViewModels
         //[ObservableProperty]
         //private Stream pdfDocumentStream;
 
+        private BestNote_3951.Views.EmbeddedPdfView _embeddedPdfView;
+
         /// <summary>
         /// Gets or sets the stream of the currently loaded PDF document.
         /// </summary>
         [ObservableProperty]
         public Stream _pdfDocumentStream;
 
+        /// <summary>
+        /// Gets or sets the stream of the currently loaded PDF document.
+        /// </summary>
+        public String PdfPath;
+
         //public ICommand OpenPdfCommand { get; private set; }
+
+
+        //internal ObservableCollection<Bookmark> Bookmarks { get; } = new ObservableCollection<Bookmark>();
+
+       
+
+        [RelayCommand]
+        internal void CreateResourceLink()
+        {
+            if (PdfPath != null)
+            {
+                //Debug.WriteLine("in create resource link");
+                int pageNumber = _embeddedPdfView.getPageNumber();
+                //String name = "My Bookmark";
+                //_embeddedPdfView.addBookmark(new Bookmark(name, pageNumber));
+                //Bookmarks.Add(new Bookmark(name, pageNumber));
+                
+            }
+
+        }
 
 
         /// <summary>
@@ -51,6 +83,8 @@ namespace BestNote_3951.ViewModels
                 var result = await FilePicker.Default.PickAsync(options);
                 if (result != null)
                 {
+                    PdfPath = result.FullPath;
+                    //Console.WriteLine("file " + filename);
                     PdfDocumentStream = await result.OpenReadAsync();
                     //this.pdfViewer.DocumentSource = PdfDocumentStream;
                 }
@@ -73,9 +107,14 @@ namespace BestNote_3951.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfViewerViewModel"/> class.
         /// </summary>
+        public EmbeddedPdfViewModel(BestNote_3951.Views.EmbeddedPdfView myView)
+        {
+            _embeddedPdfView = myView;
+        }
+
         public EmbeddedPdfViewModel()
-        { 
-            
+        {
+
         }
 
 

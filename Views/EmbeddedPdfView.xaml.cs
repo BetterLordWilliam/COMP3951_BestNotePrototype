@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using BestNote_3951.ViewModels;
+using Syncfusion.Maui.PdfViewer;
 
 /// <summary>
 /// Sources:
@@ -17,7 +19,7 @@ public partial class EmbeddedPdfView : ContentView
 	public EmbeddedPdfView()
 	{
 		InitializeComponent();
-		BindingContext = new EmbeddedPdfViewModel();
+		EmbeddedPdfViewModel BindingContext = new EmbeddedPdfViewModel(this);
 		var printer = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Print");
         var annotations = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Annotations");
         var prevPage = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Previous page");
@@ -35,57 +37,82 @@ public partial class EmbeddedPdfView : ContentView
 
     }
 
+	Bookmark Bookmark { get; set; }
 
-	///// <summary>
-	///// Creates a file picker that allows the user to select a file chos
-	///// </summary>
-	//async void OpenDocument()
-	//{
-	//	FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
-	//	{
-	//		{DevicePlatform.iOS, new[] {"public.pdf"} },
-	//		{DevicePlatform.Android, new[] {"application/pdf"} },
-	//		{DevicePlatform.WinUI, new[] {"pdf"} },
-	//		{DevicePlatform.MacCatalyst, new[] {"pdf"} }
-	//	});
-	//	PickOptions options = new()
-	//	{
-	//		PickerTitle = "Please select a PDF file",
-	//		FileTypes = pdfFileType,
-	//	};
-	//	await PickAndShow(options);
-	//}
+	public int getPageNumber()
+	{
+        Debug.WriteLine("hello");
+		return 0;
+		//return pdfViewer.PageNumber;
 
-	//public Stream PdfDocumentStream { get; set; }
+	}
 
-	//public async Task PickAndShow(PickOptions options)
-	//{
-	//	try
-	//	{
-	//		var result = await FilePicker.Default.PickAsync(options);
-	//		if (result != null)
-	//		{
-	//			PdfDocumentStream = await result.OpenReadAsync();
-	//			this.pdfViewer.DocumentSource = PdfDocumentStream;
-	//		}
-	//	}
-	//	catch (Exception ex)
-	//	{
-	//		String message;
-	//		if (ex != null && String.IsNullOrEmpty(ex.Message) == false)
-	//		{
-	//			message = ex.Message;
-	//		}
-	//		else
-	//		{
-	//			message = "File open failed";
-	//		}
-	//		Application.Current?.MainPage?.DisplayAlert("Error", message, "OK");
-	//	}
-	//}
+	
 
-  //  private void openFile_Clicked(object sender, EventArgs e)
-  //  {
-		//OpenDocument();
-  //  }
+	public void addBookmark(Bookmark newBookmark)
+	{
+		pdfViewer.CustomBookmarks.Add(newBookmark);
+	}
+
+    private void addLink_Clicked(object sender, EventArgs e)
+    {
+        int pageNum = pdfViewer.PageNumber;
+        String name = "Olivia's bookmark yay";
+        Bookmark myBookmark = new Bookmark(name, pageNum);
+        pdfViewer.CustomBookmarks.Add(myBookmark);
+    }
+
+
+    ///// <summary>
+    ///// Creates a file picker that allows the user to select a file chos
+    ///// </summary>
+    //async void OpenDocument()
+    //{
+    //	FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
+    //	{
+    //		{DevicePlatform.iOS, new[] {"public.pdf"} },
+    //		{DevicePlatform.Android, new[] {"application/pdf"} },
+    //		{DevicePlatform.WinUI, new[] {"pdf"} },
+    //		{DevicePlatform.MacCatalyst, new[] {"pdf"} }
+    //	});
+    //	PickOptions options = new()
+    //	{
+    //		PickerTitle = "Please select a PDF file",
+    //		FileTypes = pdfFileType,
+    //	};
+    //	await PickAndShow(options);
+    //}
+
+    //public Stream PdfDocumentStream { get; set; }
+
+    //public async Task PickAndShow(PickOptions options)
+    //{
+    //	try
+    //	{
+    //		var result = await FilePicker.Default.PickAsync(options);
+    //		if (result != null)
+    //		{
+    //			PdfDocumentStream = await result.OpenReadAsync();
+    //			this.pdfViewer.DocumentSource = PdfDocumentStream;
+    //		}
+    //	}
+    //	catch (Exception ex)
+    //	{
+    //		String message;
+    //		if (ex != null && String.IsNullOrEmpty(ex.Message) == false)
+    //		{
+    //			message = ex.Message;
+    //		}
+    //		else
+    //		{
+    //			message = "File open failed";
+    //		}
+    //		Application.Current?.MainPage?.DisplayAlert("Error", message, "OK");
+    //	}
+    //}
+
+    //  private void openFile_Clicked(object sender, EventArgs e)
+    //  {
+    //OpenDocument();
+    //  }
 }

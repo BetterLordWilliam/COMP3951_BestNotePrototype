@@ -48,6 +48,7 @@
                              WidthRequest="100" />
         <Button x:Name="addLink"
                              Margin="10,10,10,10"
+                             Command="{Binding CreateResourceLinkCommand}"
                              HeightRequest="40"
                              VerticalOptions="Center"
                              Text="Add Link"
@@ -61,7 +62,8 @@
                                 ShowToolbars="True"
                                 EnableDocumentLinkNavigation="True"
                                 DocumentSource="{Binding PdfDocumentStream}" 
-                                ZoomMode="FitToWidth"/>
+                                ZoomMode="FitToWidth"
+                                />
 
     </VerticalStackLayout>
 
