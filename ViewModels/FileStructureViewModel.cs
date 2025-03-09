@@ -17,57 +17,26 @@ namespace BestNote_3951.ViewModels
     {
         private FileManagerService fileManagerService;
 
+        [ObservableProperty]
+        public string testingInputName;
+
         /// <summary>
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
 
         public ObservableCollection<BestFile> FileSystem { get; set; }
+        public ObservableCollection<string> FileNames { get; set; }
 
         public FileStructureViewModel(FileManagerService bfs)
         {
-            FileSystem = GenerateSource();
+            // FileSystem = GenerateSource();
             fileManagerService = bfs;
-        }
 
-        /// <summary>
-        /// Testing method to generate items for the tree view model.
-        /// </summary>
-        private ObservableCollection<BestFile> GenerateSource()
-        {
-            var FileSystemTest = new ObservableCollection<BestFile>();
+            FileSystem = new ObservableCollection<BestFile>();
+            FileNames = new ObservableCollection<string>();
 
-            var folder = new BestFile { ItemName = "MyNotes", ImageIcon = "folder_icon.png" };
-            var folder1 = new BestFile { ItemName = "MyBetterNotes", ImageIcon = "folder_icon.png" };
-
-            var doc = new BestFile { ItemName = "comp3951notes.md" , ImageIcon = "md_file.png" };
-            var doc1 = new BestFile { ItemName = "comp3721notes.md" , ImageIcon = "md_file.png" };
-            var doc2 = new BestFile { ItemName = "textbook.pdf" , ImageIcon = "md_file.png" };
-            var doc3 = new BestFile { ItemName = "quakelogo.png", ImageIcon = "md_file.png" };
-            var doc4 = new BestFile { ItemName = "comp3951notes.md", ImageIcon = "md_file.png" };
-            var doc5 = new BestFile { ItemName = "comp3721notes.md", ImageIcon = "md_file.png" };
-            var doc6 = new BestFile { ItemName = "textbook.pdf", ImageIcon = "md_file.png" };
-            var doc7 = new BestFile { ItemName = "quakelogo.png", ImageIcon = "md_file.png" };
-
-            var sub1 = new BestFile { ItemName = "SillyNotes.md" , ImageIcon = "md_file.png" };
-            var sub2 = new BestFile { ItemName = "SeriousNodes.md", ImageIcon = "md_file.png" };
-            folder.SubFiles = new ObservableCollection<BestFile>
-            {
-                sub1,
-                sub2
-            };
-
-            FileSystemTest.Add(doc);
-            FileSystemTest.Add(doc1);
-            FileSystemTest.Add(folder1);
-            FileSystemTest.Add(doc2);
-            FileSystemTest.Add(doc3);
-            FileSystemTest.Add(folder);
-            FileSystemTest.Add(doc4);
-            FileSystemTest.Add(doc5);
-            FileSystemTest.Add(doc6);
-
-            return FileSystemTest;
+            TestingInputName = "Will Testing Item";
         }
 
         /// <summary>
@@ -87,7 +56,12 @@ namespace BestNote_3951.ViewModels
         public void AddFolder(BestFile file)
         {
             Debug.WriteLine("Add folder called. ");
-            fileManagerService.AddFolder("Will Test");
+            BestFile? bf = fileManagerService.AddFolder(TestingInputName);
+            if (bf is not null)
+            {
+                this.FileSystem.Add(bf);
+                this.FileNames.Add(bf.itemDirectory.FullName);
+            }
         }
 
         /// <summary>
@@ -97,8 +71,14 @@ namespace BestNote_3951.ViewModels
         public void AddFile()
         {
             Debug.WriteLine("Add file called. ");
-            fileManagerService.AddFile("Will Test File");
-            FileSystem.Add(new BestFile { ItemName = "💀💀💀💀", ImageIcon = "md_file.png"});
+            BestFile? bf = fileManagerService.AddFile(TestingInputName);
+            if (bf is not null)
+            {
+                this.FileSystem.Add(bf);
+                this.FileNames.Add(bf.itemDirectory.FullName);
+            }
+            else
+                Debug.WriteLine("File could not be added.");
         }
     }
 }

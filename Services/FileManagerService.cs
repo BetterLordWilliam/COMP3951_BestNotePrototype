@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BestNote_3951.Models;
 
 namespace BestNote_3951.Services
 {
@@ -63,13 +64,18 @@ namespace BestNote_3951.Services
         /// <param name="ParentPath"></param>
         /// <param name="folderName"></param>
         /// <returns></returns>
-        public DirectoryInfo AddFolder(string folderName, string? parentPath = null)
+        public BestFile? AddFolder(string folderName, string? parentPath = null)
         {
             // Create the directory if is does not exist
             string combinedPath = Path.Combine(parentPath ?? BestNoteDirectory.FullName, folderName);
+            DirectoryInfo directoryInfo;
             if (Directory.Exists(combinedPath))
-                return new DirectoryInfo(combinedPath);
-            return Directory.CreateDirectory(combinedPath);
+            { 
+                directoryInfo = new DirectoryInfo(combinedPath);
+                return new BestFile(folderName, "folder_icon.png", directoryInfo);
+            }
+            directoryInfo = Directory.CreateDirectory(combinedPath); 
+            return new BestFile(folderName, "folder_icon.png", directoryInfo);
         }
 
         /// <summary>
@@ -79,16 +85,24 @@ namespace BestNote_3951.Services
         /// <param name="fileExtension"></param>
         /// <param name="parentPath"></param>
         /// <returns></returns>
-        public FileStream AddFile(string fileName, string fileExtension = ".md", string? parentPath = null)
+        public BestFile? AddFile(string fileName, string fileExtension = ".md", string? parentPath = null)
         {
             // Create the directory if is does not exist
             string fileType = string.Join("", fileName, fileExtension);
             string combinedPath = Path.Combine(parentPath ?? BestNoteDirectory.FullName, fileType);
 
-            if (File.Exists(combinedPath))
-                File.Delete(combinedPath);
-
-            return File.Create(combinedPath);
+            try
+            {
+                if (File.Exists(combinedPath))
+                    File.Delete(combinedPath);
+                File.Create(combinedPath);
+                DirectoryInfo directoryInfo = new DirectoryInfo(combinedPath);
+                return new BestFile(fileName, "md_file.png", directoryInfo);
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

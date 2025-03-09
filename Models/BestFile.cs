@@ -10,14 +10,18 @@ namespace BestNote_3951.Models
     /// </summary>
     public class BestFile : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public string Path { get; set; }
-        public string FileType { get; set; }
-
         private string itemName;
         private ImageSource imageIcon;
+        public DirectoryInfo itemDirectory { get; set; }
 
-        private ObservableCollection<BestFile> subFiles;
+        private ObservableCollection<BestFile> subFiles { get; set; }
+
+        public BestFile(string itemName, ImageSource imageIcon, DirectoryInfo itemDirectory)
+        {
+            this.itemName = itemName;
+            this.imageIcon = imageIcon;
+            this.itemDirectory = itemDirectory;
+        }
 
         public ObservableCollection<BestFile> SubFiles
         {
@@ -46,6 +50,16 @@ namespace BestNote_3951.Models
             {
                 imageIcon = value;
                 RaisedOnPropertyChanged("ImageIcon");
+            }
+        }
+
+        public DirectoryInfo DirectoryInfo
+        {
+            get { return itemDirectory; }
+            set
+            {
+                itemDirectory = value;
+                RaisedOnPropertyChanged("DirectoryInfo");
             }
         }
 
