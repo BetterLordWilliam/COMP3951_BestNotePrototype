@@ -3,24 +3,68 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using System.Diagnostics;
+using System.Collections.ObjectModel;
+using BestNote_3951.Models;
+using Syncfusion.Maui.PdfViewer;
 
+/// <summary>
+/// SOURCES:
+/// Followed this YouTube tutorial to open and display the PDF (see OpenDocument and PickAndShow)
+/// https://www.youtube.com/watch?v=E_-g-GcQZRE&list=PL5IWFN3_TaPrE_3Y10N2XReOe57CpnMjy&index=6
+/// 
+/// Used the Syncfusion PDF Viewer documentation for .NET MAUI:
+/// https://help.syncfusion.com/maui/pdf-viewer/getting-started
+/// https://help.syncfusion.com/maui/pdf-viewer/custom-bookmark
+/// </summary>
 namespace BestNote_3951.ViewModels
 {
     public partial class EmbeddedPdfViewModel : ObservableObject
     {
-        //[ObservableProperty]
-        //private string pdfPath = "Enter PDF file path here.";
-
-        //[ObservableProperty]
-        //private Stream pdfDocumentStream;
 
         /// <summary>
-        /// Gets or sets the stream of the currently loaded PDF document.
+        /// Gets and sets the stream of the currently loaded PDF document. Has a binding relationship
+        /// with the EmbeddedPdfView pdfViewer DocumentStream property.
         /// </summary>
         [ObservableProperty]
-        public Stream _pdfDocumentStream;
+        public Stream? _pdfDocumentStream;
 
-        //public ICommand OpenPdfCommand { get; private set; }
+
+        /// <summary>
+        /// Gets and sets the path of the Pdf document.
+        /// </summary>
+        public String PdfPath;
+
+
+        /// <summary>
+        /// Gets and sets the page number of the PDF. Has a two-way binding relationship with the 
+        /// EmbeddedPdfView pdfViewer PageNumber property.
+        /// </summary>
+        [ObservableProperty]
+        public int _pageNum;
+
+
+        /// <summary>
+        /// A collection of ResourceLink objects.
+        /// </summary>
+        internal Collection<ResourceLink> ResourceLinks;
+       
+
+        /// <summary>
+        /// Creates a new ResourceLink object and adds it to the ResourceLink collection for this
+        /// PDF.
+        /// </summary>
+        [RelayCommand]
+        internal void CreateResourceLink()
+        {
+            if (PdfPath != null && PdfPath != "")
+            {
+                int pageNumber = PageNum;
+                String name = "BestNoteBookmark";
+                ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));              
+            }
+
+        }
 
 
         /// <summary>
@@ -44,6 +88,14 @@ namespace BestNote_3951.ViewModels
 		    await PickAndShow(options);
 	    }
 
+
+        /// <summary>
+        /// Displays a FilePicker object for the user to select a pdf file from. Sets the
+        /// PdfDocumentStream to the chosen PDF file and the PdfPath to the path of the 
+        /// chosen PDF file.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public async Task PickAndShow(PickOptions options)
         {
             try
@@ -51,8 +103,8 @@ namespace BestNote_3951.ViewModels
                 var result = await FilePicker.Default.PickAsync(options);
                 if (result != null)
                 {
+                    PdfPath = result.FullPath;
                     PdfDocumentStream = await result.OpenReadAsync();
-                    //this.pdfViewer.DocumentSource = PdfDocumentStream;
                 }
             }
             catch (Exception ex)
@@ -70,12 +122,16 @@ namespace BestNote_3951.ViewModels
             }
         }
 
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="PdfViewerViewModel"/> class.
+        /// Initializes PageNum to be 0, PdfPath to be an empty string, and ResourceLinks to be
+        /// a new empty collection of ResourceLink objects.
         /// </summary>
         public EmbeddedPdfViewModel()
-        { 
-            
+        {
+            PageNum = 0;
+            PdfPath = "";
+            ResourceLinks = new Collection<ResourceLink>();
         }
 
 

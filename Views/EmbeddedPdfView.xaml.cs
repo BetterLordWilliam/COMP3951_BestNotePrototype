@@ -1,11 +1,13 @@
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using BestNote_3951.ViewModels;
+using Syncfusion.Maui.PdfViewer;
 
 /// <summary>
-/// Sources:
-/// followed this tutorial on youtube:
-/// https://www.youtube.com/watch?v=E_-g-GcQZRE&list=PL5IWFN3_TaPrE_3Y10N2XReOe57CpnMjy&index=6
+/// SOURCES:
+/// Used the following Syncfusion PDF viewer documentatiion to customize the toolbar:
+/// https://help.syncfusion.com/maui/pdf-viewer/toolbar
 /// </summary>
 namespace BestNote_3951.Views;
 
@@ -14,78 +16,46 @@ namespace BestNote_3951.Views;
 /// </summary>
 public partial class EmbeddedPdfView : ContentView
 {
+    /// <summary>
+    /// Initializes this EmbeddedPdfView, binds this EmbeddedPdfView to the EmbeddedPdfViewModel
+    /// and customizes the PDF viewer tool bar.
+    /// </summary>
 	public EmbeddedPdfView()
 	{
 		InitializeComponent();
-		BindingContext = new EmbeddedPdfViewModel();
-		var printer = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Print");
+		EmbeddedPdfViewModel BindingContext = new EmbeddedPdfViewModel();
+        CustomizePDFToolbar();
+
+    }
+
+    /// <summary>
+    /// Removes the printer, annotations, previous page, next page, and page layour icons from
+    /// the Syncfusion PDF Viewer toolbar.
+    /// </summary>
+    private void CustomizePDFToolbar()
+    {
+        var printer = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Print");
         var annotations = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Annotations");
         var prevPage = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Previous page");
         var nextPage = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Next page");
         var pageLayout = pdfViewer.Toolbars?.GetByName("PrimaryToolbar")?.Items?.GetByName("Page layout mode");
 
         if (printer != null && annotations != null && prevPage != null && nextPage != null && pageLayout != null)
-		{
-			printer.IsVisible = false;
-			annotations.IsVisible = false;
-			prevPage.IsVisible = false;
-			nextPage.IsVisible = false;
-			pageLayout.IsVisible = false;
+        {
+            printer.IsVisible = false;
+            annotations.IsVisible = false;
+            prevPage.IsVisible = false;
+            nextPage.IsVisible = false;
+            pageLayout.IsVisible = false;
         }
+    }
+
+	
+    // Just for testing purposes!!!
+    private void Bookmarks_Clicked(object sender, EventArgs e)
+    {
+        pdfViewer.GoToBookmark(new Bookmark("olivia test", 2));
 
     }
 
-
-	///// <summary>
-	///// Creates a file picker that allows the user to select a file chos
-	///// </summary>
-	//async void OpenDocument()
-	//{
-	//	FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
-	//	{
-	//		{DevicePlatform.iOS, new[] {"public.pdf"} },
-	//		{DevicePlatform.Android, new[] {"application/pdf"} },
-	//		{DevicePlatform.WinUI, new[] {"pdf"} },
-	//		{DevicePlatform.MacCatalyst, new[] {"pdf"} }
-	//	});
-	//	PickOptions options = new()
-	//	{
-	//		PickerTitle = "Please select a PDF file",
-	//		FileTypes = pdfFileType,
-	//	};
-	//	await PickAndShow(options);
-	//}
-
-	//public Stream PdfDocumentStream { get; set; }
-
-	//public async Task PickAndShow(PickOptions options)
-	//{
-	//	try
-	//	{
-	//		var result = await FilePicker.Default.PickAsync(options);
-	//		if (result != null)
-	//		{
-	//			PdfDocumentStream = await result.OpenReadAsync();
-	//			this.pdfViewer.DocumentSource = PdfDocumentStream;
-	//		}
-	//	}
-	//	catch (Exception ex)
-	//	{
-	//		String message;
-	//		if (ex != null && String.IsNullOrEmpty(ex.Message) == false)
-	//		{
-	//			message = ex.Message;
-	//		}
-	//		else
-	//		{
-	//			message = "File open failed";
-	//		}
-	//		Application.Current?.MainPage?.DisplayAlert("Error", message, "OK");
-	//	}
-	//}
-
-  //  private void openFile_Clicked(object sender, EventArgs e)
-  //  {
-		//OpenDocument();
-  //  }
 }
