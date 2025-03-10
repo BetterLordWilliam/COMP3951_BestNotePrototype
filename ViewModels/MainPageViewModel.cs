@@ -6,6 +6,7 @@ namespace BestNote_3951.ViewModels
     public partial class MainPageViewModel : ObservableObject
     {
         #region Services
+        public AlertService AlertService { get; private set; }
         public FileManagerService FileManagerService { get; private set; }
         #endregion
 
@@ -17,12 +18,12 @@ namespace BestNote_3951.ViewModels
         {
             #region Services
             FileManagerService = new FileManagerService();
+            AlertService = new AlertService();
             #endregion
 
             #region ViewModels
-            FileStructureViewModel = new FileStructureViewModel(FileManagerService);
+            FileStructureViewModel = new FileStructureViewModel(AlertService, FileManagerService);
             #endregion
         }
-
     }
 }

@@ -7,5 +7,6 @@
              x:DataType="viewmodels:MainPanelViewModel">
 
     <HorizontalStackLayout>
+        <Label Text="Main panel"></Label>
     </HorizontalStackLayout>
 </ContentView>

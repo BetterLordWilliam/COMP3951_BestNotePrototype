@@ -16,27 +16,41 @@ namespace BestNote_3951.ViewModels
     public partial class FileStructureViewModel : ObservableObject
     {
         private FileManagerService fileManagerService;
+        private AlertService alertService;
 
         [ObservableProperty]
         public string testingInputName;
+
+        [ObservableProperty]
+        public BestFile selectedParent;
 
         /// <summary>
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
 
-        public ObservableCollection<BestFile> FileSystem { get; set; }
-        public ObservableCollection<string> FileNames { get; set; }
+        public ObservableCollection<BestFile> FileSystem { get; } = new ObservableCollection<BestFile>();
+        public ObservableCollection<string> FileNames { get; } = new ObservableCollection<string>();
 
-        public FileStructureViewModel(FileManagerService bfs)
+        public FileStructureViewModel(AlertService als, FileManagerService bfs)
         {
             // FileSystem = GenerateSource();
             fileManagerService = bfs;
-
-            FileSystem = new ObservableCollection<BestFile>();
-            FileNames = new ObservableCollection<string>();
+            alertService = als;
 
             TestingInputName = "Will Testing Item";
+        }
+
+        /// <summary>
+        /// Expand contents of a best file.
+        /// </summary>
+        [RelayCommand]
+        public void ToggleExpand(BestFile file)
+        {
+            if (file.IsExpanded)
+                file.IsExpanded = false;
+            else
+                file.IsExpanded = true;
         }
 
         /// <summary>
@@ -53,14 +67,35 @@ namespace BestNote_3951.ViewModels
         }
 
         [RelayCommand]
-        public void AddFolder(BestFile file)
+        public void AddFolder(BestFile? parent = null)
         {
             Debug.WriteLine("Add folder called. ");
-            BestFile? bf = fileManagerService.AddFolder(TestingInputName);
-            if (bf is not null)
+
+            try
             {
-                this.FileSystem.Add(bf);
-                this.FileNames.Add(bf.itemDirectory.FullName);
+                if (string.IsNullOrEmpty(TestingInputName))
+                    throw new Exception("Empty item name");
+
+                BestFile? bf = (parent is not null)
+                    ? fileManagerService.AddFolder(TestingInputName, parentPath: parent.ItemDirectory.FullName)
+                    : fileManagerService.AddFolder(TestingInputName);
+
+                if (bf is not null)
+                {
+                    this.FileSystem.Add(bf);
+                    // this.FileNames.Add(bf.ItemDirectory.FullName);
+                    TestingInputName = "";
+                }
+            }
+            catch (Exception e)
+            {
+                string message = "Your action could not be complete.\n\nFolder or file name cannot be empty.";
+#if DEBUG
+                message = $"Your action could not be complete\n\n{e}";
+#endif
+
+                alertService.ShowAlertAsync("Error", message);
+                Debug.WriteLine($"Exception occured {e}");
             }
         }
 
@@ -68,17 +103,38 @@ namespace BestNote_3951.ViewModels
         /// TESTING METHOD FOR ADDING FILES, ONLY UI.
         /// </summary>
         [RelayCommand]
-        public void AddFile()
+        public void AddFile(BestFile? parent = null)
         {
             Debug.WriteLine("Add file called. ");
-            BestFile? bf = fileManagerService.AddFile(TestingInputName);
-            if (bf is not null)
+
+            try
             {
-                this.FileSystem.Add(bf);
-                this.FileNames.Add(bf.itemDirectory.FullName);
+                if (string.IsNullOrEmpty(TestingInputName))
+                    throw new Exception("Empty item name");
+
+                BestFile? bf = (parent is not null)
+                    ? fileManagerService.AddFile(TestingInputName, parentPath: parent.ItemDirectory.FullName)
+                    : fileManagerService.AddFile(TestingInputName);
+
+                if (bf is not null)
+                {
+                    this.FileSystem.Add(bf);
+                    // this.FileNames.Add(bf.ItemDirectory.FullName);
+                    TestingInputName = "";
+                }
+                else
+                    Debug.WriteLine("File could not be added.");
             }
-            else
-                Debug.WriteLine("File could not be added.");
+            catch (Exception e)
+            {
+                string message = "Your action could not be complete.\n\nFolder or file name cannot be empty.";
+#if DEBUG
+                message = $"Your action could not be complete\n\n{e}";
+#endif
+
+                alertService.ShowAlertAsync("Error", message);
+                Debug.WriteLine($"Exception occured {e}");
+            }
         }
     }
 }

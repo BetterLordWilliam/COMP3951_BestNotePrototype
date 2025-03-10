@@ -13,6 +13,7 @@ namespace BestNote_3951
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .ConfigureSyncfusionCore()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -22,7 +23,6 @@ namespace BestNote_3951
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            builder.ConfigureSyncfusionCore();
 
             return builder.Build();
         }

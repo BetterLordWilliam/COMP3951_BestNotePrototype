@@ -78,6 +78,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\BestFileTreeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\EmbeddedPdfView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

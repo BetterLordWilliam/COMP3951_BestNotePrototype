@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Syncfusion.Maui.GridCommon.ScrollAxis;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace BestNote_3951.Models
@@ -12,25 +13,36 @@ namespace BestNote_3951.Models
     {
         private string itemName;
         private ImageSource imageIcon;
-        public DirectoryInfo itemDirectory { get; set; }
 
-        private ObservableCollection<BestFile> subFiles { get; set; }
+        private DirectoryInfo itemDirectory;
+        private DirectoryInfo parentItemDirectory;
+        
+        public ObservableCollection<BestFile> SubFiles { get; } = new ObservableCollection<BestFile>();
+        public int Level { get; set; } = 0;
+        public bool IsExpanded { get; set; } = false;
 
-        public BestFile(string itemName, ImageSource imageIcon, DirectoryInfo itemDirectory)
-        {
+        /// <summary>
+        /// Best file model constructor.
+        /// </summary>
+        /// <param name="itemName"></param>
+        /// <param name="imageIcon"></param>
+        /// <param name="itemDirectory"></param>
+        /// <param name="parentItemDirectory"></param>
+        public BestFile(
+            string              itemName,
+            ImageSource         imageIcon,
+            DirectoryInfo       itemDirectory,
+            DirectoryInfo       parentItemDirectory
+        ) {
             this.itemName = itemName;
             this.imageIcon = imageIcon;
             this.itemDirectory = itemDirectory;
+            this.parentItemDirectory = parentItemDirectory;
         }
 
-        public ObservableCollection<BestFile> SubFiles
+        public DirectoryInfo ItemDirectory
         {
-            get { return subFiles; }
-            set
-            {
-                subFiles = value;
-                RaisedOnPropertyChanged("SubFiles");
-            }
+            get { return itemDirectory; }
         }
 
         public string ItemName
