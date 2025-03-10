@@ -14,7 +14,7 @@ namespace BestNote_3951
         public MarkdownRendererViewModel()
         {
             string testConversion = Markdown.ToHtml("**Test Bold**");
-            System.Diagnostics.Debug.WriteLine($"markdig test: {testConversion}");
+            Debug.WriteLine($"markdig test: {testConversion}");
 
             WebViewSource = new HtmlWebViewSource
             {
@@ -24,7 +24,7 @@ namespace BestNote_3951
             WeakReferenceMessenger.Default.Register<MarkdownTextChangedMessage>(this, (recipient, message) =>
             {         
                 string text = message.Value;
-                System.Diagnostics.Debug.WriteLine($"received the message: {text}");
+                Debug.WriteLine($"received the message: {text}");
 
                 // markdig the text 
                 var htmlBody = Markdown.ToHtml(text ?? "");
@@ -34,7 +34,7 @@ namespace BestNote_3951
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     WebViewSource = new HtmlWebViewSource { Html = html };
-                    System.Diagnostics.Debug.WriteLine($"please please please: {WebViewSource.Html}");
+                    Debug.WriteLine($"please please please: {WebViewSource.Html}");
                 });
             });
         }
