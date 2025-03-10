@@ -6,12 +6,12 @@
              x:Class="BestNote_3951.Views.MainPanel"
              x:DataType="viewmodels:MainPanelViewModel">
 
-    <Grid RowDefinitions="*,Auto">
+    <Grid ColumnDefinitions="*,*">
         <views:MarkdownEditorView
             x:Name="EditorView"
-            Grid.Row="0" />
+            Grid.Column="0" />
         <views:MarkdownRendererView
             x:Name="RendererView"
-            Grid.Row="1" />
+            Grid.Column="1" />
     </Grid>
 </ContentView>
