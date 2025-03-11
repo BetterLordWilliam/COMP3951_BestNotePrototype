@@ -9,6 +9,8 @@
             FontSize="Title"
             HorizontalOptions="Center" />
         <WebView 
+            MinimumHeightRequest="500"
+            MinimumWidthRequest="500"
             VerticalOptions="FillAndExpand" 
             Source="{Binding WebViewSource}" />
     </VerticalStackLayout>
