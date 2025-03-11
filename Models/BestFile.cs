@@ -13,13 +13,13 @@ namespace BestNote_3951.Models
     {
         private string itemName;
         private ImageSource imageIcon;
-
         private DirectoryInfo itemDirectory;
         private DirectoryInfo parentItemDirectory;
         
-        public ObservableCollection<BestFile> SubFiles { get; } = new ObservableCollection<BestFile>();
-        public int Level { get; set; } = 0;
-        public bool IsExpanded { get; set; } = false;
+        public ObservableCollection<BestFile> SubFiles { get; set; } = new ObservableCollection<BestFile>();
+        public int Level { get; set; }
+        public Thickness IndentationPadding => new Thickness(Level, 0, 0, 0);
+        public bool Expandable { get; private set; } = true;
 
         /// <summary>
         /// Best file model constructor.
@@ -28,7 +28,7 @@ namespace BestNote_3951.Models
         /// <param name="imageIcon"></param>
         /// <param name="itemDirectory"></param>
         /// <param name="parentItemDirectory"></param>
-        public BestFile(
+        private BestFile(
             string              itemName,
             ImageSource         imageIcon,
             DirectoryInfo       itemDirectory,
@@ -38,6 +38,32 @@ namespace BestNote_3951.Models
             this.imageIcon = imageIcon;
             this.itemDirectory = itemDirectory;
             this.parentItemDirectory = parentItemDirectory;
+        }
+
+        public static BestFile BestFileMarkdown(
+            string itemName,
+            ImageSource imageIcon,
+            DirectoryInfo itemDirectory,
+            DirectoryInfo parentItemDirectory
+        )
+        {
+            BestFile bf = new BestFile(itemName, imageIcon, itemDirectory, parentItemDirectory);
+            bf.Expandable = false;
+
+            return bf;
+        }
+
+        public static BestFile BestFileFolder(
+            string itemName,
+            ImageSource imageIcon,
+            DirectoryInfo itemDirectory,
+            DirectoryInfo parentItemDirectory
+        )
+        {
+            BestFile bf = new BestFile(itemName, imageIcon, itemDirectory, parentItemDirectory);
+            bf.Expandable = true;
+
+            return bf;
         }
 
         public DirectoryInfo ItemDirectory

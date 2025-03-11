@@ -5,25 +5,35 @@
              xmlns:views="clr-namespace:BestNote_3951.Views"
              x:Class="BestNote_3951.Views.BestFileTreeView"
              x:Name="this">
+
+    <!--
+    <CollectionView x:Name="SubFilesCollectionView" IsVisible="False" ItemsSource="{Binding SubFiles}">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <views:BestFileTreeView BestFile="{Binding .}"/>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView> -->
     
     <VerticalStackLayout>
-        <HorizontalStackLayout Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}, ConverterParameter=20}" >
-            <Image Source="{Binding ImageIcon}" HeightRequest="20" />
+        <!-- File Information -->
+        <HorizontalStackLayout Margin="{Binding IndentationPadding}"
+                               HeightRequest="20">
+            <Image Source="{Binding ImageIcon}" />
             <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
-            <toolkit:Expander IsVisible="{Binding SubFiles.Count, Converter={StaticResource BoolConverter}}" HeightRequest="20">
-                <toolkit:Expander.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding BindingContext.ToggleExpandCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}" CommandParameter="{Binding .}" />
-                </toolkit:Expander.GestureRecognizers>
-            </toolkit:Expander>
+            <HorizontalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnToggleClicked" />
+            </HorizontalStackLayout.GestureRecognizers>
         </HorizontalStackLayout>
-        <CollectionView ItemsSource="{Binding SubFiles}" IsVisible="{Binding IsExpanded}">
+
+            <!-- Recursive Subfile List -->
+        <CollectionView x:Name="SubFilesCollectionView" IsVisible="True" ItemsSource="{Binding SubFiles}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <views:BestFileTreeView BestFile="{Binding .}" />
+                    <views:BestFileTreeView BestFile="{Binding .}"/>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        
         <!-- Context View To add File to this node -->
         <FlyoutBase.ContextFlyout>
             <MenuFlyout>
@@ -32,4 +42,5 @@
             </MenuFlyout>
         </FlyoutBase.ContextFlyout>
     </VerticalStackLayout>
+
 </ContentView>

@@ -42,18 +42,6 @@ namespace BestNote_3951.ViewModels
         }
 
         /// <summary>
-        /// Expand contents of a best file.
-        /// </summary>
-        [RelayCommand]
-        public void ToggleExpand(BestFile file)
-        {
-            if (file.IsExpanded)
-                file.IsExpanded = false;
-            else
-                file.IsExpanded = true;
-        }
-
-        /// <summary>
         /// Handles the open file logic (eventually)
         /// 
         /// The relay command attribute automatically generates a command property that can be invoked.
@@ -80,12 +68,19 @@ namespace BestNote_3951.ViewModels
                     ? fileManagerService.AddFolder(TestingInputName, parentPath: parent.ItemDirectory.FullName)
                     : fileManagerService.AddFolder(TestingInputName);
 
-                if (bf is not null)
+                if (bf is null)
+                    return;
+
+                if (parent is not null)
                 {
-                    this.FileSystem.Add(bf);
-                    // this.FileNames.Add(bf.ItemDirectory.FullName);
-                    TestingInputName = "";
+                    bf.Level = parent.Level + 10;
+                    parent.SubFiles.Add(bf);
                 }
+                else
+                {
+                    FileSystem.Add(bf);
+                }
+                TestingInputName = "";
             }
             catch (Exception e)
             {
@@ -116,14 +111,19 @@ namespace BestNote_3951.ViewModels
                     ? fileManagerService.AddFile(TestingInputName, parentPath: parent.ItemDirectory.FullName)
                     : fileManagerService.AddFile(TestingInputName);
 
-                if (bf is not null)
+                if (bf is null)
+                    return;
+
+                if (parent is not null)
                 {
-                    this.FileSystem.Add(bf);
-                    // this.FileNames.Add(bf.ItemDirectory.FullName);
-                    TestingInputName = "";
+                    bf.Level = parent.Level + 10;
+                    parent.SubFiles.Add(bf);
                 }
                 else
-                    Debug.WriteLine("File could not be added.");
+                {
+                    FileSystem.Add(bf);
+                }
+                TestingInputName = "";
             }
             catch (Exception e)
             {

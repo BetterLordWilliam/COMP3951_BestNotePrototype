@@ -75,11 +75,11 @@ namespace BestNote_3951.Services
             if (Directory.Exists(combinedPath))
             { 
                 directoryInfo = new DirectoryInfo(combinedPath);
-                return new BestFile(folderName, "folder_icon.png", directoryInfo, parentDirectoryInfo);
+                return BestFile.BestFileFolder(folderName, "folder_icon.png", directoryInfo, parentDirectoryInfo);
             }
             directoryInfo = Directory.CreateDirectory(combinedPath);
 
-            return new BestFile(folderName, "folder_icon.png", directoryInfo, parentDirectoryInfo);
+            return BestFile.BestFileFolder(folderName, "folder_icon.png", directoryInfo, parentDirectoryInfo);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace BestNote_3951.Services
             DirectoryInfo directoryInfo = new DirectoryInfo(combinedPath);
             DirectoryInfo parentDirectoryInfo = new DirectoryInfo(parent);
 
-            return new BestFile(fileName, "md_file.png", directoryInfo, parentDirectoryInfo);
+            return BestFile.BestFileMarkdown(fileName, "md_file.png", directoryInfo, parentDirectoryInfo);
         }
     }
 }
