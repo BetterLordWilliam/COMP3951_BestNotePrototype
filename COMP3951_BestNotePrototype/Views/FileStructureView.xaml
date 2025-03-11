@@ -31,15 +31,20 @@
                     </HorizontalStackLayout>
                 </ScrollView>
             </VerticalStackLayout>
-            <!-- Bind to the FileSystem Items -->
-            <CollectionView Grid.Row="1"
-                            ItemsSource="{Binding FileSystem}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:BestFile">
-                        <views:BestFileTreeView BestFile="{Binding .}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+
+            <!-- BsetFile tree -->
+            <!-- TODO: Make it so you can add things -->
+            <!-- TODO: Make it bind to application data directory on app load -->
+
+            <ScrollView Grid.Row="1" Orientation="Both">
+                <CollectionView ItemsSource="{Binding FileSystem}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:BestFile">
+                            <views:BestFileTreeView BestFile="{Binding .}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
         </Grid>
         
         <!-- File Tree Overview Context Menu -->
