@@ -3,6 +3,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BestNote_3951.ViewModels
 {
+    /// <summary>
+    /// ViewModel for the main page where the file structure viewmodel and services are created.
+    /// </summary>
     public partial class MainPageViewModel : ObservableObject
     {
         #region Services

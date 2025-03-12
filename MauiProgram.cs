@@ -5,6 +5,9 @@ using Syncfusion.Maui.TreeView;
 
 namespace BestNote_3951
 {
+    /// <summary>
+    /// The entry point of the application. 
+    /// </summary>
     public static class MauiProgram
     {
         public static MauiApp CreateMauiApp()
