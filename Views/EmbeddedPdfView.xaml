@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
+    The ContentView contains the XAML code for displaying a PDF and UI used so the user can
+    open a PDF from their file system.
+    
+    AUTHOR: Olivia Grace worked on the EmbeddedPdfView files
     SOURCES: 
     Used the Syncfusion PDF Viewer documentation for .NET MAUI:
     https://help.syncfusion.com/maui/pdf-viewer/getting-started
@@ -36,11 +40,7 @@
                              VerticalOptions="Center"
                              Text="Add Link"
                              WidthRequest="100" />
-            <Button x:Name="Bookmarks"
-                   Text="1"
-                   Clicked="Bookmarks_Clicked" 
-                   IsVisible="False"
-                         />
+
         </HorizontalStackLayout>
 
         <syncfusion:SfPdfViewer x:Name="pdfViewer"

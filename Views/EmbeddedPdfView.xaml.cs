@@ -5,6 +5,7 @@ using BestNote_3951.ViewModels;
 using Syncfusion.Maui.PdfViewer;
 
 /// <summary>
+/// AUTHOR: Olivia Grace worked on the EmbeddedPdfView files
 /// SOURCES:
 /// Used the following Syncfusion PDF viewer documentatiion to customize the toolbar:
 /// https://help.syncfusion.com/maui/pdf-viewer/toolbar
@@ -48,14 +49,6 @@ public partial class EmbeddedPdfView : ContentView
             nextPage.IsVisible = false;
             pageLayout.IsVisible = false;
         }
-    }
-
-	
-    // Just for testing purposes!!!
-    private void Bookmarks_Clicked(object sender, EventArgs e)
-    {
-        pdfViewer.GoToBookmark(new Bookmark("olivia test", 2));
-
     }
 
 }
