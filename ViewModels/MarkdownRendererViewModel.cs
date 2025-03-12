@@ -16,15 +16,28 @@ using Microsoft.Maui.Controls;
 
 namespace BestNote_3951
 {
+    /// <summary>
+    /// MarkdownRenderer ViewModel
+    /// 
+    /// This defines the logic that displays the rendered markdown in the MarkdownView file.
+    /// Registers the viewmodel with the MarkdownTextChanged messaged so that it can receive real-time
+    /// updates for the text change in the MarkdownEditor. 
+    /// 
+    /// Uses a webviewsource to display the rendered markdown.
+    /// 
+    /// </summary>
     public partial class MarkdownRendererViewModel : ObservableObject
     {
+        /// <summary>
+        /// Property for the webviewsource that displays the rendered markdown.
+        /// </summary>
         [ObservableProperty]
         private HtmlWebViewSource webViewSource;
 
         public MarkdownRendererViewModel()
         {
             // pipeline gives access to advanced markdown rendering features.
-            var pipeline          = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
 
             WebViewSource = new HtmlWebViewSource
             {
