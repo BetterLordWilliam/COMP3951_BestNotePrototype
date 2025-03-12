@@ -3,15 +3,15 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="BestNote_3951.Views.MarkdownRendererView">
-    <VerticalStackLayout>
+    <Grid
+        Padding="10"
+        VerticalOptions="FillAndExpand">
         <Label 
             Text="Markdown Renderer"
             FontSize="Title"
             HorizontalOptions="Center" />
         <WebView 
-            MinimumHeightRequest="500"
-            MinimumWidthRequest="500"
             VerticalOptions="FillAndExpand" 
             Source="{Binding WebViewSource}" />
-    </VerticalStackLayout>
+    </Grid>
 </ContentView>

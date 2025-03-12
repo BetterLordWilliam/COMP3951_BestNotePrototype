@@ -4,6 +4,9 @@ using BestNote_3951.Messages;
 using Markdig;
 using Microsoft.Maui.Controls;
 
+/**
+ * https://learn.microsoft.com/en-us/dotnet/maui/xaml/fundamentals/mvvm?view=net-maui-9.0
+ */
 namespace BestNote_3951
 {
     public partial class MarkdownRendererViewModel : ObservableObject
