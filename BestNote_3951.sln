@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestNote_3951", "BestNote_3951.csproj", "{CA8F8F21-8B73-4013-BFF9-B03A589A45AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestNote_3951", "COMP3951_BestNotePrototype\BestNote_3951.csproj", "{6D772A5D-3116-4AB1-B34F-34E654CC4C53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMP3951_BestNoteTests", "COMP3951_BestNoteTests\COMP3951_BestNoteTests.csproj", "{1F290CDE-7E4C-47F1-B298-0658D553A8DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CA8F8F21-8B73-4013-BFF9-B03A589A45AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA8F8F21-8B73-4013-BFF9-B03A589A45AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA8F8F21-8B73-4013-BFF9-B03A589A45AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA8F8F21-8B73-4013-BFF9-B03A589A45AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D772A5D-3116-4AB1-B34F-34E654CC4C53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D772A5D-3116-4AB1-B34F-34E654CC4C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D772A5D-3116-4AB1-B34F-34E654CC4C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D772A5D-3116-4AB1-B34F-34E654CC4C53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F290CDE-7E4C-47F1-B298-0658D553A8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F290CDE-7E4C-47F1-B298-0658D553A8DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F290CDE-7E4C-47F1-B298-0658D553A8DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F290CDE-7E4C-47F1-B298-0658D553A8DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

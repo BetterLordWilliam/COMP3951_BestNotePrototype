@@ -1,13 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Diagnostics;
 using BestNote_3951.Services;
 using BestNote_3951.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BestNote_3951.Testing
+namespace COMP3951_BestNoteTests
 {
     [TestClass]
     public sealed class FileSystemServiceTests
@@ -93,5 +88,4 @@ namespace BestNote_3951.Testing
             Debug.WriteLine($"Best note new folder directory {output1.DirectoryInfo.FullName}\nBest note new folder name {output1.DirectoryInfo.Name}");
         }
     }
-
 }
