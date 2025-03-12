@@ -9,6 +9,7 @@ using BestNote_3951.Models;
 using Syncfusion.Maui.PdfViewer;
 
 /// <summary>
+/// AUTHOR: Olivia Grace worked on the EmbeddedPdfViewModel file
 /// SOURCES:
 /// Followed this YouTube tutorial to open and display the PDF (see OpenDocument and PickAndShow)
 /// https://www.youtube.com/watch?v=E_-g-GcQZRE&list=PL5IWFN3_TaPrE_3Y10N2XReOe57CpnMjy&index=6

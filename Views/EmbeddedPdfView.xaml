@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
+    AUTHOR: Olivia Grace worked on the EmbeddedPdfView files
     SOURCES: 
     Used the Syncfusion PDF Viewer documentation for .NET MAUI:
     https://help.syncfusion.com/maui/pdf-viewer/getting-started
