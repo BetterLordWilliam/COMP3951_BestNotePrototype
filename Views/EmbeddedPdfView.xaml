@@ -40,11 +40,7 @@
                              VerticalOptions="Center"
                              Text="Add Link"
                              WidthRequest="100" />
-            <Button x:Name="Bookmarks"
-                   Text="1"
-                   Clicked="Bookmarks_Clicked" 
-                   IsVisible="False"
-                         />
+
         </HorizontalStackLayout>
 
         <syncfusion:SfPdfViewer x:Name="pdfViewer"
