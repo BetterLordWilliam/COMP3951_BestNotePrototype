@@ -50,18 +50,18 @@ namespace BestNote_3951.ViewModels
             try
             {
                 // Get details of where the file should go
-                ObservableCollection<BestFile> contents;
+                IReadOnlyCollection<BestFile> contents;
                 ObservableCollection<BestFile> destination;
                 if (bfParent is null)
                 {
                     contents = fileManagerService.GetFolderContents();
-                    FileSystem = new ObservableCollection<BestFile>();
+                    FileSystem.Clear();
                     destination = FileSystem;
                 }
                 else
                 {
                     contents = fileManagerService.GetFolderContents(parentPath: bfParent.DirectoryInfo.FullName);
-                    bfParent.SubFiles = new ObservableCollection<BestFile>();
+                    bfParent.SubFiles.Clear();
                     destination = bfParent.SubFiles;
                 }
                 if (contents is null)
@@ -134,8 +134,8 @@ namespace BestNote_3951.ViewModels
         private BestFile? CreateFileBestFile(BestFile? bfParent)
         {
             return (bfParent is not null)
-                ? fileManagerService.AddFile(TestingInputName, parentPath: bfParent.ItemDirectory.FullName)
-                : fileManagerService.AddFile(TestingInputName);
+                ? fileManagerService.AddFile($"{TestingInputName}.md", parentPath: bfParent.ItemDirectory.FullName)
+                : fileManagerService.AddFile($"{TestingInputName}.md");
         }
 
         /// <summary>
@@ -154,9 +154,7 @@ namespace BestNote_3951.ViewModels
         [RelayCommand]
         public void RetrieveContents(BestFile? parent)
         {
-            Debug.WriteLine("Retrieve file called.");
-            if (parent is null)
-                return;
+            Debug.WriteLine($"Retrieve file called. Parent null: {parent is null}");
             LoadFileSystemContents(parent);
         }
 

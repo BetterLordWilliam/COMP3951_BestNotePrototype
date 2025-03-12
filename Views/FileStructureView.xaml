@@ -18,7 +18,7 @@
 
         <Grid RowDefinitions="Auto,*"
               VerticalOptions="Fill">
-
+            <!-- File Tree Options Menu TEMP -->
             <VerticalStackLayout Grid.Row="0">
                 <Label Text="File Manager Options"/>
                 <Entry x:Name="testingItemNameInput" Text="{Binding TestingInputName}"></Entry>
@@ -31,12 +31,9 @@
                     </HorizontalStackLayout>
                 </ScrollView>
             </VerticalStackLayout>
-
-            <!-- BsetFile tree -->
-            <!-- TODO: Make it so you can add things -->
-            <!-- TODO: Make it bind to application data directory on app load -->
-
-            <CollectionView Grid.Row="1" ItemsSource="{Binding FileSystem}">
+            <!-- Bind to the FileSystem Items -->
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding FileSystem}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:BestFile">
                         <views:BestFileTreeView BestFile="{Binding .}"/>
@@ -44,6 +41,16 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
+        
+        <!-- File Tree Overview Context Menu -->
+        <FlyoutBase.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem
+                            IsEnabled="True"
+                            Text="Reload Files"
+                            Command="{Binding RetrieveContentsCommand}"></MenuFlyoutItem>
+            </MenuFlyout>
+        </FlyoutBase.ContextFlyout>
     </Border>
 
 </ContentView>

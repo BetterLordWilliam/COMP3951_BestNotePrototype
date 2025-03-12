@@ -9,8 +9,7 @@
 
     <VerticalStackLayout>
         <!-- File Information -->
-        <HorizontalStackLayout
-                               Margin="{Binding IndentationPadding}"
+        <HorizontalStackLayout Margin="{Binding IndentationPadding}"
                                HeightRequest="20">
             <Image Source="{Binding ImageIcon}" />
             <!--<Entry Placeholder="Item name..." HeightRequest="20" MinimumHeightRequest="20" FontSize="5" VerticalTextAlignment="Center" />-->

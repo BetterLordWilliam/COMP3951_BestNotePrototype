@@ -14,32 +14,33 @@ public class FileManagerService
     public DirectoryInfo AppDirectory { get; private set; }         // Application data directory
     public DirectoryInfo BestNoteDirectory { get; private set; }    // Notes directory
 
-    private string appDirectory;
-    private string bestNoteDirectory;
+    private readonly string _appDirectoryPath;
+    private readonly string _bestNoteDirectoryPath;
 
     /// <summary>
     /// Service constructor. Use with dependency injection.
     /// </summary>
     public FileManagerService()
     {
-        // Define the directory, possible configureable, for now ..\OS_Data\BestNote\...
-        appDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
-        // Define the notes directory, possible configureable, for now notes
-        bestNoteDirectory = Path.Combine(appDirectory, "Notes");
+        _appDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
+        _bestNoteDirectoryPath = Path.Combine(_appDirectoryPath, "Notes");
 
-        // Create directory information objects
-        if (!Directory.Exists(appDirectory))
-        {
-            Directory.CreateDirectory(appDirectory);
-        }
-        AppDirectory = new DirectoryInfo(appDirectory);
+        AppDirectory = CreateDirectoryIfNotExists(_appDirectoryPath);
+        BestNoteDirectory = CreateDirectoryIfNotExists(_bestNoteDirectoryPath);
+    }
 
-        // Create directory information objects
-        if (!Directory.Exists(bestNoteDirectory))
+    /// <summary>
+    /// Create a directory if it does not exist in the system.
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    private DirectoryInfo CreateDirectoryIfNotExists(string path)
+    {
+        if (!Directory.Exists(path))
         {
-            Directory.CreateDirectory(bestNoteDirectory);
+            Directory.CreateDirectory(path);
         }
-        BestNoteDirectory = new DirectoryInfo(bestNoteDirectory);
+        return new DirectoryInfo(path);
     }
 
     /// <summary>
@@ -48,28 +49,31 @@ public class FileManagerService
     /// <param name="folderName"></param>
     /// <param name="parentPath"></param>
     /// <returns></returns>
-    public ObservableCollection<BestFile>? GetFolderContents(string folderName = "", string? parentPath = null)
+    public IReadOnlyCollection<BestFile> GetFolderContents(string folderName = "", string? parentPath = null)
     {
-        // Determine parent
         string parent = parentPath ?? BestNoteDirectory.FullName;
         string combinedPath = Path.Combine(parent, folderName);
-        DirectoryInfo directoryInfo;
-        ObservableCollection<BestFile> contents = new ObservableCollection<BestFile>();
 
-        // If directory does not exist abort
+        // Debug.WriteLine($"{parent} {combinedPath}");
+
         if (!Directory.Exists(combinedPath))
-            return null;
+        {
+            return new List<BestFile>(); // Return empty list
+        }
 
-        directoryInfo = new DirectoryInfo(combinedPath);
+        DirectoryInfo directoryInfo = new DirectoryInfo(combinedPath);
+        List<BestFile> contents = new List<BestFile>();
 
         foreach (DirectoryInfo d in directoryInfo.GetDirectories())
         {
             contents.Add(BestFile.BestFileFolder(d.Name, "folder_icon.png", d, directoryInfo));
         }
-        foreach (FileInfo d in directoryInfo.GetFiles())
+
+        foreach (FileInfo f in directoryInfo.GetFiles())
         {
-            contents.Add(BestFile.BestFileMarkdown(d.Name, "md_file.png", d, directoryInfo));
+            contents.Add(BestFile.BestFileMarkdown(f.Name, "md_file.png", f, directoryInfo));
         }
+
 
         return contents;
     }
@@ -80,20 +84,13 @@ public class FileManagerService
     /// <param name="ParentPath"></param>
     /// <param name="folderName"></param>
     /// <returns></returns>
-    public BestFile? AddFolder(string folderName, string? parentPath = null)
+    public BestFile AddFolder(string folderName, string? parentPath = null)
     {
-        // Determine parent
         string parent = parentPath ?? BestNoteDirectory.FullName;
         string combinedPath = Path.Combine(parent, folderName);
-        DirectoryInfo directoryInfo, parentDirectoryInfo = new DirectoryInfo(parent);
+        DirectoryInfo parentDirectoryInfo = new DirectoryInfo(parent);
 
-        // Create directory if it does not exist
-        if (Directory.Exists(combinedPath))
-        { 
-            directoryInfo = new DirectoryInfo(combinedPath);
-            return BestFile.BestFileFolder(folderName, "folder_icon.png", directoryInfo, parentDirectoryInfo);
-        }
-        directoryInfo = Directory.CreateDirectory(combinedPath);
+        DirectoryInfo directoryInfo = Directory.CreateDirectory(combinedPath);
 
         return BestFile.BestFileFolder(folderName, "folder_icon.png", directoryInfo, parentDirectoryInfo);
     }
@@ -102,26 +99,19 @@ public class FileManagerService
     /// Create a file in the apps local data. Parent folder and file extension are not required, default is md.
     /// </summary>
     /// <param name="fileName"></param>
-    /// <param name="fileExtension"></param>
     /// <param name="parentPath"></param>
     /// <returns></returns>
-    public BestFile? AddFile(string fileName, string fileExtension = ".md", string? parentPath = null)
+    public BestFile? AddFile(string fileName, string? parentPath = null)
     {
-        // Determine fileType and parent
-        string fileType = string.Join("", fileName, fileExtension);
+        Debug.WriteLine(fileName);
         string parent = parentPath ?? BestNoteDirectory.FullName;
-        string combinedPath = Path.Combine(parent, fileType);
+        string combinedPath = Path.Combine(parent, fileName);
 
-        // If the file exists, try and delete it
-        if (File.Exists(combinedPath))
-            File.Delete(combinedPath);
-
-        // Create the file
-        File.Create(combinedPath);
-        FileInfo directoryInfo = new FileInfo(combinedPath);
+        using (File.Create(combinedPath)) { } // Create empty file.
+        FileInfo fileInfo = new FileInfo(combinedPath);
         DirectoryInfo parentDirectoryInfo = new DirectoryInfo(parent);
 
-        return BestFile.BestFileMarkdown(fileName, "md_file.png", directoryInfo, parentDirectoryInfo);
+        return BestFile.BestFileMarkdown(fileName, "md_file.png", fileInfo, parentDirectoryInfo);
     }
 }
 

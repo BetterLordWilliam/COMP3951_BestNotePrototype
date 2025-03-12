@@ -31,8 +31,10 @@ public partial class BestFileTreeView : ContentView
     private void OnToggleClicked(object sender, EventArgs e)
     {
         // Only invoke the command if the tree is not visible
-        if (!SubFilesCollectionView.IsVisible)
+        if (!SubFilesCollectionView.IsVisible && BestFile.Parent)
+        {
             ((FileStructureViewModel)((FileStructureView)fileTreeItem.BindingContext).BindingContext).RetrieveContents(BestFile);
+        }
         SubFilesCollectionView.IsVisible = !SubFilesCollectionView.IsVisible;
     }
 }
