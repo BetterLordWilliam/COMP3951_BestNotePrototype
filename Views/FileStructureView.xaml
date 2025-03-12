@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
+# pragma warning disable XC0022
 <!-- 
   This ContentView displays the file structure pane.
   It uses a CollectionView to list all files provided by the ViewModel.
