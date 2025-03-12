@@ -6,6 +6,12 @@
              x:Class="BestNote_3951.Views.MainPanel"
              x:DataType="viewmodels:MainPanelViewModel">
 
-    <HorizontalStackLayout>
-    </HorizontalStackLayout>
+    <Grid ColumnDefinitions="*,*">
+        <views:MarkdownEditorView
+            x:Name="EditorView"
+            Grid.Column="0" />
+        <views:MarkdownRendererView
+            x:Name="RendererView"
+            Grid.Column="1" />
+    </Grid>
 </ContentView>
