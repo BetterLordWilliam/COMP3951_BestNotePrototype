@@ -1,4 +1,5 @@
 using BestNote_3951.Models;
+using BestNote_3951.ViewModels;
 
 namespace BestNote_3951.Views;
 
@@ -15,7 +16,7 @@ public partial class BestFileTreeView : ContentView
 
 	public BestFileTreeView()
 	{
-		InitializeComponent();
+        InitializeComponent();
 	}
 
     private static void OnBestFileChanged(BindableObject bindable, object oldValue, object newValue)
@@ -29,6 +30,11 @@ public partial class BestFileTreeView : ContentView
 
     private void OnToggleClicked(object sender, EventArgs e)
     {
+        // Only invoke the command if the tree is not visible
+        if (!SubFilesCollectionView.IsVisible && BestFile.Parent)
+        {
+            ((FileStructureViewModel)((FileStructureView)fileTreeItem.BindingContext).BindingContext).RetrieveContents(BestFile);
+        }
         SubFilesCollectionView.IsVisible = !SubFilesCollectionView.IsVisible;
     }
 }

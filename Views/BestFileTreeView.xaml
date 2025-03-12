@@ -3,18 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:BestNote_3951.Views"
+             xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
              x:Class="BestNote_3951.Views.BestFileTreeView"
              x:Name="this">
 
-    <!--
-    <CollectionView x:Name="SubFilesCollectionView" IsVisible="False" ItemsSource="{Binding SubFiles}">
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <views:BestFileTreeView BestFile="{Binding .}"/>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView> -->
-    
     <VerticalStackLayout>
         <!-- File Information -->
         <HorizontalStackLayout Margin="{Binding IndentationPadding}"
@@ -22,12 +14,13 @@
             <Image Source="{Binding ImageIcon}" />
             <!--<Entry Placeholder="Item name..." HeightRequest="20" MinimumHeightRequest="20" FontSize="5" VerticalTextAlignment="Center" />-->
             <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
+            <Label x:Name="fileTreeItem" IsEnabled="False" IsVisible="False" BindingContext="{Binding ., Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}" />
             <HorizontalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnToggleClicked" />
             </HorizontalStackLayout.GestureRecognizers>
         </HorizontalStackLayout>
 
-            <!-- Recursive Subfile List -->
+        <!-- Recursive Subfile List -->
         <CollectionView x:Name="SubFilesCollectionView" IsVisible="True" ItemsSource="{Binding SubFiles}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
@@ -35,11 +28,23 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        
         <!-- Context View To add File to this node -->
         <FlyoutBase.ContextFlyout>
             <MenuFlyout>
-                <MenuFlyoutItem Text="Add Subfolder" Command="{Binding BindingContext.AddFolderCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}" CommandParameter="{Binding .}" />
-                <MenuFlyoutItem Text="Add Note" Command="{Binding BindingContext.AddFileCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}" CommandParameter="{Binding .}" />
+                <MenuFlyoutItem
+                    IsEnabled="False"
+                    Text="Rename Item" />
+                <MenuFlyoutItem
+                    IsEnabled="{Binding Parent}"
+                    Text="Add Subfolder"
+                    Command="{Binding BindingContext.AddFolderCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
+                    CommandParameter="{Binding .}" />
+                <MenuFlyoutItem
+                    IsEnabled="{Binding Parent}"
+                    Text="Add Note"
+                    Command="{Binding BindingContext.AddFileCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
+                    CommandParameter="{Binding .}" />
             </MenuFlyout>
         </FlyoutBase.ContextFlyout>
     </VerticalStackLayout>
