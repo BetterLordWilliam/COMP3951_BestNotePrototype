@@ -5,6 +5,7 @@
     xmlns:views="clr-namespace:BestNote_3951.Views"
     xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="BestNote"
     x:Class="BestNote_3951.MainPage">
 
     <ContentPage.BindingContext>
@@ -36,8 +37,8 @@
                                        MaximumWidthRequest="250" />
 
             <views:MainPanel toolkit:DockLayout.DockPosition="None"
-                                VerticalOptions="Fill"
-                                HorizontalOptions="Fill" />
+                             VerticalOptions="Fill"
+                             HorizontalOptions="Fill" />
 
         </toolkit:DockLayout>
     </Border>
