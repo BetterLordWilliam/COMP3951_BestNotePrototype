@@ -7,7 +7,9 @@
 <ContentView 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.TreeView;assembly=Syncfusion.Maui.TreeView"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
+    xmlns:views="clr-namespace:BestNote_3951.Views"
     xmlns:models="clr-namespace:BestNote_3951.Models"
     x:Class="BestNote_3951.Views.FileStructureView"
     x:Name="this">
@@ -15,9 +17,8 @@
     <Border Stroke="#2e2e2e">
 
         <Grid RowDefinitions="Auto,*"
-              VerticalOptions="Fill"
-              BindingContext="{Binding BindingContext, Source={x:Reference this}}">
-            
+              VerticalOptions="Fill">
+            <!-- File Tree Options Menu TEMP -->
             <VerticalStackLayout Grid.Row="0">
                 <Label Text="File Manager Options"/>
                 <Entry x:Name="testingItemNameInput" Text="{Binding TestingInputName}"></Entry>
@@ -30,43 +31,26 @@
                     </HorizontalStackLayout>
                 </ScrollView>
             </VerticalStackLayout>
-
-            <!-- BsetFile tree -->
-            <!-- TODO: Make it so you can add things -->
-            <!-- TODO: Make it bind to application data directory on app load -->
-
+            <!-- Bind to the FileSystem Items -->
             <CollectionView Grid.Row="1"
                             ItemsSource="{Binding FileSystem}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:BestFile">
-                        <HorizontalStackLayout>
-                            <Image Source="{Binding ImageIcon}" HeightRequest="20" />
-                            <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
-                        </HorizontalStackLayout>
+                        <views:BestFileTreeView BestFile="{Binding .}"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </Grid>
+        
+        <!-- File Tree Overview Context Menu -->
+        <FlyoutBase.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem
+                            IsEnabled="True"
+                            Text="Reload Files"
+                            Command="{Binding RetrieveContentsCommand}"></MenuFlyoutItem>
+            </MenuFlyout>
+        </FlyoutBase.ContextFlyout>
     </Border>
 
 </ContentView>
-
-<!-- 
-Grid.Row="1"
-x:Name="treeView"
-ItemsSource="{Binding FileSystem}"
-ChildPropertyName="SubFiles"
-    
-                    <CollectionView>
-                    <DataTemplate x:DataType="models:BestFile">
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal" VerticalOptions="Center" >
-                                <Image Source="{Binding ImageIcon}" HeightRequest="20" />
-                                <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </CollectionView>
-    
-    -->
