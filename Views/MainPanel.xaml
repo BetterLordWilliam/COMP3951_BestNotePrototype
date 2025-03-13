@@ -6,12 +6,19 @@
              x:Class="BestNote_3951.Views.MainPanel"
              x:DataType="viewmodels:MainPanelViewModel">
 
-    <Grid ColumnDefinitions="*,*">
+    <Grid ColumnDefinitions="*,*,*">
         <views:MarkdownEditorView
+            BindingContext="{Binding MarkdownEditorViewModel}"
             x:Name="EditorView"
             Grid.Column="0" />
         <views:MarkdownRendererView
+            BindingContext="{Binding MarkdownRendererViewModel}"
             x:Name="RendererView"
             Grid.Column="1" />
+        <views:EmbeddedPdfView
+            BindingContext="{Binding EmbeddedPdfViewModel}"
+            x:Name="PdfView"
+            Grid.Column="2">
+        </views:EmbeddedPdfView>
     </Grid>
 </ContentView>

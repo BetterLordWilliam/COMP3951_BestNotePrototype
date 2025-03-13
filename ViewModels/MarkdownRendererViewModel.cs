@@ -14,7 +14,7 @@ using Microsoft.Maui.Controls;
 * https://www.youtube.com/watch?v=bCryIp9HqIM
 */
 
-namespace BestNote_3951
+namespace BestNote_3951.ViewModels
 {
     /// <summary>
     /// MarkdownRenderer ViewModel

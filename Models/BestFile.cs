@@ -2,6 +2,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
+///
+/// Will Otterbein
+/// March 12 2025
+///
 namespace BestNote_3951.Models
 {
     /// <summary>

@@ -9,6 +9,10 @@ using BestNote_3951.Models;
 
 namespace BestNote_3951.Services;
 
+///
+/// Will Otterbein
+/// March 12 2025
+///
 public class FileManagerService
 {
     public DirectoryInfo AppDirectory { get; private set; }         // Application data directory
