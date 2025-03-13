@@ -36,8 +36,9 @@
 
             <views:EmbeddedPdfView BindingContext="{Binding EmbeddedPdfViewModel}"
                                        toolkit:DockLayout.DockPosition="Right"
-                                       VerticalOptions="Fill"
-                                       MaximumWidthRequest="250" />
+                                       VerticalOptions="FillAndExpand"
+                                       MinimumWidthRequest="300"
+                                       MaximumWidthRequest="400" />
 
             <views:MainPanel toolkit:DockLayout.DockPosition="None"
                              VerticalOptions="Fill"

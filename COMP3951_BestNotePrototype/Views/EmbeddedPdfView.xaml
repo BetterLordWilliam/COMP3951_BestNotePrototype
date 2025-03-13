@@ -19,13 +19,12 @@
              x:DataType="local:EmbeddedPdfViewModel">
 
 
-    <VerticalStackLayout Width="300">
-
-        <VerticalStackLayout.BindingContext>
+    <Grid RowDefinitions="Auto,*">
+        <Grid.BindingContext>
             <local:EmbeddedPdfViewModel/>
-        </VerticalStackLayout.BindingContext>
+        </Grid.BindingContext>
 
-        <HorizontalStackLayout x:Name="Toolbar">
+        <HorizontalStackLayout x:Name="Toolbar" Grid.Row="0">
             <Button x:Name="openFile"
                              Margin="10,10,10,10"
                              Command="{Binding OpenDocumentCommand}"
@@ -40,11 +39,11 @@
                              VerticalOptions="Center"
                              Text="Add Link"
                              WidthRequest="100" />
-
         </HorizontalStackLayout>
 
         <syncfusion:SfPdfViewer x:Name="pdfViewer"
-                                HeightRequest="300"
+                                Grid.Row="1"
+                                VerticalOptions="FillAndExpand"
                                 IsOutlineViewVisible="True"
                                 ShowScrollHead="False"
                                 ShowToolbars="True"
@@ -53,7 +52,5 @@
                                 ZoomMode="FitToWidth"
                                 PageNumber ="{Binding PageNum, Mode=TwoWay}"
                                 />
-
-    </VerticalStackLayout>
-
+    </Grid>
 </ContentView>
