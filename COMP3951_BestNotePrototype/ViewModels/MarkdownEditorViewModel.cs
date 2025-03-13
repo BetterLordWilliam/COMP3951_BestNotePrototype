@@ -2,6 +2,9 @@
 using CommunityToolkit.Mvvm.Messaging;
 using BestNote_3951.Messages;
 
+/**
+ * Authors: Bryson Lindy
+ */
 namespace BestNote_3951.ViewModels
 {
     /// <summary>

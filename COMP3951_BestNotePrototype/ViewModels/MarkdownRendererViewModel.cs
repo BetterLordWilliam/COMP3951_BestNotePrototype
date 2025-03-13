@@ -12,6 +12,7 @@ using Microsoft.Maui.Controls;
 * Avalonia framework. It really helped show how the Observable Properties and Objects should be connected
 * across views/viewmodels.
 * https://www.youtube.com/watch?v=bCryIp9HqIM
+* Authors: Bryson Lindy
 */
 
 namespace BestNote_3951
