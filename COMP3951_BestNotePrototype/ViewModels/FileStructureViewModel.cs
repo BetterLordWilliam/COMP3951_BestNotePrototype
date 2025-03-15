@@ -9,7 +9,7 @@ using BestNote_3951.Services;
 ///
 /// Will Otterbein
 /// March 12 2025
-///
+/// 
 namespace BestNote_3951.ViewModels
 {
     /// <summary>
