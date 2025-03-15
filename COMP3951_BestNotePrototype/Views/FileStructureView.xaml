@@ -31,11 +31,7 @@
                     </HorizontalStackLayout>
                 </ScrollView>
             </VerticalStackLayout>
-
-            <!-- BsetFile tree -->
-            <!-- TODO: Make it so you can add things -->
-            <!-- TODO: Make it bind to application data directory on app load -->
-
+            <!-- Bind to the FileSystem Items -->
             <ScrollView Grid.Row="1" Orientation="Both">
                 <CollectionView ItemsSource="{Binding FileSystem}">
                     <CollectionView.ItemTemplate>
