@@ -7,9 +7,12 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using BestNote_3951.Models;
 using Syncfusion.Maui.PdfViewer;
+using CommunityToolkit.Mvvm.Messaging;
+using BestNote_3951.Messages;
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfViewModel file
+///         Bryson Lindy pdfviewmodel - markdown renderer messaging
 /// SOURCES:
 /// Followed this YouTube tutorial to open and display the PDF (see OpenDocument and PickAndShow)
 /// https://www.youtube.com/watch?v=E_-g-GcQZRE&list=PL5IWFN3_TaPrE_3Y10N2XReOe57CpnMjy&index=6
@@ -29,7 +32,6 @@ namespace BestNote_3951.ViewModels
         /// </summary>
         [ObservableProperty]
         public Stream? _pdfDocumentStream;
-
 
         /// <summary>
         /// Gets and sets the path of the Pdf document.
@@ -58,13 +60,17 @@ namespace BestNote_3951.ViewModels
         [RelayCommand]
         internal void CreateResourceLink()
         {
-            if (PdfPath != null && PdfPath != "")
+            if (!string.IsNullOrEmpty(PdfPath))
             {
-                int pageNumber = PageNum;
-                String name = "BestNoteBookmark";
-                ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));              
-            }
+                int pageNumber    = PageNum;
+                String name       = "BestNoteBookmark";
+                Bookmark bookmark = new Bookmark(name, pageNumber);
 
+                ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));
+
+                // sends to the registered messenger in the markdowneditor viewmodel constructor
+                WeakReferenceMessenger.Default.Send(new PdfBookmarkTomarkdownMessage(bookmark));
+            }
         }
 
 
@@ -133,9 +139,12 @@ namespace BestNote_3951.ViewModels
             PageNum = 0;
             PdfPath = "";
             ResourceLinks = new Collection<ResourceLink>();
+
+            WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
+            {
+                PageNum = message.Value;
+            });
         }
-
-
     }
 }
 
