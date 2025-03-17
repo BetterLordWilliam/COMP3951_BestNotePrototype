@@ -16,7 +16,15 @@ public partial class MarkdownRendererView : ContentView
     }
 
 	/// <summary>
-	/// Gets the UR
+	///  if the event args contain a url that has the bestnote:// scheme it cancels
+	///  the default behavior and we turn the url into a uri for local navigation.
+	///  we ge tthe page number by parsing the query string and then send the page
+	///  number to the pdfViewer that is registered for the event.
+	///  
+	/// sadly it doesn't actually GO to the page, it just updates the page number and the
+	/// user has to physically press enter because the syncfusion pdfViewer doesn't
+	/// have a public API that lets us simulate a keypress event for unknown arcane 
+	/// reasons of reat mystery and confusion.
 	/// </summary>
 	/// <param name="sender"></param>
 	/// <param name="e"></param>
