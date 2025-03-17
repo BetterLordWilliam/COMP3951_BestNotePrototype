@@ -20,9 +20,7 @@
 
 
     <Grid RowDefinitions="Auto,*">
-        <Grid.BindingContext>
-            <local:EmbeddedPdfViewModel/>
-        </Grid.BindingContext>
+
 
         <HorizontalStackLayout x:Name="Toolbar"
                                Grid.Row="0">

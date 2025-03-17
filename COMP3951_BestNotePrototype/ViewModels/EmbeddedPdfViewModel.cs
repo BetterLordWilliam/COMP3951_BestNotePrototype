@@ -140,10 +140,11 @@ namespace BestNote_3951.ViewModels
             PdfPath = "";
             ResourceLinks = new Collection<ResourceLink>();
 
-            WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
-            {
-                PageNum = message.Value;
-            });
+            //WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
+            //{
+
+            //    PageNum = message.Value;
+            //});
         }
     }
 }

@@ -4,7 +4,10 @@ using System.Linq.Expressions;
 using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
 using BestNote_3951.ViewModels;
+using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.PdfViewer;
+using BestNote_3951.Messages;
+
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfView files
@@ -31,8 +34,21 @@ public partial class EmbeddedPdfView : ContentView
 
         if (this.BindingContext is EmbeddedPdfViewModel vm)
         {
-            vm.PropertyChanged += OnViewModelPropertyChanged;
+            vm.PropertyChanged += OnPropertyChanged;
         }
+
+        WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
+        {
+
+            if (pdfViewer.PageCount > 0 && message.Value > 0)
+            {
+                if (pdfViewer.GoToPageCommand.CanExecute(message.Value))
+                {
+                    pdfViewer.GoToPageCommand.Execute(message.Value);
+                    pdfViewer.Unfocus();
+                }
+            }
+        });
 
     }
 
@@ -62,7 +78,22 @@ public partial class EmbeddedPdfView : ContentView
     /// <summary>
     /// When the view model's PageNum changes, we use the GoToPageCommand to navigate.
     /// </summary>
-    private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+    //private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    //{
+    //    if (sender is EmbeddedPdfViewModel vm && e.PropertyName == nameof(vm.PageNum))
+    //    {
+    //        if (pdfViewer.PageCount > 0 && vm.PageNum > 0)
+    //        {
+    //            if (pdfViewer.GoToPageCommand.CanExecute(vm.PageNum))
+    //            {
+    //                pdfViewer.GoToPageCommand.Execute(vm.PageNum);
+    //                pdfViewer.Unfocus();
+    //            }
+    //        }
+    //    }
+    //}
+
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (sender is EmbeddedPdfViewModel vm && e.PropertyName == nameof(vm.PageNum))
         {
@@ -76,6 +107,7 @@ public partial class EmbeddedPdfView : ContentView
             }
         }
     }
+
 
 
     /// <summary>
