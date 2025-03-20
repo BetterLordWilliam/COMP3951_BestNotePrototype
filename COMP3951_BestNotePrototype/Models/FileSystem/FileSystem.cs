@@ -21,7 +21,7 @@ namespace BestNote_3951.Models.FileSystem
         void WriteToFile(string Content);
     }
 
-    public interface IBNFile : IBNWritable, IBNReadable
+    public interface IBNFile
     {
         FileInfo FileInfo { get; set; }
     }
@@ -145,10 +145,6 @@ namespace BestNote_3951.Models.FileSystem
             get => _sourceFile.FileInfo;
             set => _sourceFile.FileInfo = value;
         }
-
-        public void WriteToFile(string Content) => _sourceFile.WriteToFile(Content);
-
-        public string ReadFileContents() => _sourceFile.ReadFileContents();
     }
 
     /// <summary>

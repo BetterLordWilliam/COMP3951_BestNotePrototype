@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BestNote_3951.Models.FileSystem;
 
-public class MarkdownFile : IBNFile
+public class MarkdownFile : IBNFile, IBNWritable, IBNReadable
 {
     private readonly FileManagerService _fileManagerService;
     private FileInfo fileInfo;
