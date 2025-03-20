@@ -12,6 +12,7 @@
     xmlns:views="clr-namespace:BestNote_3951.Views"
     xmlns:models="clr-namespace:BestNote_3951.Models.FileSystem"
     x:Class="BestNote_3951.Views.FileStructureView"
+    x:DataType="viewmodels:FileStructureViewModel"
     x:Name="this">
 
     <Border Stroke="#2e2e2e">
@@ -37,7 +38,7 @@
             <ScrollView Grid.Row="1" Orientation="Both">
                 <CollectionView ItemsSource="{Binding FileSystem}">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:BestFile">
+                        <DataTemplate x:DataType="models:ITreeViewItem">
                             <views:BestFileTreeView BestFile="{Binding .}"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
