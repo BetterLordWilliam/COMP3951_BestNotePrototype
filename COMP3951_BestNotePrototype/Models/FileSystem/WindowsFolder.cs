@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace BestNote_3951.Models.FileSystem;
 
-
 public class WindowsFolder : IBNFolder
 {
     private readonly FileManagerService _fileManagerService;
@@ -28,6 +27,10 @@ public class WindowsFolder : IBNFolder
         set => directoryInfo = value;
     }
 
-    public ObservableCollection<ITreeViewItem> Children => children;
+    public ObservableCollection<ITreeViewItem> Children
+    {
+        get => children;
+        set => children = value;
+    }
 }
 

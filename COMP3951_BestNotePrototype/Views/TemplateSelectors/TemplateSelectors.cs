@@ -17,6 +17,7 @@ namespace BestNote_3951.Views.TemplateSelectors
     {
         public DataTemplate FileTemplate { get; set; }
         public DataTemplate FolderTemplate { get; set; }
+        public DataTemplate TemporaryTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
@@ -28,7 +29,10 @@ namespace BestNote_3951.Views.TemplateSelectors
             {
                 return FolderTemplate;
             }
-            return null; // Or a default template
+            else
+            {
+                return TemporaryTemplate;
+            }
         }
     }
 }

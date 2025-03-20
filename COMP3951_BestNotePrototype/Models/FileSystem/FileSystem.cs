@@ -29,7 +29,7 @@ namespace BestNote_3951.Models.FileSystem
     public interface IBNFolder
     {
         DirectoryInfo DirectoryInfo { get; set; }
-        ObservableCollection<ITreeViewItem> Children { get; }
+        ObservableCollection<ITreeViewItem> Children { get; set; }
     }
 
     public interface ITreeViewItem : INotifyPropertyChanged
@@ -38,8 +38,8 @@ namespace BestNote_3951.Models.FileSystem
         public int ItemLevel { get; set; }
         public bool HasChildren { get; }
         public bool CanHaveChildren { get; }
-        public ObservableCollection<ITreeViewItem>? Children { get; }
         public Thickness IndentationPadding { get; set; }
+        public IEnumerable<ITreeViewItem> SafeChildren { get; }
         public ImageSource ImageIcon { get; }
     }
 
@@ -93,11 +93,11 @@ namespace BestNote_3951.Models.FileSystem
             }
         }
 
-        public abstract bool HasChildren { get; }
+        public virtual bool HasChildren => false;
 
-        public abstract bool CanHaveChildren { get; }
+        public virtual bool CanHaveChildren => false;
 
-        public abstract ObservableCollection<ITreeViewItem>? Children { get; }
+        public virtual IEnumerable<ITreeViewItem> SafeChildren => Enumerable.Empty<ITreeViewItem>();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -108,9 +108,16 @@ namespace BestNote_3951.Models.FileSystem
     }
 
     /// <summary>
+    /// Temporary tree item.
+    /// </summary>
+    public partial class FileTreeTemp : TreeViewItemBase
+    {
+    }
+
+    /// <summary>
     /// Tree File Items.
     /// </summary>
-    public class FileTreeItem : TreeViewItemBase, IBNFile
+    public partial class FileTreeItem : TreeViewItemBase, IBNFile
     {
         private readonly IBNFile _sourceFile;
 
@@ -132,11 +139,6 @@ namespace BestNote_3951.Models.FileSystem
             IndentationPadding = indentationPadding;
         }
 
-        // Define file specific tree view item properties
-        public override bool CanHaveChildren => false;
-        public override bool HasChildren => false;
-        public override ObservableCollection<ITreeViewItem>? Children { get => null;  }
-
         // Source file delegated implementations
         public FileInfo FileInfo
         {
@@ -152,7 +154,7 @@ namespace BestNote_3951.Models.FileSystem
     /// <summary>
     /// Tree Folder Items.
     /// </summary>
-    public class FolderTreeItem : TreeViewItemBase, IBNFolder
+    public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
     {
         private readonly IBNFolder _sourceFolder;
 
@@ -186,6 +188,15 @@ namespace BestNote_3951.Models.FileSystem
             set => _sourceFolder.DirectoryInfo = value;
         }
 
-        public override ObservableCollection<ITreeViewItem> Children { get => _sourceFolder.Children; }
+        public ObservableCollection<ITreeViewItem> Children
+        {
+            get => _sourceFolder.Children;
+            set => _sourceFolder.Children = value;
+        }
+
+        public override IEnumerable<ITreeViewItem> SafeChildren
+        {
+            get => _sourceFolder.Children;
+        }
     }
 }

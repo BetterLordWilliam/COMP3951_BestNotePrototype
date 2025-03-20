@@ -30,9 +30,9 @@ public partial class BestFileTreeView : ContentView
 
     private void OnToggleClicked(object sender, EventArgs e)
     {
-        
+
         // Only invoke the command if the tree is not visible
-        if (!SubFilesCollectionView.IsVisible && TreeViewItem.CanHaveChildren && TreeViewItem.Children is not null)
+        if (!SubFilesCollectionView.IsVisible && TreeViewItem.CanHaveChildren)
         {
             Debug.WriteLine("Clicked and condition validated.");
             ((FileStructureViewModel)((FileStructureView)fileTreeItem.BindingContext).BindingContext).RetrieveContents(TreeViewItem);

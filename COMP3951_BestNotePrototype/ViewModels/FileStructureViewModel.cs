@@ -133,12 +133,16 @@ namespace BestNote_3951.ViewModels
         public void AddFile(ITreeViewItem? parent)
         {
             // AddItem(parent, CreateFileBestFile);
+            if (parent == null)
+                return;
         }
 
         [RelayCommand]
         public void AddFolder(ITreeViewItem? parent)
         {
             // AddItem(parent, CreateFolderBestFile);
+            if (parent == null)
+                return;
         }
     }
 }
