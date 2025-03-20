@@ -23,7 +23,7 @@ namespace BestNote_3951.ViewModels
         private readonly AlertService alertService;
 
         [ObservableProperty]
-        public string testingInputName;
+        public partial string TestingInputName { get; set; }
 
         /// <summary>
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
@@ -43,24 +43,33 @@ namespace BestNote_3951.ViewModels
             LoadFileSystemContents();
         }
 
+        /// <summary>
+        /// Load file system contents, initial method and on refresh.
+        /// </summary>
+        /// <param name="folderName"></param>
+        /// <param name="parentPath"></param>
         private void LoadFileSystemContents(string folderName = "", string? parentPath = null)
         {
-            FileSystem.Clear(); // Clear existing items
+            FileSystem.Clear();
 
             var contents = fileManagerService.GetDirectoryInfoContents(folderName, parentPath);
             foreach (var item in contents)
             {
-                FileSystem.Add(CreateTreeItem(item, 0, new Thickness(0))); // Initial level and padding
+                FileSystem.Add(CreateTreeItem(item, 0, new Thickness(0)));
             }
         }
-
+        
+        /// <summary>
+        /// Load the children of a specfic parent node, expand action on a IBNFolder item.
+        /// </summary>
+        /// <param name="parent"></param>
         private void LoadChildren(FolderTreeItem parent)
         {
-            parent.Children.Clear(); // Clear existing children
+            parent.Children.Clear();
 
             var contents = fileManagerService.GetDirectoryInfoContents(parent.DirectoryInfo.Name, parent.DirectoryInfo.Parent?.FullName);
             int childLevel = parent.ItemLevel + 1;
-            Thickness childPadding = parent.IndentationPadding + new Thickness(20, 0, 0, 0); // Adjust as needed
+            Thickness childPadding = parent.IndentationPadding + new Thickness(20, 0, 0, 0);
 
             foreach (var item in contents)
             {
@@ -96,13 +105,6 @@ namespace BestNote_3951.ViewModels
             return new FolderTreeItem(itemLevel, indentationPadding, bnFolder);
         }
 
-        /// <summary>
-        /// Handles the open file logic (eventually)
-        /// 
-        /// The relay command attribute automatically generates a command property that can be invoked.
-        /// It basically just implements a Command  design pattern with a decorator instead of having to write that crap ourselves.
-        /// </summary>
-        /// <param name="file"></param>
         [RelayCommand]
         public void OpenFile()
         {

@@ -57,7 +57,7 @@ public class FileManagerService
     /// <param name="folderName"></param>
     /// <param name="parentPath"></param>
     /// <returns></returns>
-    public List<FileSystemInfo> GetDirectoryInfoContents(string folderName = "", string? parentPath = null)
+    public IEnumerable<FileSystemInfo> GetDirectoryInfoContents(string folderName = "", string? parentPath = null)
     {
         string parent = parentPath ?? BestNoteDirectory.FullName;
         string combinedPath = Path.Combine(parent, folderName);
@@ -67,20 +67,22 @@ public class FileManagerService
             return new List<FileSystemInfo>();
         }
 
-        DirectoryInfo directoryInfo = new DirectoryInfo(combinedPath);
-        List<FileSystemInfo> contents = new List<FileSystemInfo>();
-
         try
         {
+            DirectoryInfo directoryInfo = new DirectoryInfo(combinedPath);
+            List<FileSystemInfo> contents = new List<FileSystemInfo>();
+
             contents.AddRange(directoryInfo.GetDirectories());
             contents.AddRange(directoryInfo.GetFiles());
+
+            return contents;
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error getting directory contents: {ex.Message}");
-        }
 
-        return contents;
+            return Enumerable.Empty<FileSystemInfo>();
+        }
     }
 
     /// <summary>
@@ -135,15 +137,16 @@ public class FileManagerService
     /// <returns></returns>
     public string ReadFileContents(string filePath)
     {
-        try
-        {
-            return File.ReadAllText(filePath);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error reading file: {ex.Message}");
-            return string.Empty;
-        }
+        //try
+        //{
+        //    return File.ReadAllText(filePath);
+        //}
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine($"Error reading file: {ex.Message}");
+        //    return string.Empty;
+        //}
+        return "";
     }
 
     /// <summary>
@@ -153,14 +156,14 @@ public class FileManagerService
     /// <param name="content"></param>
     public void WriteFileContents(string filePath, string content)
     {
-        try
-        {
-            File.WriteAllText(filePath, content);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error writing file: {ex.Message}");
-        }
+        //try
+        //{
+        //    File.WriteAllText(filePath, content);
+        //}
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine($"Error writing file: {ex.Message}");
+        //}
     }
 }
 

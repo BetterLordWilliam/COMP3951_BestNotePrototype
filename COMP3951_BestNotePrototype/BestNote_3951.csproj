@@ -20,6 +20,9 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
+		<!-- Language version -->
+		<LangVersion>preview</LangVersion>
+
 		<!-- Display name -->
 		<ApplicationTitle>BestNote_3951</ApplicationTitle>
 
