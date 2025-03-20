@@ -112,9 +112,10 @@ namespace BestNote_3951.ViewModels
         [RelayCommand]
         public void RetrieveContents(ITreeViewItem? parent)
         {
+            Debug.WriteLine($"Retrieve file called. {parent is null}");
             if (parent == null)
             {
-                Debug.WriteLine($"Retrieve file called. Parent null: {parent is null}");
+                LoadFileSystemContents();
                 return;
             }
             if (parent is FolderTreeItem parentFolder)

@@ -13,10 +13,12 @@ public class WindowsFolder : IBNFolder
 {
     private readonly FileManagerService _fileManagerService;
     private DirectoryInfo directoryInfo;
+    private ObservableCollection<ITreeViewItem> children;
 
     public WindowsFolder(DirectoryInfo directoryInfo, FileManagerService fileManagerService)
     {
         _fileManagerService = fileManagerService;
+        this.children = new ObservableCollection<ITreeViewItem>();
         this.directoryInfo = directoryInfo;
     }
 
@@ -26,6 +28,6 @@ public class WindowsFolder : IBNFolder
         set => directoryInfo = value;
     }
 
-    public ObservableCollection<ITreeViewItem> Children => throw new NotImplementedException();
+    public ObservableCollection<ITreeViewItem> Children => children;
 }
 

@@ -39,7 +39,7 @@
                 <CollectionView ItemsSource="{Binding FileSystem}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:ITreeViewItem">
-                            <views:BestFileTreeView BestFile="{Binding .}"/>
+                            <views:BestFileTreeView TreeViewItem="{Binding .}"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
