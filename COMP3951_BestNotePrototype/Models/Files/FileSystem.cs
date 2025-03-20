@@ -38,6 +38,7 @@ namespace BestNote_3951.Models.FileSystem
         public int ItemLevel { get; set; }
         public bool HasChildren { get; }
         public bool CanHaveChildren { get; }
+        public ObservableCollection<ITreeViewItem>? Children { get; }
         public Thickness IndentationPadding { get; set; }
         public ImageSource ImageIcon { get; }
     }
@@ -96,6 +97,8 @@ namespace BestNote_3951.Models.FileSystem
 
         public abstract bool CanHaveChildren { get; }
 
+        public abstract ObservableCollection<ITreeViewItem>? Children { get; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public void RaisedOnPropertyChanged(string propertyName)
@@ -132,6 +135,7 @@ namespace BestNote_3951.Models.FileSystem
         // Define file specific tree view item properties
         public override bool CanHaveChildren => false;
         public override bool HasChildren => false;
+        public override ObservableCollection<ITreeViewItem>? Children { get => null;  }
 
         // Source file delegated implementations
         public FileInfo FileInfo
@@ -182,6 +186,6 @@ namespace BestNote_3951.Models.FileSystem
             set => _sourceFolder.DirectoryInfo = value;
         }
 
-        public ObservableCollection<ITreeViewItem> Children { get => _sourceFolder.Children; }
+        public override ObservableCollection<ITreeViewItem> Children { get => _sourceFolder.Children; }
     }
 }

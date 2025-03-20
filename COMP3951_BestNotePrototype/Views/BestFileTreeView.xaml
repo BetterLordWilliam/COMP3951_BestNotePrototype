@@ -23,10 +23,14 @@
         </HorizontalStackLayout>
 
         <!-- Recursive Subfile List -->
-        <CollectionView x:Name="SubFilesCollectionView" IsVisible="True" ItemsSource="{Binding SubFiles}">
+        <CollectionView 
+            x:Name="SubFilesCollectionView"
+            IsEnabled="{Binding CanHaveChildren}"
+            IsVisible="True"
+            ItemsSource="{Binding Children}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <views:BestFileTreeView BestFile="{Binding .}"/>
+                    <views:BestFileTreeView TreeViewItem="{Binding .}"/>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
