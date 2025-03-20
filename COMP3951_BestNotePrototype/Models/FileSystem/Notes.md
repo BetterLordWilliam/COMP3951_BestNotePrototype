@@ -65,3 +65,17 @@ tree view items.
 - PropertyChanged (base type event)
 - Raised on property changed
 
+### `FileTreeItem`
+Extends `TreeViewItemBase` class, implements `IBNFolder` implemented via composition -- delegation pattern
+
+### `FolderTreeItem`
+Extends `TreeViewItemBase` class, implements `IBNFile` implemented via composition -- delegation pattern.
+
+### MarkdownFile
+Concrete implementation of `INBFile`, also implements `IBNReadable` and `IBNWritable` interfaces, to be used by fileio
+operations in the future.
+
+### WindowsFolder
+Concrete implementation of `IBNFolder`.
+
+

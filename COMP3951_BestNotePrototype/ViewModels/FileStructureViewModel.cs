@@ -5,6 +5,7 @@ using System.Windows.Input;
 using BestNote_3951.Models.FileSystem;
 using BestNote_3951.Services;
 using Syncfusion.Pdf;
+using System.IO;
 
 ///
 /// Will Otterbein
@@ -77,7 +78,7 @@ namespace BestNote_3951.ViewModels
             }
         }
 
-        private ITreeViewItem CreateTreeItem(FileSystemInfo fileSystemInfo, int itemLevel, Thickness indentationPadding)
+        private ITreeViewItem CreateTreeItem(FileSystemInfo? fileSystemInfo, int itemLevel, Thickness indentationPadding, ITreeViewItem? parentItem = null)
         {
             if (fileSystemInfo is FileInfo fileInfo)
             {
@@ -87,19 +88,48 @@ namespace BestNote_3951.ViewModels
             {
                 return CreateFolderTreeItem(directoryInfo, itemLevel, indentationPadding);
             }
+            else if (fileSystemInfo is null)
+            {
+                return CreateTempTreeItem(itemLevel, indentationPadding, parentItem);
+            }
             else
             {
                 throw new ArgumentException("Unknown FileSystemInfo type");
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="itemLevel"></param>
+        /// <param name="indentationPadding"></param>
+        /// <returns></returns>
+        private TempTreeItem CreateTempTreeItem(int itemLevel, Thickness indentationPadding, ITreeViewItem parentInfo)
+        {
+            return new TempTreeItem(itemLevel + 1, indentationPadding + new Thickness(20, 0, 0, 0), parentInfo);
+        }
+
+        /// <summary>
+        /// Creates a file tree item at the specified level of the tree.
+        /// </summary>
+        /// <param name="fileInfo"></param>
+        /// <param name="itemLevel"></param>
+        /// <param name="indentationPadding"></param>
+        /// <returns></returns>
         private ITreeViewItem CreateFileTreeItem(FileInfo fileInfo, int itemLevel, Thickness indentationPadding)
         {
             IBNFile bnFile = new MarkdownFile(fileInfo, fileManagerService);
             return new FileTreeItem(itemLevel, indentationPadding, bnFile);
         }
 
-        private ITreeViewItem CreateFolderTreeItem(DirectoryInfo directoryInfo, int itemLevel, Thickness indentationPadding)
+        /// <summary>
+        /// Creates a folder tree item at the specified level of the file tree.
+        /// </summary>
+        /// <param name="directoryInfo"></param>
+        /// <param name="itemLevel"></param>
+        /// <param name="indentationPadding"></param>
+        /// <returns></returns>
+        private FolderTreeItem CreateFolderTreeItem(DirectoryInfo directoryInfo, int itemLevel, Thickness indentationPadding)
         {
             IBNFolder bnFolder = new WindowsFolder(directoryInfo, fileManagerService);
             return new FolderTreeItem(itemLevel, indentationPadding, bnFolder);
@@ -134,13 +164,25 @@ namespace BestNote_3951.ViewModels
         [RelayCommand]
         public void AddFile(ITreeViewItem? parent)
         {
+            Debug.WriteLine("Add File method called");
+
             // AddItem(parent, CreateFileBestFile);
             if (parent == null)
                 return;
+
+            // Will testing
+            // Figure out the best way to handle the temp items being added
+            // May need to explore implementing an abstract factory pattern or just regular factory patter
+            // For now case parent into an IBNFolder
+            // Really the type of this method hsould be IBNFolder, since that is what actually is having chilren
+            // Alas for the current methods, I need the directory info parameters.
+            // Need to work on this view model this weekend.
+
+            ((IBNFolder)parent).Children.Add(CreateTempTreeItem(parent.ItemLevel, parent.IndentationPadding, parent));
         }
 
         [RelayCommand]
-        public void AddFolder(ITreeViewItem? parent)
+        public void AddFolder(IBNFolder? parent)
         {
             // AddItem(parent, CreateFolderBestFile);
             if (parent == null)

@@ -19,7 +19,9 @@
 
         <DataTemplate x:Key="FolderTreeItem"
                       x:DataType="models:IBNFolder">
-            <views:BestFileTreeView TreeViewItem="{Binding .}"/>
+            <VerticalStackLayout>
+                <views:BestFileTreeView TreeViewItem="{Binding .}"/>
+            </VerticalStackLayout>
         </DataTemplate>
 
         <DataTemplate x:Key="TempTreeItem">
@@ -44,24 +46,6 @@
             <HorizontalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnToggleClicked" />
             </HorizontalStackLayout.GestureRecognizers>
-            <!-- Context View To add File to this node -->
-            <FlyoutBase.ContextFlyout>
-                <MenuFlyout>
-                    <MenuFlyoutItem
-                    IsEnabled="False"
-                    Text="Rename Item" />
-                    <MenuFlyoutItem
-                    IsEnabled="{Binding CanHaveChildren}"
-                    Text="Add Subfolder"
-                    Command="{Binding BindingContext.AddFolderCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
-                    CommandParameter="{Binding .}" />
-                    <MenuFlyoutItem
-                    IsEnabled="{Binding CanHaveChildren}"
-                    Text="Add Note"
-                    Command="{Binding BindingContext.AddFileCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
-                    CommandParameter="{Binding .}" />
-                </MenuFlyout>
-            </FlyoutBase.ContextFlyout>
         </HorizontalStackLayout>
 
         <!-- Recursive Subfile List -->
@@ -71,6 +55,25 @@
             IsVisible="{Binding CanHaveChildren}"
             ItemsSource="{Binding SafeChildren}"
             ItemTemplate="{StaticResource TreeViewItemTemplateSelector}" />
+
+        <!-- Context View To add File to this node -->
+        <FlyoutBase.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem
+                    IsEnabled="False"
+                    Text="Rename Item" />
+                <MenuFlyoutItem
+                    IsEnabled="{Binding CanHaveChildren}"
+                    Text="Add Subfolder"
+                    Command="{Binding BindingContext.AddFolderCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
+                    CommandParameter="{Binding .}" />
+                <MenuFlyoutItem
+                    IsEnabled="{Binding CanHaveChildren}"
+                    Text="Add Note"
+                    Command="{Binding BindingContext.AddFileCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
+                    CommandParameter="{Binding .}" />
+            </MenuFlyout>
+        </FlyoutBase.ContextFlyout>
     </VerticalStackLayout>
 
 </ContentView>

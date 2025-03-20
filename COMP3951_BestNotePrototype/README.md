@@ -39,3 +39,11 @@ My fellow bramericans, we need to stand together to rize against the tyranny or 
 You get the picture. Your's not so truly.
 
 Bohmian Gabusha, Definitely Presitend of Disunited Mistakes of Bramerica
+
+### `Feature_FileExplorer`
+Will Otterbein, `Feature_FileExplorer` development todo.
+
+- [ ]	Update the CRUD operations for the new pattern adding items (subfiles/folders) on folder tree items
+- [ ]	Show temp items in the user interface instead of using the treeview top level testing form
+- [ ]	
+

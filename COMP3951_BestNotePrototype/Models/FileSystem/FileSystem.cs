@@ -30,6 +30,8 @@ namespace BestNote_3951.Models.FileSystem
     {
         DirectoryInfo DirectoryInfo { get; set; }
         ObservableCollection<ITreeViewItem> Children { get; set; }
+        // interface method for adding a child item.
+        // define contract that these items need to define for UI purposes.
     }
 
     public interface ITreeViewItem : INotifyPropertyChanged
@@ -110,8 +112,26 @@ namespace BestNote_3951.Models.FileSystem
     /// <summary>
     /// Temporary tree item.
     /// </summary>
-    public partial class FileTreeTemp : TreeViewItemBase
+    public partial class TempTreeItem : TreeViewItemBase
     {
+        private ITreeViewItem _parent;
+
+        /// <summary>
+        /// Constructor for the temporary tree view item, defines the parent of the item.
+        /// </summary>
+        /// <param name="indendationPadding"></param>
+        /// <param name="itemLevel"></param>
+        /// <param name="parent"></param>
+        public TempTreeItem(
+            int             itemLevel,
+            Thickness       indendationPadding,
+            ITreeViewItem   parent
+        ) {
+            _parent = parent;
+            ImageIcon = "";
+            ItemLevel = itemLevel;
+            IndentationPadding = indendationPadding;
+        }
     }
 
     /// <summary>
@@ -127,9 +147,9 @@ namespace BestNote_3951.Models.FileSystem
         /// <param name="sourceFile"></param>
         /// <param name=""></param>
         public FileTreeItem(
-            int itemLevel,
-            Thickness indentationPadding,
-            IBNFile sourceFile
+            int         itemLevel,
+            Thickness   indentationPadding,
+            IBNFile     sourceFile
         )
         {
             _sourceFile = sourceFile;
@@ -161,9 +181,9 @@ namespace BestNote_3951.Models.FileSystem
         /// <param name="indentationPadding"></param>
         /// <param name="sourceFolder"></param>
         public FolderTreeItem(
-            int itemLevel,
-            Thickness indentationPadding,
-            IBNFolder sourceFolder
+            int         itemLevel,
+            Thickness   indentationPadding,
+            IBNFolder   sourceFolder
         )
         {
             _sourceFolder = sourceFolder;
