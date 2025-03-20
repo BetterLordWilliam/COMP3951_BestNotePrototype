@@ -4,7 +4,9 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:BestNote_3951.Views"
              xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
+             xmlns:models="clr-namespace:BestNote_3951.Models.FileSystem"
              x:Class="BestNote_3951.Views.BestFileTreeView"
+             x:DataType="models:ITreeViewItem"
              x:Name="this">
 
     <VerticalStackLayout>
@@ -36,12 +38,12 @@
                     IsEnabled="False"
                     Text="Rename Item" />
                 <MenuFlyoutItem
-                    IsEnabled="{Binding Parent}"
+                    IsEnabled="{Binding CanHaveChildren}"
                     Text="Add Subfolder"
                     Command="{Binding BindingContext.AddFolderCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
                     CommandParameter="{Binding .}" />
                 <MenuFlyoutItem
-                    IsEnabled="{Binding Parent}"
+                    IsEnabled="{Binding CanHaveChildren}"
                     Text="Add Note"
                     Command="{Binding BindingContext.AddFileCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
                     CommandParameter="{Binding .}" />
