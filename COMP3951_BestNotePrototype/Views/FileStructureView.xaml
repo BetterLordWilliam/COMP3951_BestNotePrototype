@@ -10,14 +10,16 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
     xmlns:views="clr-namespace:BestNote_3951.Views"
-    xmlns:models="clr-namespace:BestNote_3951.Models"
+    xmlns:models="clr-namespace:BestNote_3951.Models.FileSystem"
     x:Class="BestNote_3951.Views.FileStructureView"
+    x:DataType="viewmodels:FileStructureViewModel"
     x:Name="this">
-
-    <Border Stroke="#2e2e2e">
+    
+   <Border Stroke="#2e2e2e">
 
         <Grid RowDefinitions="Auto,*"
               VerticalOptions="Fill">
+            
             <!-- File Tree Options Menu TEMP -->
             <VerticalStackLayout Grid.Row="0">
                 <Label Text="File Manager Options"/>
@@ -31,15 +33,17 @@
                     </HorizontalStackLayout>
                 </ScrollView>
             </VerticalStackLayout>
+            
             <!-- Bind to the FileSystem Items -->
-            <CollectionView Grid.Row="1"
-                            ItemsSource="{Binding FileSystem}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:BestFile">
-                        <views:BestFileTreeView BestFile="{Binding .}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <ScrollView Grid.Row="1" Orientation="Both">
+                <CollectionView ItemsSource="{Binding FileSystem}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ITreeViewItem">
+                            <views:BestFileTreeView TreeViewItem="{Binding .}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
         </Grid>
         
         <!-- File Tree Overview Context Menu -->
