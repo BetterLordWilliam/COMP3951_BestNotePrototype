@@ -44,5 +44,13 @@ public partial class MarkdownRendererView : ContentView
 				WeakReferenceMessenger.Default.Send(msg);
 			}
 		}
+
+		if (e.Url.Contains("#"))
+		{
+			e.Cancel = true;
+
+			var anchor = e.Url.Substring(e.Url.IndexOf('#') + 1);
+			(sender as WebView)?.Eval($"document.getElementById('{anchor}')?.scrollIntoView();");
+		}
 	}
 }

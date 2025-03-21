@@ -38,7 +38,10 @@ namespace BestNote_3951.ViewModels
         public MarkdownRendererViewModel()
         {
             // pipeline gives access to advanced markdown rendering features.
-            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            var pipeline = new MarkdownPipelineBuilder()
+                .UseAdvancedExtensions()
+                .UseAutoIdentifiers()
+                .Build();
 
             WebViewSource = new HtmlWebViewSource
             {
