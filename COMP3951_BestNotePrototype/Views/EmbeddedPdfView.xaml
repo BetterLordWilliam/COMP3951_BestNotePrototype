@@ -46,6 +46,7 @@ xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.M
         <syncfusionPopup:SfPopup x:Name="popup" ShowFooter ="True" AppearanceMode="TwoButton" HeaderTitle="Copy to BestNote Directory" 
                                  Message="Would you like to copy the selected PDF to your BestFile directory?"
                                  DeclineCommand="{Binding OpenDocumentCommand}"
+                                 AcceptCommand="{Binding OpenDocumentAndCopyCommand}"
                                  />
 
         <syncfusion:SfPdfViewer x:Name="pdfViewer"

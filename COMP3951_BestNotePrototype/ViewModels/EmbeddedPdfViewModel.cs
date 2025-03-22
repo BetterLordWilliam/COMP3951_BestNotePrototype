@@ -77,10 +77,28 @@ namespace BestNote_3951.ViewModels
 
         }
 
-        void OnButtonPressed(object sender, EventArgs args)
+
+        /// <summary>
+        /// Creates a file picker that allows the user to select a file chos
+        /// </summary>
+        [RelayCommand]
+        async void OpenDocumentAndCopy()
         {
-            OpenDocument();
+            FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
+            {
+                {DevicePlatform.iOS, new[] {"public.pdf"} },
+                {DevicePlatform.Android, new[] {"application/pdf"} },
+                {DevicePlatform.WinUI, new[] {"pdf"} },
+                {DevicePlatform.MacCatalyst, new[] {"pdf"} }
+        });
+            PickOptions options = new()
+            {
+                PickerTitle = "Please select a PDF file",
+                FileTypes = pdfFileType,
+            };
+            await PickAndShow(options, true);
         }
+
 
 
         /// <summary>
@@ -101,7 +119,7 @@ namespace BestNote_3951.ViewModels
                 PickerTitle = "Please select a PDF file",
                 FileTypes = pdfFileType,
             };
-		    await PickAndShow(options);
+		    await PickAndShow(options, false);
 	    }
 
 
@@ -112,15 +130,31 @@ namespace BestNote_3951.ViewModels
         /// </summary>
         /// <param name="options"></param>
         /// <returns></returns>
-        public async Task PickAndShow(PickOptions options)
+        public async Task PickAndShow(PickOptions options, bool copyToBestDirectory)
         {
             try
             {
                 var result = await FilePicker.Default.PickAsync(options);
-                if (result != null)
+                if (result != null && !copyToBestDirectory)
                 {
                     PdfPath = result.FullPath;
                     PdfDocumentStream = await result.OpenReadAsync();
+                } else if (result != null && copyToBestDirectory)
+                {
+                    string resourcesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
+                    resourcesPath = Path.Combine(resourcesPath, "Notes");
+                    resourcesPath = Path.Combine(resourcesPath, "Resources");
+                    string newFilePath = Path.Combine(resourcesPath, result.FileName);
+                    if (!Directory.Exists(resourcesPath))
+                    {
+                        Directory.CreateDirectory(resourcesPath);
+                    }
+
+                    File.Copy(result.FullPath, newFilePath);
+                    PdfPath = result.FullPath;
+
+
+                    PdfDocumentStream = File.OpenRead(newFilePath);
                 }
             }
             catch (Exception ex)
