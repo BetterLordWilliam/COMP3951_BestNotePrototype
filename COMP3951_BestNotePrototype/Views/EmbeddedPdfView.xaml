@@ -14,6 +14,8 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
+             xmlns:syncfusionPopup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
+xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              x:Class="BestNote_3951.Views.EmbeddedPdfView"
              xmlns:local="clr-namespace:BestNote_3951.ViewModels"
              x:DataType="local:EmbeddedPdfViewModel">
@@ -27,19 +29,24 @@
         <HorizontalStackLayout x:Name="Toolbar" Grid.Row="0">
             <Button x:Name="openFile"
                              Margin="10,10,10,10"
-                             Command="{Binding OpenDocumentCommand}"
+                             Clicked ="showPopup_Clicked"
                              HeightRequest="40"
                              VerticalOptions="Center"
                              Text="Open PDF"
                              WidthRequest="100" />
             <Button x:Name="addLink"
                              Margin="10,10,10,10"
-                             Command="{Binding CreateResourceLinkCommand}"
+                             Command="{Binding CreateResourceLinkCommand}" 
                              HeightRequest="40"
                              VerticalOptions="Center"
                              Text="Add Link"
                              WidthRequest="100" />
         </HorizontalStackLayout>
+
+        <syncfusionPopup:SfPopup x:Name="popup" ShowFooter ="True" AppearanceMode="TwoButton" HeaderTitle="Copy to BestNote Directory" 
+                                 Message="Would you like to copy the selected PDF to your BestFile directory?"
+                                 DeclineCommand="{Binding OpenDocumentCommand}"
+                                 />
 
         <syncfusion:SfPdfViewer x:Name="pdfViewer"
                                 Grid.Row="1"
@@ -54,3 +61,6 @@
                                 />
     </Grid>
 </ContentView>
+
+<!-- Command="{Binding OpenDocumentCommand}"
+                             Clicked ="showPopup_Clicked" -->

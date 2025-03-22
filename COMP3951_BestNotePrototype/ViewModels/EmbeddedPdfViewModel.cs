@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using BestNote_3951.Models;
 using Syncfusion.Maui.PdfViewer;
+using Syncfusion.Maui.Popup;
+using CommunityToolkit.Maui.Views;
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfViewModel file
@@ -45,6 +47,14 @@ namespace BestNote_3951.ViewModels
         public int _pageNum;
 
 
+        ///// <summary>
+        ///// Gets and sets the page number of the PDF. Has a two-way binding relationship with the 
+        ///// EmbeddedPdfView pdfViewer PageNumber property.
+        ///// </summary>
+        //[ObservableProperty]
+        //public SfPopup _popup;
+
+
         /// <summary>
         /// A collection of ResourceLink objects.
         /// </summary>
@@ -67,6 +77,11 @@ namespace BestNote_3951.ViewModels
 
         }
 
+        void OnButtonPressed(object sender, EventArgs args)
+        {
+            OpenDocument();
+        }
+
 
         /// <summary>
 	    /// Creates a file picker that allows the user to select a file chos
@@ -81,11 +96,11 @@ namespace BestNote_3951.ViewModels
 			    {DevicePlatform.WinUI, new[] {"pdf"} },
 			    {DevicePlatform.MacCatalyst, new[] {"pdf"} }
 		});
-		    PickOptions options = new()
-		    {
-			    PickerTitle = "Please select a PDF file",
-			    FileTypes = pdfFileType,
-		    };
+            PickOptions options = new()
+            {
+                PickerTitle = "Please select a PDF file",
+                FileTypes = pdfFileType,
+            };
 		    await PickAndShow(options);
 	    }
 

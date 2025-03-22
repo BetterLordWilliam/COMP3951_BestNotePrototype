@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using BestNote_3951.ViewModels;
 using Syncfusion.Maui.PdfViewer;
 
+
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfView files
 /// SOURCES:
@@ -51,4 +52,8 @@ public partial class EmbeddedPdfView : ContentView
         }
     }
 
+    private void showPopup_Clicked(object sender, EventArgs e)
+    {
+        popup.Show();
+    }
 }
