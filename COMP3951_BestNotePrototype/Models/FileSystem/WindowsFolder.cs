@@ -14,8 +14,15 @@ public class WindowsFolder : IBNFolder
     private DirectoryInfo directoryInfo;
     private ObservableCollection<ITreeViewItem> children;
 
-    public WindowsFolder(DirectoryInfo directoryInfo, FileManagerService fileManagerService)
-    {
+    /// <summary>
+    /// Initializes a new WindowsFolder instance.
+    /// </summary>
+    /// <param name="directoryInfo"></param>
+    /// <param name="fileManagerService"></param>
+    public WindowsFolder(
+        DirectoryInfo       directoryInfo,
+        FileManagerService  fileManagerService
+    ) {
         _fileManagerService = fileManagerService;
         this.children = new ObservableCollection<ITreeViewItem>();
         this.directoryInfo = directoryInfo;

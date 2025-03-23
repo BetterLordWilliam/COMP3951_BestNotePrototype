@@ -73,12 +73,12 @@ namespace BestNote_3951.Services
         {
             string RealTargetPath = TargetPath ?? BestNoteDirectory.FullName;
 
-            if (!Directory.Exists(TargetPath))
+            if (!Directory.Exists(RealTargetPath))
             {
-                throw new FileSystemObjectDoesNotExist($"Cannot get contents of item at: {TargetPath}.\n\n Directory does not exist");
+                throw new FileSystemObjectDoesNotExist($"Cannot get contents of item at: {RealTargetPath}.\n\n Directory does not exist");
             }
             
-            DirectoryInfo directoryInfo = new(TargetPath);
+            DirectoryInfo directoryInfo = new(RealTargetPath);
             List<FileSystemInfo> contents = new();
 
             contents.AddRange(directoryInfo.GetDirectories());

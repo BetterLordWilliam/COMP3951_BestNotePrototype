@@ -14,8 +14,15 @@ public class MarkdownFile : IBNFile, IBNWritable, IBNReadable
     private readonly FileManagerService _fileManagerService;
     private FileInfo fileInfo;
 
-    public MarkdownFile(FileInfo fileInfo, FileManagerService fileManagerService)
-    {
+    /// <summary>
+    /// Initializes a new MarkDown file instnace.
+    /// </summary>
+    /// <param name="fileInfo"></param>
+    /// <param name="fileManagerService"></param>
+    public MarkdownFile(
+        FileInfo            fileInfo,
+        FileManagerService  fileManagerService
+    ) {
         _fileManagerService = fileManagerService;
         this.fileInfo = fileInfo;
     }
