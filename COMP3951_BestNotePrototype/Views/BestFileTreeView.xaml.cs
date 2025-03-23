@@ -28,6 +28,11 @@ public partial class BestFileTreeView : ContentView
         }
     }
 
+    /// <summary>
+    /// Event handler for file tree items being clicked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnToggleClicked(object sender, EventArgs e)
     {
         // Only invoke the command if the tree is not visible
@@ -37,5 +42,20 @@ public partial class BestFileTreeView : ContentView
             ((FileStructureViewModel)((FileStructureView)fileTreeItem.BindingContext).BindingContext).RetrieveContents(TreeViewItem);
         }
         SubFilesCollectionView.IsVisible = !SubFilesCollectionView.IsVisible;
+    }
+    
+    /// <summary>
+    /// Event handler for the rename context button being clicked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnRenameClicked(object sender, EventArgs e)
+    {
+        // Only invoke the command if the item can be renamed
+        if (TreeViewItem.CanRename)
+        {
+            Debug.WriteLine("Rename clicked.");
+            ((FileStructureViewModel)((FileStructureView)fileTreeItem.BindingContext).BindingContext).RetrieveContents(TreeViewItem);
+        }
     }
 }

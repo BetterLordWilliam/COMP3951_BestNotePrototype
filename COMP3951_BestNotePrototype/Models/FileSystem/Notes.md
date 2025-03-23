@@ -79,3 +79,20 @@ operations in the future.
 Concrete implementation of `IBNFolder`.
 
 
+# Random Notes
+
+- It is necessary to refactor the FileStructureViewModel code to extract the item instantiaiton.
+- Put this into another class, file system utils or the like.
+- Classes to help instantiation BestNote objects from file system objects (contain mappings, etc).
+
+It would possibly be worth looking into the following class, `FileSystemWatcher`
+
+[File system watcher docs](https://learn.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?view=net-9.0)
+
+Could avoid querying the file system and instead updating items in real time
+
+This would *potentially* require some changes perhaps to the underlying data structures, for example may need to consider using a map
+as the underlying type for `FileSystem` in the view model and `Children` in `IBNFolder` types -- could map FileSystemInfo objects to `ITreeViewItem` instnaces for example.
+
+> This is an idea that I am liking for several reasons, but I don't want to refactor too much
+> Good news is that I would need to change any of the models for this

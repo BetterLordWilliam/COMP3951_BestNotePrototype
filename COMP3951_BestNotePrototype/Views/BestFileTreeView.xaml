@@ -40,7 +40,13 @@
                                Margin="{Binding IndentationPadding}"
                                HeightRequest="20">
             <Image Source="{Binding ImageIcon}" />
-            <!--<Entry Placeholder="Item name..." HeightRequest="20" MinimumHeightRequest="20" FontSize="5" VerticalTextAlignment="Center" />-->
+            <Entry
+                Placeholder="Item name..."
+                HeightRequest="20"
+                MinimumHeightRequest="20"
+                FontSize="5"
+                VerticalTextAlignment="Center"
+                IsVisible="{Binding ItemRename}" />
             <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
             <Label x:Name="fileTreeItem" IsEnabled="False" IsVisible="False" BindingContext="{Binding ., Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}" />
             <HorizontalStackLayout.GestureRecognizers>
@@ -60,7 +66,8 @@
         <FlyoutBase.ContextFlyout>
             <MenuFlyout>
                 <MenuFlyoutItem
-                    IsEnabled="False"
+                    IsEnabled="{Binding CanRename}"
+                    Command="{Binding BindingContext.RenameItem, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
                     Text="Rename Item" />
                 <MenuFlyoutItem
                     IsEnabled="{Binding CanHaveChildren}"

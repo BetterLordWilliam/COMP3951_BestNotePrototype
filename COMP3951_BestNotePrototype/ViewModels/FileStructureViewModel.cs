@@ -14,6 +14,16 @@ using System.IO;
 namespace BestNote_3951.ViewModels
 {
     /// <summary>
+    /// Handles logic for creating ITreeView items from file system objects.
+    /// 
+    /// A proxy for the services provided by the FileManagerService class.
+    /// </summary>
+    class FileStructureFactory
+    {
+
+    }
+
+    /// <summary>
     /// Handles the logic for the file structure view.
     /// 
     /// Observable object just simplifies a buttload of boilerplater code so we can use the observer pattern out of the box easily.
@@ -88,10 +98,6 @@ namespace BestNote_3951.ViewModels
             {
                 return CreateFolderTreeItem(directoryInfo, itemLevel, indentationPadding);
             }
-            else if (fileSystemInfo is null)
-            {
-                return CreateTempTreeItem(itemLevel, indentationPadding, parentItem);
-            }
             else
             {
                 throw new ArgumentException("Unknown FileSystemInfo type");
@@ -99,14 +105,12 @@ namespace BestNote_3951.ViewModels
         }
 
         /// <summary>
-        /// 
+        /// Method for renaming file tree itesm.
         /// </summary>
-        /// <param name="itemLevel"></param>
-        /// <param name="indentationPadding"></param>
-        /// <returns></returns>
-        private TempTreeItem CreateTempTreeItem(int itemLevel, Thickness indentationPadding, ITreeViewItem parentInfo)
+        /// <param name="Renameable"></param>
+        private void RenameTreeItem(string newItemName, ITreeViewItem? Renameable)
         {
-            return new TempTreeItem(itemLevel + 1, indentationPadding + new Thickness(20, 0, 0, 0), parentInfo);
+            // if (Renameable.)
         }
 
         /// <summary>
@@ -135,12 +139,17 @@ namespace BestNote_3951.ViewModels
             return new FolderTreeItem(itemLevel, indentationPadding, bnFolder);
         }
 
+
         [RelayCommand]
         public void OpenFile()
         {
             // TODO: open file logic
         }
 
+        /// <summary>
+        /// Retrieves the contents of a specified parent tree item.
+        /// </summary>
+        /// <param name="parent"></param>
         [RelayCommand]
         public void RetrieveContents(ITreeViewItem? parent)
         {
@@ -178,7 +187,7 @@ namespace BestNote_3951.ViewModels
             // Alas for the current methods, I need the directory info parameters.
             // Need to work on this view model this weekend.
 
-            ((IBNFolder)parent).Children.Add(CreateTempTreeItem(parent.ItemLevel, parent.IndentationPadding, parent));
+            // ((IBNFolder)parent).Children.Add(CreateTempTreeItem(parent.ItemLevel, parent.IndentationPadding, parent));
         }
 
         [RelayCommand]

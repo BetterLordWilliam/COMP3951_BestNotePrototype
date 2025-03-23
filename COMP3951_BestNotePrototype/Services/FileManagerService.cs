@@ -6,6 +6,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using BestNote_3951.Models;
+using Microsoft.Maui.Storage;
 
 ///
 /// Will Otterbein
@@ -129,6 +130,37 @@ public class FileManagerService
             return null;
         }
     }
+
+    /// <summary>
+    /// Rename an item on the file system.
+    /// </summary>
+    /// <p>
+    /// Try and find the file in the file system. If it exists rename it to the supplied name.
+    /// </p>
+    /// <param name="newName"></param>
+    /// <param name="itemInfo"></param>
+    /// <returns></returns>
+    public FileInfo RenameFile(string newName, FileInfo itemInfo)
+    {
+        DirectoryInfo? parentPath = Directory.GetParent(itemInfo.FullName);
+        if (parentPath is null)
+            throw new NullReferenceException($"Parent path of item is null {parentPath}");
+        
+        string newPath = Path.Combine(parentPath.FullName, newName);
+        itemInfo.MoveTo(newPath);
+        return itemInfo;
+    }
+
+    /// <summary>
+    /// Rename a folder in the file system.
+    /// </summary>
+    /// <param name="newName"></param>
+    /// <param name=""></param>
+    /// <returns></returns>
+    //public DirectoryInfo RenameFolder(string newName, DirectoryInfo)
+    //{
+    //    return null;
+    //}
 
     /// <summary>
     /// Reads the contents of a file.
