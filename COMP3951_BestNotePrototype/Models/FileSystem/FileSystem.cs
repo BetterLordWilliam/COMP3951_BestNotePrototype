@@ -153,6 +153,7 @@ namespace BestNote_3951.Models.FileSystem
         /// </summary>
         public virtual IEnumerable<ITreeViewItem> SafeChildren => Enumerable.Empty<ITreeViewItem>();
 
+
         /// <summary>
         /// Property changed event.
         /// </summary>
@@ -165,31 +166,6 @@ namespace BestNote_3951.Models.FileSystem
         public void RaisedOnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    /// <summary>
-    /// Temporary tree item.
-    /// </summary>
-    public partial class TempTreeItem : TreeViewItemBase
-    {
-        private ITreeViewItem _parent;
-
-        /// <summary>
-        /// Constructor for the temporary tree view item, defines the parent of the item.
-        /// </summary>
-        /// <param name="indendationPadding"></param>
-        /// <param name="itemLevel"></param>
-        /// <param name="parent"></param>
-        public TempTreeItem(
-            int             itemLevel,
-            Thickness       indendationPadding,
-            ITreeViewItem   parent
-        ) {
-            _parent = parent;
-            ImageIcon = "";
-            ItemLevel = itemLevel;
-            IndentationPadding = indendationPadding;
         }
     }
 }

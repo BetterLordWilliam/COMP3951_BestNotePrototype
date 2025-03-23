@@ -21,9 +21,11 @@ High level overview of what I need to do for coding 2.
 	- Interfaces for specific funcitonality that types in the file system should implementation
 		ex. read/write capabilities
 - [ ]	File system info supremecy
-- [ ]	20240323 - Load items refinement 
-	- [ ]	ITreeViewItem factory
+- [X]	20240323 - Load items refinement 
+	- [X]	ITreeViewItem factory
 	- [ ]	Based off the file system item type
+- [ ]	`BestFileTreeItemViewModel`, implement this type and figure out how
+to assign view models to types as they are loaded programatically.
 - [ ]	Async file management instead of synchronous file management
 - [ ]	Unit testing, I need to figure out how I can get unit testing working for this project
 - [ ]	Update docstrings and documentation accordignly

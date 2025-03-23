@@ -12,190 +12,180 @@ using Microsoft.Maui.Storage;
 /// Will Otterbein
 /// March 12 2025
 /// 
-namespace BestNote_3951.Services;
-
-///
-/// Will Otterbein
-/// March 19 2025
-///
-public class FileManagerService
+namespace BestNote_3951.Services
 {
-    public DirectoryInfo AppDirectory { get; private set; }         // Application data directory
-    public DirectoryInfo BestNoteDirectory { get; private set; }    // Notes directory
-
-    private readonly string _appDirectoryPath;
-    private readonly string _bestNoteDirectoryPath;
-
     /// <summary>
-    /// Service constructor. Use with dependency injection.
+    /// Thrown if the file system tries to do work on an item that does not exist.
     /// </summary>
-    public FileManagerService()
+    public class FileSystemObjectDoesNotExist : Exception
     {
-        _appDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
-        _bestNoteDirectoryPath = Path.Combine(_appDirectoryPath, "Notes");
-
-        AppDirectory = CreateDirectoryIfNotExists(_appDirectoryPath);
-        BestNoteDirectory = CreateDirectoryIfNotExists(_bestNoteDirectoryPath);
+        /// <summary>
+        /// Initializes a file system object with a message string.
+        /// </summary>
+        /// <param name="Message"></param>
+        public FileSystemObjectDoesNotExist(string Message) : base(Message) { }
     }
 
     /// <summary>
-    /// Create a directory if it does not exist in the system.
+    /// Service for managing application files in the file system.
     /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    private DirectoryInfo CreateDirectoryIfNotExists(string path)
+    public class FileManagerService
     {
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-        return new DirectoryInfo(path);
-    }
+        public DirectoryInfo AppDirectory { get; private set; }         // Application data directory
+        public DirectoryInfo BestNoteDirectory { get; private set; }    // Notes directory
 
-    /// <summary>
-    /// Returns the contents of a specified directory, else it returns the root contents.
-    /// </summary>
-    /// <param name="folderName"></param>
-    /// <param name="parentPath"></param>
-    /// <returns></returns>
-    public IEnumerable<FileSystemInfo> GetDirectoryInfoContents(string folderName = "", string? parentPath = null)
-    {
-        string parent = parentPath ?? BestNoteDirectory.FullName;
-        string combinedPath = Path.Combine(parent, folderName);
+        private readonly string _appDirectoryPath;
+        private readonly string _bestNoteDirectoryPath;
 
-        if (!Directory.Exists(combinedPath))
+        /// <summary>
+        /// Service constructor. Use with dependency injection.
+        /// </summary>
+        public FileManagerService()
         {
-            return new List<FileSystemInfo>();
+            _appDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
+            _bestNoteDirectoryPath = Path.Combine(_appDirectoryPath, "Notes");
+
+            AppDirectory = CreateDirectoryIfNotExists(_appDirectoryPath);
+            BestNoteDirectory = CreateDirectoryIfNotExists(_bestNoteDirectoryPath);
         }
 
-        try
+        /// <summary>
+        /// Create a directory if it does not exist in the system.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private DirectoryInfo CreateDirectoryIfNotExists(string path)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(combinedPath);
-            List<FileSystemInfo> contents = new List<FileSystemInfo>();
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            return new DirectoryInfo(path);
+        }
+
+        /// <summary>
+        /// Returns the contents of a specified directory, else it returns the root contents.
+        /// </summary>
+        /// <param name="FolderName"></param>
+        /// <param name="ParentPath"></param>
+        /// <returns></returns>
+        public IEnumerable<FileSystemInfo> GetDirectoryInfoContents(string? TargetPath)
+        {
+            string RealTargetPath = TargetPath ?? BestNoteDirectory.FullName;
+
+            if (!Directory.Exists(TargetPath))
+            {
+                throw new FileSystemObjectDoesNotExist($"Cannot get contents of item at: {TargetPath}.\n\n Directory does not exist");
+            }
+            
+            DirectoryInfo directoryInfo = new(TargetPath);
+            List<FileSystemInfo> contents = new();
 
             contents.AddRange(directoryInfo.GetDirectories());
             contents.AddRange(directoryInfo.GetFiles());
 
             return contents;
         }
-        catch (Exception ex)
+
+        /// <summary>
+        /// Creates a new directory.
+        /// </summary>
+        /// <param name="FolderName"></param>
+        /// <param name="ParentPath"></param>
+        /// <returns></returns>
+        public DirectoryInfo? CreateDirectory(string FolderName, string? ParentPath = null)
         {
-            Debug.WriteLine($"Error getting directory contents: {ex.Message}");
 
-            return Enumerable.Empty<FileSystemInfo>();
+            string Parent = ParentPath ?? BestNoteDirectory.FullName;
+            string CombinedPath = Path.Combine(Parent, FolderName);
+
+            return Directory.CreateDirectory(CombinedPath);
         }
-    }
 
-    /// <summary>
-    /// Creates a new directory.
-    /// </summary>
-    /// <param name="folderName"></param>
-    /// <param name="parentPath"></param>
-    /// <returns></returns>
-    public DirectoryInfo? CreateDirectory(string folderName, string? parentPath = null)
-    {
-        string parent = parentPath ?? BestNoteDirectory.FullName;
-        string combinedPath = Path.Combine(parent, folderName);
-
-        try
+        /// <summary>
+        /// Creates a new file.
+        /// </summary>
+        /// <param name="FileName"></param>
+        /// <param name="TargetPath"></param>
+        /// <returns></returns>
+        public FileInfo? CreateFile(string FileName, string? TargetPath = null)
         {
-            return Directory.CreateDirectory(combinedPath);
+            string Parent = TargetPath ?? BestNoteDirectory.FullName;
+            string CombinedPath = Path.Combine(Parent, FileName);
+
+
+            using (File.Create(CombinedPath)) { } // Create empty file.
+            return new FileInfo(CombinedPath);
         }
-        catch (Exception ex)
+
+        /// <summary>
+        /// Rename an item on the file system.
+        /// </summary>
+        /// <p>
+        /// Try and find the file in the file system. If it exists rename it to the supplied name.
+        /// </p>
+        /// <param name="newName"></param>
+        /// <param name="itemInfo"></param>
+        /// <returns></returns>
+        public FileInfo RenameFile(string newName, FileInfo itemInfo)
         {
-            Debug.WriteLine($"Error creating directory: {ex.Message}");
-            return null;
+            DirectoryInfo? ParentPath = Directory.GetParent(itemInfo.FullName);
+            if (ParentPath is null)
+                throw new NullReferenceException($"Parent path of item is null {ParentPath}");
+
+            string newPath = Path.Combine(ParentPath.FullName, newName);
+            itemInfo.MoveTo(newPath);
+            return itemInfo;
         }
-    }
 
-    /// <summary>
-    /// Creates a new file.
-    /// </summary>
-    /// <param name="fileName"></param>
-    /// <param name="parentPath"></param>
-    /// <returns></returns>
-    public FileInfo? CreateFile(string fileName, string? parentPath = null)
-    {
-        string parent = parentPath ?? BestNoteDirectory.FullName;
-        string combinedPath = Path.Combine(parent, fileName);
-
-        try
-        {
-            using (File.Create(combinedPath)) { } // Create empty file.
-            return new FileInfo(combinedPath);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error creating file: {ex.Message}");
-            return null;
-        }
-    }
-
-    /// <summary>
-    /// Rename an item on the file system.
-    /// </summary>
-    /// <p>
-    /// Try and find the file in the file system. If it exists rename it to the supplied name.
-    /// </p>
-    /// <param name="newName"></param>
-    /// <param name="itemInfo"></param>
-    /// <returns></returns>
-    public FileInfo RenameFile(string newName, FileInfo itemInfo)
-    {
-        DirectoryInfo? parentPath = Directory.GetParent(itemInfo.FullName);
-        if (parentPath is null)
-            throw new NullReferenceException($"Parent path of item is null {parentPath}");
-        
-        string newPath = Path.Combine(parentPath.FullName, newName);
-        itemInfo.MoveTo(newPath);
-        return itemInfo;
-    }
-
-    /// <summary>
-    /// Rename a folder in the file system.
-    /// </summary>
-    /// <param name="newName"></param>
-    /// <param name=""></param>
-    /// <returns></returns>
-    //public DirectoryInfo RenameFolder(string newName, DirectoryInfo)
-    //{
-    //    return null;
-    //}
-
-    /// <summary>
-    /// Reads the contents of a file.
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <returns></returns>
-    public string ReadFileContents(string filePath)
-    {
-        //try
+        /// <summary>
+        /// Rename a folder in the file system.
+        /// </summary>
+        /// <param name="newName"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        //public DirectoryInfo RenameFolder(string newName, DirectoryInfo)
         //{
-        //    return File.ReadAllText(filePath);
+        //    return null;
         //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine($"Error reading file: {ex.Message}");
-        //    return string.Empty;
-        //}
-        return "";
-    }
 
-    /// <summary>
-    /// Writes to a file.
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <param name="content"></param>
-    public void WriteFileContents(string filePath, string content)
-    {
-        //try
-        //{
-        //    File.WriteAllText(filePath, content);
-        //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine($"Error writing file: {ex.Message}");
-        //}
+        /// <summary>
+        /// Reads the contents of a file.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public string ReadFileContents(string filePath)
+        {
+            //try
+            //{
+            //    return File.ReadAllText(filePath);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"Error reading file: {ex.Message}");
+            //    return string.Empty;
+            //}
+            return "";
+        }
+
+        /// <summary>
+        /// Writes to a file.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="content"></param>
+        public void WriteFileContents(string filePath, string content)
+        {
+            //try
+            //{
+            //    File.WriteAllText(filePath, content);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine($"Error writing file: {ex.Message}");
+            //}
+        }
     }
 }
+
+
 

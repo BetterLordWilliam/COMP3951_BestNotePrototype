@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 ///
 /// Will Otterbein
-/// March 22 2025
+/// March 23 2025
 /// 
 namespace BestNote_3951.ViewModels
 {
@@ -17,7 +17,7 @@ namespace BestNote_3951.ViewModels
     /// <summary>
     /// Tree view model object.
     /// </summary>
-    public partial class BestFileTreeViewModel : ObservableObject
+    public partial class BestFileTreeItemViewModel : ObservableObject
     {
         public ITreeViewItem TreeViewItem { get; private set; }
         public FileManagerService FileManagerService { get; private set; }
@@ -27,12 +27,33 @@ namespace BestNote_3951.ViewModels
         /// </summary>
         /// <param name="TreeViewItem"></param>
         /// <param name="FileManagerService"></param>
-        public BestFileTreeViewModel(
+        public BestFileTreeItemViewModel(
             ITreeViewItem       TreeViewItem,
             FileManagerService  FileManagerService
         ) {
             this.TreeViewItem       = TreeViewItem;
             this.FileManagerService = FileManagerService;
+        }
+
+        /// <summary>
+        /// Creates a note file as a child of this item.
+        /// This command should only be available if ITreeViewItem is capable of having children.
+        /// </summary>
+        [RelayCommand]
+        public void CreateChildFile(string NewFileName)
+        {
+            try
+            {
+                if (!TreeViewItem.CanHaveChildren)
+                    throw new NotImplementedException();
+
+                // Use the FileManagerService to create a child file
+                FileManagerService.CreateFile(NewFileName, ((IBNFolder)TreeViewItem).DirectoryInfo.FullName);
+            }
+            catch (NotImplementedException ex)
+            {
+
+            }
         }
 
         /// <summary>

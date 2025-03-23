@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Windows.Input;
 using BestNote_3951.Models.FileSystem;
 using BestNote_3951.Services;
 using Syncfusion.Pdf;
 using System.IO;
+using MetalPerformanceShaders;
 
 ///
 /// Will Otterbein
@@ -18,9 +20,60 @@ namespace BestNote_3951.ViewModels
     /// 
     /// A proxy for the services provided by the FileManagerService class.
     /// </summary>
-    class FileStructureFactory
+    class FileStructureViewUtils
     {
+        static readonly Dictionary<> FileSystemTypeMap = new Dictionary<>();
 
+        /// <summary>
+        /// Returns an observable collection of ITreeViewItems.
+        /// Returns an empty singleton list if there are no children.
+        /// A hard reload of the items inside of the specified directory,
+        /// root directory if `TargetDirectory` is null.
+        /// </summary>
+        /// <param name="TargetCollection"></param>
+        /// <param name="FileManagerService"></param>
+        /// <param name="TargetDirectory"></param>
+        /// <returns></returns>
+        public static void LoadFileSystemObjects(
+            ObservableCollection<ITreeViewItem> TargetCollection,
+            FileManagerService                  FileManagerService,
+            DirectoryInfo?                      TargetDirectory = null
+        ) {
+            try
+            {
+                TargetCollection.Clear();
+
+                var contents = FileManagerService.GetDirectoryInfoContents(TargetDirectory?.FullName);
+                foreach (var item in contents)
+                {
+                    TargetCollection.Add(CreateTreeViewItem(item));
+                }
+            }
+            catch (Exception ex)
+            {
+                return (ObservableCollection<ITreeViewItem>)Enumerable.Empty<ITreeViewItem>();
+            }
+        }
+
+        private static void CreateTreeViewFile()
+        {
+
+        }
+
+        private static void CreateTreeViewFolder()
+        {
+
+        }
+
+        /// <summary>
+        /// Uses maps of file system types to tree view item implementations to instantiate tree view items.
+        /// </summary>
+        /// <param name="FileSystemInfo"></param>
+        /// <returns></returns>
+        public static ITreeViewItem CreateTreeViewItem(FileSystemInfo FileSystemInfo)
+        {
+            return null;
+        }
     }
 
     /// <summary>
@@ -30,8 +83,8 @@ namespace BestNote_3951.ViewModels
     /// </summary>
     public partial class FileStructureViewModel : ObservableObject
     {
-        private readonly FileManagerService fileManagerService;
-        private readonly AlertService alertService;
+        private readonly FileManagerService FileManagerService;
+        private readonly AlertService AlertService;
 
         [ObservableProperty]
         public partial string TestingInputName { get; set; }
@@ -40,34 +93,23 @@ namespace BestNote_3951.ViewModels
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
-
         public ObservableCollection<ITreeViewItem> FileSystem { get; private set;  } = new ObservableCollection<ITreeViewItem>();
-        public ObservableCollection<string> FileNames { get; private set; } = new ObservableCollection<string>();
-
-        public FileStructureViewModel(AlertService als, FileManagerService bfs)
-        {
-            // FileSystem = GenerateSource();
-            fileManagerService = bfs;
-            alertService = als;
-            TestingInputName = "Will Testing Item";
-
-            LoadFileSystemContents();
-        }
 
         /// <summary>
-        /// Load file system contents, initial method and on refresh.
+        /// Initializes the file structure view model with.
         /// </summary>
-        /// <param name="folderName"></param>
-        /// <param name="parentPath"></param>
-        private void LoadFileSystemContents(string folderName = "", string? parentPath = null)
-        {
-            FileSystem.Clear();
+        /// <param name="AlertService"></param>
+        /// <param name="FileManagerService"></param>
+        public FileStructureViewModel(
+            AlertService        AlertService,
+            FileManagerService  FileManagerService
+        ) {
+            // FileSystem = GenerateSource();
+            this.FileManagerService = FileManagerService;
+            this.AlertService = AlertService;
+            TestingInputName = "Will Testing Item";
 
-            var contents = fileManagerService.GetDirectoryInfoContents(folderName, parentPath);
-            foreach (var item in contents)
-            {
-                FileSystem.Add(CreateTreeItem(item, 0, new Thickness(0)));
-            }
+            FileStructureViewUtils.LoadFileSystemObjects(FileSystem, FileManagerService);
         }
         
         /// <summary>
@@ -78,7 +120,7 @@ namespace BestNote_3951.ViewModels
         {
             parent.Children.Clear();
 
-            var contents = fileManagerService.GetDirectoryInfoContents(parent.DirectoryInfo.Name, parent.DirectoryInfo.Parent?.FullName);
+            var contents = FileManagerService.GetDirectoryInfoContents(parent.DirectoryInfo.Name, parent.DirectoryInfo.Parent?.FullName);
             int childLevel = parent.ItemLevel + 1;
             Thickness childPadding = parent.IndentationPadding + new Thickness(20, 0, 0, 0);
 
@@ -122,7 +164,7 @@ namespace BestNote_3951.ViewModels
         /// <returns></returns>
         private ITreeViewItem CreateFileTreeItem(FileInfo fileInfo, int itemLevel, Thickness indentationPadding)
         {
-            IBNFile bnFile = new MarkdownFile(fileInfo, fileManagerService);
+            IBNFile bnFile = new MarkdownFile(fileInfo, FileManagerService);
             return new FileTreeItem(itemLevel, indentationPadding, bnFile);
         }
 
@@ -135,7 +177,7 @@ namespace BestNote_3951.ViewModels
         /// <returns></returns>
         private FolderTreeItem CreateFolderTreeItem(DirectoryInfo directoryInfo, int itemLevel, Thickness indentationPadding)
         {
-            IBNFolder bnFolder = new WindowsFolder(directoryInfo, fileManagerService);
+            IBNFolder bnFolder = new WindowsFolder(directoryInfo, FileManagerService);
             return new FolderTreeItem(itemLevel, indentationPadding, bnFolder);
         }
 
