@@ -54,8 +54,8 @@ namespace BestNote_3951.ViewModels
                 //Debug.WriteLine($"received the message: {text}");
 
                 // markdig the text 
-                var htmlBody = Markdown.ToHtml(text, pipeline);
-                var html = $"<html><head><meta charset=\"utf-8\"></head><body>{htmlBody}</body></html>";
+                string? htmlBody = Markdown.ToHtml(text, pipeline);
+                string? html = $"<html><head><meta charset=\"utf-8\"></head><body>{htmlBody}</body></html>";
 
                 // force UI to update on hte main thread
                 MainThread.BeginInvokeOnMainThread(() =>

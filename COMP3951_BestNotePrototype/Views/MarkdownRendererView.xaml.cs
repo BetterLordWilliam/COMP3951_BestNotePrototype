@@ -45,11 +45,13 @@ public partial class MarkdownRendererView : ContentView
 			}
 		}
 
+		// if there is a markdown heading in the link, cancel default behavior and use a lil bit of 
+		// java script to scroll to the heading.
 		if (e.Url.Contains("#"))
 		{
 			e.Cancel = true;
 
-			var anchor = e.Url.Substring(e.Url.IndexOf('#') + 1);
+			string anchor = e.Url.Substring(e.Url.IndexOf('#') + 1);
 			(sender as WebView)?.Eval($"document.getElementById('{anchor}')?.scrollIntoView();");
 		}
 	}
