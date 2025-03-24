@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BestNote_3951.Models;
 using Microsoft.Maui.Storage;
@@ -93,13 +95,30 @@ namespace BestNote_3951.Services
         /// <param name="FolderName"></param>
         /// <param name="ParentPath"></param>
         /// <returns></returns>
-        public DirectoryInfo? CreateDirectory(string FolderName, string? ParentPath = null)
+        public DirectoryInfo? CreateDirectory(string FolderName = "New Folder", string? TargetPath = null)
         {
 
-            string Parent = ParentPath ?? BestNoteDirectory.FullName;
+            string Parent = TargetPath ?? BestNoteDirectory.FullName;
             string CombinedPath = Path.Combine(Parent, FolderName);
 
-            return Directory.CreateDirectory(CombinedPath);
+            return CreateUniqueDirectory(CombinedPath);
+        }
+
+        /// <summary>
+        /// Creates a new directory such that the name is unique, auto increments a number.
+        /// </summary>
+        /// <param name="Path"></param>
+        /// <returns></returns>
+        private DirectoryInfo? CreateUniqueDirectory(string Path)
+        {
+            string OriginalPath = Path;
+            int Counter = 1;
+            
+            while (Directory.Exists(Path))
+            {
+                Path = $"{OriginalPath} ({Counter++})";
+            }
+            return Directory.CreateDirectory(Path);
         }
 
         /// <summary>
@@ -108,15 +127,38 @@ namespace BestNote_3951.Services
         /// <param name="FileName"></param>
         /// <param name="TargetPath"></param>
         /// <returns></returns>
-        public FileInfo? CreateFile(string FileName, string? TargetPath = null)
+        public FileInfo? CreateFile(string FileName = "New File", string? TargetPath = null)
         {
+            FileName = $"{FileName}.md";
             string Parent = TargetPath ?? BestNoteDirectory.FullName;
             string CombinedPath = Path.Combine(Parent, FileName);
 
-
-            using (File.Create(CombinedPath)) { } // Create empty file.
-            return new FileInfo(CombinedPath);
+            return CreateUniqueFile(CombinedPath);
         }
+
+        /// <summary>
+        /// Creates a new file such that the name is unique, auto increments a number.
+        /// </summary>
+        /// <param name="FilePath"></param>
+        /// <returns></returns>
+        private FileInfo? CreateUniqueFile(string FilePath)
+        {
+            string OriginalPath = FilePath;
+            int Counter = 1;
+
+            string FileName = Path.GetFileNameWithoutExtension(OriginalPath);
+            string Extension = Path.GetExtension(OriginalPath);
+            string ParentDirectory = Path.GetDirectoryName(OriginalPath);
+
+            while(File.Exists(FilePath))
+            {
+                FilePath = Path.Combine(ParentDirectory, $"{FileName} ({Counter++}){Extension}");
+            }
+
+            using (File.Create(FilePath)) { }
+            return new FileInfo(FilePath);
+        }
+
 
         /// <summary>
         /// Rename an item on the file system.

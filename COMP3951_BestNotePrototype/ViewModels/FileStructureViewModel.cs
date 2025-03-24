@@ -79,12 +79,10 @@ namespace BestNote_3951.ViewModels
                 TargetCollection.Clear();
 
                 var contents = FileManagerService.GetDirectoryInfoContents(TargetDirectory?.FullName);
-                int ChildLevel = (Level == 0) ? 0 : Level + 10;
-                Thickness ChildIndentationPadding = IndentationPadding + new Thickness(10, 0, 0, 0) ?? Thickness.Zero;
 
                 foreach (var item in contents)
                 {
-                    TargetCollection.Add(CreateTreeViewItem(FileManagerService, item, ChildLevel, ChildIndentationPadding));
+                    TargetCollection.Add(CreateTreeViewItem(FileManagerService, item, Level, IndentationPadding));
                 }
             }
             catch (Exception ex)
@@ -173,15 +171,16 @@ namespace BestNote_3951.ViewModels
             int                 ItemLevel = 0,
             Thickness?          IndentationPadding = null
         ) {
-            Thickness TargetIndentationPadding = IndentationPadding ?? Thickness.Zero;
+            int ChildLevel = (ItemLevel == 0) ? 0 : ItemLevel + 10;
+            Thickness ChildIndentationPadding = IndentationPadding + new Thickness(10, 0, 0, 0) ?? Thickness.Zero;
 
             if (FileSystemInfo is FileInfo FileInfo)
             {
-                return CreateTreeViewFile(FileManagerService, FileInfo, ItemLevel, TargetIndentationPadding);
+                return CreateTreeViewFile(FileManagerService, FileInfo, ChildLevel, ChildIndentationPadding);
             }
             else if (FileSystemInfo is DirectoryInfo DirectoryInfo)
             {
-                return CreateTreeViewFolder(FileManagerService, DirectoryInfo, ItemLevel, TargetIndentationPadding);
+                return CreateTreeViewFolder(FileManagerService, DirectoryInfo, ChildLevel, ChildIndentationPadding);
             }
             else
             {
@@ -235,55 +234,76 @@ namespace BestNote_3951.ViewModels
         }
 
         /// <summary>
-        /// Retrieves the contents of a specified parent tree item.
+        /// TEMP, show an alert message.
         /// </summary>
-        /// <param name="parent"></param>
+        /// <param name="AlertMessage"></param>
         [RelayCommand]
-        public void RetrieveContents(ITreeViewItem? parent)
+        public void ShowAlertMessage(string AlertMessage)
         {
-            Debug.WriteLine($"Retrieve file called. {parent is null}");
-            if (parent == null)
+            AlertService.ShowAlertAsync("Info", AlertMessage);
+        }
+
+        /// <summary>
+        /// Retrieves the contents of a specified Parent tree item.
+        /// </summary>
+        /// <param name="Parent"></param>
+        [RelayCommand]
+        public void RetrieveContents(FolderTreeItem? ParentFolder = null)
+        {
+            Debug.WriteLine($"Retrieve file called. {ParentFolder is null}");
+            if (ParentFolder is null)
             {
-                FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, FileSystem);
-                return;
-            }
-            if (parent is FolderTreeItem parentFolder)
-            {
-                FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, parentFolder);
+                FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, ParentFolder?.Children ?? FileSystem);
                 return;
             }
             else
             {
-                Debug.WriteLine($"Retrieve file called. Unknown parent type {parent is null}");
+                FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, ParentFolder);
             }
         }
 
+        /// <summary>
+        /// Adds a file to a specified parent item in the tree view.
+        /// </summary>
+        /// <param name="Parent"></param>
         [RelayCommand]
-        public void AddFile(ITreeViewItem? parent)
+        public void AddFile(FolderTreeItem Parent)
         {
             Debug.WriteLine("Add File method called");
 
-            // AddItem(parent, CreateFileBestFile);
-            if (parent == null)
-                return;
-
-            // Will testing
-            // Figure out the best way to handle the temp items being added
-            // May need to explore implementing an abstract factory pattern or just regular factory patter
-            // For now case parent into an IBNFolder
-            // Really the type of this method hsould be IBNFolder, since that is what actually is having chilren
-            // Alas for the current methods, I need the directory info parameters.
-            // Need to work on this view model this weekend.
-
-            // ((IBNFolder)parent).Children.Add(CreateTempTreeItem(parent.ItemLevel, parent.IndentationPadding, parent));
+            try
+            {
+                FileInfo NewFileInfo = FileManagerService.CreateFile(TargetPath: Parent.DirectoryInfo.FullName);
+                ITreeViewItem NewItem = FileStructureViewUtils.CreateTreeViewItem(FileManagerService, NewFileInfo, Parent.ItemLevel, Parent.IndentationPadding);
+                Parent.Children.Add(NewItem);
+            }
+            catch (Exception ex)
+            {
+                AlertService.ShowAlertAsync("Invalid action", "The action you have take is one the system cannot accomodate.");
+                Debug.WriteLine(ex);
+            }
         }
 
+        /// <summary>
+        /// Adds a folder to a specified parent item in the tree view.
+        /// </summary>
+        /// <param name="Parent"></param>
         [RelayCommand]
-        public void AddFolder(IBNFolder? parent)
+        public void AddFolder(FolderTreeItem Parent)
         {
-            // AddItem(parent, CreateFolderBestFile);
-            if (parent == null)
-                return;
+            Debug.WriteLine("Add folder method called.");
+
+            try
+            {
+                DirectoryInfo NewDirectoryInfo = FileManagerService.CreateDirectory(TargetPath: Parent.DirectoryInfo.FullName);
+                ITreeViewItem NewItem = FileStructureViewUtils.CreateTreeViewItem(FileManagerService, NewDirectoryInfo, Parent.ItemLevel, Parent.IndentationPadding);
+                Parent.Children.Add(NewItem);
+            }
+            catch (Exception ex)
+            {
+                AlertService.ShowAlertAsync("Invalid action", "The action you have take is one the system cannot accomodate.");
+                Debug.WriteLine(ex);
+            }
         }
     }
 }
