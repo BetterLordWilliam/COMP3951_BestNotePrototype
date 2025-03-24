@@ -25,7 +25,6 @@ namespace BestNote_3951.ViewModels
 {
     public partial class EmbeddedPdfViewModel : ObservableObject
     {
-
         /// <summary>
         /// Gets and sets the stream of the currently loaded PDF document. Has a binding relationship
         /// with the EmbeddedPdfView pdfViewer DocumentStream property.
@@ -60,6 +59,7 @@ namespace BestNote_3951.ViewModels
         [RelayCommand]
         internal void CreateResourceLink()
         {
+
             if (!string.IsNullOrEmpty(PdfPath))
             {
                 int pageNumber    = PageNum;

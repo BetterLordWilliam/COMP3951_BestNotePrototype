@@ -28,7 +28,8 @@ namespace BestNote_3951.ViewModels
             {
                 Bookmark bookmark = message.Value;
                 string link = $"[PDF Bookmark (Page {bookmark.PageNumber})](bestnote://bookmark?pg={bookmark.PageNumber})";
-                MarkdownText += "\n\n" + link;
+
+                WeakReferenceMessenger.Default.Send(new InsertAtCursorMessage(link));
             });
         }
 
