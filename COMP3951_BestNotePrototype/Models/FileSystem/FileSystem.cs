@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using BestNote_3951.ViewModels;
 
 ///
 /// Will Otterbein
@@ -41,7 +42,7 @@ namespace BestNote_3951.Models.FileSystem
     public interface IBNFolder
     {
         DirectoryInfo DirectoryInfo { get; set; }
-        ObservableCollection<ITreeViewItem> Children { get; set; }
+        ObservableCollection<BestFileTreeItemViewModel> Children { get; set; }
         // interface method for adding a child item.
         // define contract that these items need to define for UI purposes.
     }
@@ -58,7 +59,7 @@ namespace BestNote_3951.Models.FileSystem
         public bool CanRename { get; set; }
         public bool ItemRename { get; set; }
         public Thickness IndentationPadding { get; set; }
-        public IEnumerable<ITreeViewItem> SafeChildren { get; }
+        public IEnumerable<BestFileTreeItemViewModel> SafeChildren { get; }
         public ImageSource ImageIcon { get; }
     }
 
@@ -151,8 +152,7 @@ namespace BestNote_3951.Models.FileSystem
         /// <summary>
         /// Safe access the contents of a nodes children. Used during data binding.
         /// </summary>
-        public virtual IEnumerable<ITreeViewItem> SafeChildren => Enumerable.Empty<ITreeViewItem>();
-
+        public virtual IEnumerable<BestFileTreeItemViewModel> SafeChildren => Enumerable.Empty<BestFileTreeItemViewModel>();
 
         /// <summary>
         /// Property changed event.

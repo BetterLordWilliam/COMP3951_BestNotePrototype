@@ -12,7 +12,7 @@ public class WindowsFolder : IBNFolder
 {
     private readonly FileManagerService _fileManagerService;
     private DirectoryInfo directoryInfo;
-    private ObservableCollection<ITreeViewItem> children;
+    private ObservableCollection<BestFileTreeItemViewModel> children;
 
     /// <summary>
     /// Initializes a new WindowsFolder instance.
@@ -24,7 +24,7 @@ public class WindowsFolder : IBNFolder
         FileManagerService  fileManagerService
     ) {
         _fileManagerService = fileManagerService;
-        this.children = new ObservableCollection<ITreeViewItem>();
+        this.children = new ObservableCollection<BestFileTreeItemViewModel>();
         this.directoryInfo = directoryInfo;
     }
 
@@ -34,7 +34,7 @@ public class WindowsFolder : IBNFolder
         set => directoryInfo = value;
     }
 
-    public ObservableCollection<ITreeViewItem> Children
+    public ObservableCollection<BestFileTreeItemViewModel> Children
     {
         get => children;
         set => children = value;

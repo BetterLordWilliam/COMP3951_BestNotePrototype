@@ -68,11 +68,12 @@ namespace BestNote_3951.ViewModels
         /// <param name="IndentationPadding"></param>
         /// <returns></returns>
         public static void LoadFileSystemObjects(
-            FileManagerService                  FileManagerService,
-            ObservableCollection<ITreeViewItem> TargetCollection,
-            DirectoryInfo?                      TargetDirectory = null,
-            int                                 Level = 0,
-            Thickness?                          IndentationPadding = null
+            FileManagerService FileManagerService,
+            AlertService AlertManagerService,
+            ObservableCollection<BestFileTreeItemViewModel> TargetCollection,
+            DirectoryInfo? TargetDirectory = null,
+            int Level = 0,
+            Thickness? IndentationPadding = null
         ) {
             try
             {
@@ -82,7 +83,9 @@ namespace BestNote_3951.ViewModels
 
                 foreach (var item in contents)
                 {
-                    TargetCollection.Add(CreateTreeViewItem(FileManagerService, item, Level, IndentationPadding));
+                    ITreeViewItem TreeItem = CreateTreeViewItem(FileManagerService, item, Level, IndentationPadding);
+                    BestFileTreeItemViewModel TreeItemViewModel = new(TreeItem, FileManagerService, AlertManagerService);
+                    TargetCollection.Add(TreeItemViewModel);
                 }
             }
             catch (Exception ex)
@@ -97,17 +100,22 @@ namespace BestNote_3951.ViewModels
         /// <param name="FileManagerService"></param>
         /// <param name="TargetFolder"></param>
         public static void LoadFileSystemObjects(
-            FileManagerService      FileManagerService,
-            FolderTreeItem          TargetFolder
+            FileManagerService FileManagerService,
+            AlertService AlertManagerService,
+            BestFileTreeItemViewModel TargetItem
         )
         {
-            LoadFileSystemObjects(
-                FileManagerService,
-                TargetFolder.Children,
-                TargetFolder.DirectoryInfo,
-                TargetFolder.ItemLevel,
-                TargetFolder.IndentationPadding
-            );
+            if (TargetItem.TreeViewItem is FolderTreeItem FolderItem)
+            {
+                LoadFileSystemObjects(
+                    FileManagerService,
+                    AlertManagerService,
+                    FolderItem.Children,
+                    FolderItem.DirectoryInfo,
+                    FolderItem.ItemLevel,
+                    FolderItem.IndentationPadding
+                );
+            }
         }
 
         /// <summary>
@@ -119,13 +127,13 @@ namespace BestNote_3951.ViewModels
         /// <param name="IndentationPadding"></param>
         /// <returns></returns>
         private static ITreeViewItem CreateTreeViewFile(
-            FileManagerService  FileManagerService,
-            FileInfo            FileInfo,
-            int                 ItemLevel,
-            Thickness           IndentationPadding
+            FileManagerService FileManagerService,
+            FileInfo FileInfo,
+            int ItemLevel,
+            Thickness IndentationPadding
         ) {
             // Map to extension
-            
+
             var FileExtension = FileInfo.Extension.ToLower();
 
             Debug.WriteLine($"File system info object {FileInfo} w/ extension {FileExtension}");
@@ -145,10 +153,10 @@ namespace BestNote_3951.ViewModels
         /// <param name="IndentationPadding"></param>
         /// <returns></returns>
         private static ITreeViewItem CreateTreeViewFolder(
-            FileManagerService  FileManagerService,
-            DirectoryInfo       DirectoryInfo,
-            int                 ItemLevel,
-            Thickness           IndentationPadding
+            FileManagerService FileManagerService,
+            DirectoryInfo DirectoryInfo,
+            int ItemLevel,
+            Thickness IndentationPadding
         ) {
             // Default is windows folder
 
@@ -166,10 +174,10 @@ namespace BestNote_3951.ViewModels
         /// <param name="FileSystemInfo"></param>
         /// <returns></returns>
         public static ITreeViewItem CreateTreeViewItem(
-            FileManagerService  FileManagerService,
-            FileSystemInfo      FileSystemInfo,
-            int                 ItemLevel = 0,
-            Thickness?          IndentationPadding = null
+            FileManagerService FileManagerService,
+            FileSystemInfo FileSystemInfo,
+            int ItemLevel = 0,
+            Thickness? IndentationPadding = null
         ) {
             int ChildLevel = (ItemLevel == 0) ? 0 : ItemLevel + 10;
             Thickness ChildIndentationPadding = IndentationPadding + new Thickness(10, 0, 0, 0) ?? Thickness.Zero;
@@ -208,7 +216,7 @@ namespace BestNote_3951.ViewModels
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
-        public ObservableCollection<ITreeViewItem> FileSystem { get; private set;  } = new ObservableCollection<ITreeViewItem>();
+        public ObservableCollection<BestFileTreeItemViewModel> FileSystem { get; private set; } = new ObservableCollection<BestFileTreeItemViewModel>();
 
         /// <summary>
         /// Initializes the file structure view model with.
@@ -216,15 +224,15 @@ namespace BestNote_3951.ViewModels
         /// <param name="AlertService"></param>
         /// <param name="FileManagerService"></param>
         public FileStructureViewModel(
-            AlertService        AlertService,
-            FileManagerService  FileManagerService
+            AlertService AlertService,
+            FileManagerService FileManagerService
         ) {
             // FileSystem = GenerateSource();
             this.FileManagerService = FileManagerService;
             this.AlertService = AlertService;
             TestingInputName = "Will Testing Item";
 
-            FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, FileSystem);
+            FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, AlertService, FileSystem);
         }
 
         [RelayCommand]
@@ -248,17 +256,18 @@ namespace BestNote_3951.ViewModels
         /// </summary>
         /// <param name="Parent"></param>
         [RelayCommand]
-        public void RetrieveContents(FolderTreeItem? ParentFolder = null)
+        public void RetrieveContents(BestFileTreeItemViewModel? ParentModel = null)
         {
-            Debug.WriteLine($"Retrieve file called. {ParentFolder is null}");
-            if (ParentFolder is null)
+            Debug.WriteLine($"Retrieve file called. {ParentModel is null}");
+
+            if (ParentModel is null)
             {
-                FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, ParentFolder?.Children ?? FileSystem);
+                FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, AlertService, FileSystem);
                 return;
             }
-            else
+            else if (ParentModel.TreeViewItem is FolderTreeItem FolderTreeItem)
             {
-                FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, ParentFolder);
+                FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, AlertService, FolderTreeItem.Children);
             }
         }
 
@@ -275,7 +284,8 @@ namespace BestNote_3951.ViewModels
             {
                 FileInfo NewFileInfo = FileManagerService.CreateFile(TargetPath: Parent.DirectoryInfo.FullName);
                 ITreeViewItem NewItem = FileStructureViewUtils.CreateTreeViewItem(FileManagerService, NewFileInfo, Parent.ItemLevel, Parent.IndentationPadding);
-                Parent.Children.Add(NewItem);
+                BestFileTreeItemViewModel NewViewModel = new (NewItem, FileManagerService, AlertService);
+                Parent.Children.Add(NewViewModel);
             }
             catch (Exception ex)
             {
@@ -297,7 +307,8 @@ namespace BestNote_3951.ViewModels
             {
                 DirectoryInfo NewDirectoryInfo = FileManagerService.CreateDirectory(TargetPath: Parent.DirectoryInfo.FullName);
                 ITreeViewItem NewItem = FileStructureViewUtils.CreateTreeViewItem(FileManagerService, NewDirectoryInfo, Parent.ItemLevel, Parent.IndentationPadding);
-                Parent.Children.Add(NewItem);
+                BestFileTreeItemViewModel NewViewModel = new (NewItem, FileManagerService, AlertService);
+                Parent.Children.Add(NewViewModel);
             }
             catch (Exception ex)
             {

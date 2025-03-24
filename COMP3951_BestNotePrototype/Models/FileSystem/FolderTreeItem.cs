@@ -53,7 +53,7 @@ public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
     /// <summary>
     /// Observable collection of child ITreeViewItems.
     /// </summary>
-    public ObservableCollection<ITreeViewItem> Children
+    public ObservableCollection<BestFileTreeItemViewModel> Children
     {
         get => _sourceFolder.Children;
         set => _sourceFolder.Children = value;
@@ -62,7 +62,7 @@ public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
     /// <summary>
     /// Safe children implementations, returns the children of the item.
     /// </summary>
-    public override IEnumerable<ITreeViewItem> SafeChildren
+    public override IEnumerable<BestFileTreeItemViewModel> SafeChildren
     {
         get => _sourceFolder.Children;
     }

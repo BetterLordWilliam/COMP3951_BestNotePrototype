@@ -166,18 +166,39 @@ namespace BestNote_3951.Services
         /// <p>
         /// Try and find the file in the file system. If it exists rename it to the supplied name.
         /// </p>
-        /// <param name="newName"></param>
-        /// <param name="itemInfo"></param>
+        /// <param name="NewName"></param>
+        /// <param name="ItemInfo"></param>
         /// <returns></returns>
-        public FileInfo RenameFile(string newName, FileInfo itemInfo)
+        public FileInfo RenameFile(string NewName, FileInfo ItemInfo)
         {
-            DirectoryInfo? ParentPath = Directory.GetParent(itemInfo.FullName);
+            string ItemExtension = ItemInfo.Extension;
+            DirectoryInfo? ParentPath = Directory.GetParent(ItemInfo.FullName);
             if (ParentPath is null)
                 throw new NullReferenceException($"Parent path of item is null {ParentPath}");
 
-            string newPath = Path.Combine(ParentPath.FullName, newName);
-            itemInfo.MoveTo(newPath);
-            return itemInfo;
+            string NewPath = Path.Combine(ParentPath.FullName, $"{NewName}{ItemExtension}");
+            ItemInfo.MoveTo(NewPath);
+            return ItemInfo;
+        }
+
+        /// <summary>
+        /// Rename an item on the file system.
+        /// </summary>
+        /// <p>
+        /// Try and find the file in the file system. If it exists rename it to the supplied name.
+        /// </p>
+        /// <param name="NewName"></param>
+        /// <param name="ItemInfo"></param>
+        /// <returns></returns>
+        public DirectoryInfo RenameFolder(string NewName, DirectoryInfo ItemInfo)
+        {
+            DirectoryInfo? ParentPath = Directory.GetParent(ItemInfo.FullName);
+            if (ParentPath is null)
+                throw new NullReferenceException($"Parent path of item is null {ParentPath}");
+
+            string NewPath = Path.Combine(ParentPath.FullName, NewName);
+            ItemInfo.MoveTo(NewPath);
+            return ItemInfo;
         }
 
         /// <summary>
