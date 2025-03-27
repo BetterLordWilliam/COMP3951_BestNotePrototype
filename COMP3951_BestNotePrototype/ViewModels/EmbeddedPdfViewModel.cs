@@ -144,16 +144,6 @@ namespace BestNote_3951.ViewModels
                     PdfDocumentStream = await result.OpenReadAsync();
                 } else if (result != null && copyToBestDirectory)
                 {
-                    //string resourcesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
-                    //resourcesPath = Path.Combine(resourcesPath, "Notes");
-                    //resourcesPath = Path.Combine(resourcesPath, "Resources");
-                    //string newFilePath = Path.Combine(resourcesPath, result.FileName);
-                    //if (!Directory.Exists(resourcesPath))
-                    //{
-                    //    Directory.CreateDirectory(resourcesPath);
-                    //}
-
-                    //File.Copy(result.FullPath, newFilePath);
                     String newFilePath = fileManagerService.AddResourceFile(result.FileName, result.FullPath);
                     OpenPDFFromPath(newFilePath);
                 }

@@ -22,13 +22,11 @@ public class FileManagerService
 {
     public DirectoryInfo AppDirectory { get; private set; }         // Application data directory
     public DirectoryInfo BestNoteDirectory { get; private set; }    // Notes directory
-
-    public DirectoryInfo ResourceDirectory { get; private set; }    // 20250327 OG
+    public DirectoryInfo ResourceDirectory { get; private set; }    // Resource Directory
 
     private readonly string _appDirectoryPath;
     private readonly string _bestNoteDirectoryPath;
-
-    private readonly string _resourceDirectoryPath; // 20250327 OG
+    private readonly string _resourceDirectoryPath;
 
     /// <summary>
     /// Service constructor. Use with dependency injection.
@@ -37,12 +35,10 @@ public class FileManagerService
     {
         _appDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
         _bestNoteDirectoryPath = Path.Combine(_appDirectoryPath, "Notes");
-
-        _resourceDirectoryPath = Path.Combine(_bestNoteDirectoryPath, "Resources");
+        _resourceDirectoryPath = Path.Combine(_appDirectoryPath, "Resources");
 
         AppDirectory = CreateDirectoryIfNotExists(_appDirectoryPath);
         BestNoteDirectory = CreateDirectoryIfNotExists(_bestNoteDirectoryPath);
-
         ResourceDirectory = CreateDirectoryIfNotExists(_resourceDirectoryPath);
     }
 
@@ -131,11 +127,16 @@ public class FileManagerService
         return BestFile.BestFileMarkdown(fileName, "md_file.png", fileInfo, parentDirectoryInfo);
     }
 
-
-    public string AddResourceFile(string fileName, string filePath, string? parentPath = null)
+    /// <summary>
+    /// Copies a file from a specified file path to the BestNote Resources folder.
+    /// </summary>
+    /// <param name="fileName">the name of the file to copy</param>
+    /// <param name="filePath">the path of the file to copy</param>
+    /// <returns>string, the path of where the file was copied to</returns>
+    public string AddResourceFile(string fileName, string filePath)
     {
         Debug.WriteLine(fileName);
-        string parent = parentPath ?? ResourceDirectory.FullName;
+        string parent = ResourceDirectory.FullName;
         string newPath = Path.Combine(parent, fileName);
         File.Copy(filePath, newPath);
         return newPath;
