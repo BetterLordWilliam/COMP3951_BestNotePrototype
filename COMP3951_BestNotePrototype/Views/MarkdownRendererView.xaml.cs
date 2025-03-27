@@ -21,10 +21,8 @@ public partial class MarkdownRendererView : ContentView
 	///  we ge tthe page number by parsing the query string and then send the page
 	///  number to the pdfViewer that is registered for the event.
 	///  
-	/// sadly it doesn't actually GO to the page, it just updates the page number and the
-	/// user has to physically press enter because the syncfusion pdfViewer doesn't
-	/// have a public API that lets us simulate a keypress event for unknown arcane 
-	/// reasons of reat mystery and confusion.
+	/// if the event args contain a markdown heading (#), then use javascript to
+	/// scroll to that heading in the webview.
 	/// </summary>
 	/// <param name="sender"></param>
 	/// <param name="e"></param>
