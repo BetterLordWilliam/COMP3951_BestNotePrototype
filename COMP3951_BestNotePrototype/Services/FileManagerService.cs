@@ -6,6 +6,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using BestNote_3951.Models;
+using BitMiracle.LibTiff.Classic;
 
 ///
 /// Will Otterbein
@@ -22,8 +23,12 @@ public class FileManagerService
     public DirectoryInfo AppDirectory { get; private set; }         // Application data directory
     public DirectoryInfo BestNoteDirectory { get; private set; }    // Notes directory
 
+    public DirectoryInfo ResourceDirectory { get; private set; }    // 20250327 OG
+
     private readonly string _appDirectoryPath;
     private readonly string _bestNoteDirectoryPath;
+
+    private readonly string _resourceDirectoryPath; // 20250327 OG
 
     /// <summary>
     /// Service constructor. Use with dependency injection.
@@ -33,8 +38,12 @@ public class FileManagerService
         _appDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
         _bestNoteDirectoryPath = Path.Combine(_appDirectoryPath, "Notes");
 
+        _resourceDirectoryPath = Path.Combine(_bestNoteDirectoryPath, "Resources");
+
         AppDirectory = CreateDirectoryIfNotExists(_appDirectoryPath);
         BestNoteDirectory = CreateDirectoryIfNotExists(_bestNoteDirectoryPath);
+
+        ResourceDirectory = CreateDirectoryIfNotExists(_resourceDirectoryPath);
     }
 
     /// <summary>
@@ -120,6 +129,18 @@ public class FileManagerService
         DirectoryInfo parentDirectoryInfo = new DirectoryInfo(parent);
 
         return BestFile.BestFileMarkdown(fileName, "md_file.png", fileInfo, parentDirectoryInfo);
+    }
+
+
+    public string AddResourceFile(string fileName, string filePath, string? parentPath = null)
+    {
+        Debug.WriteLine(fileName);
+        string parent = parentPath ?? ResourceDirectory.FullName;
+        string newPath = Path.Combine(parent, fileName);
+        File.Copy(filePath, newPath);
+        return newPath;
+
+
     }
 }
 

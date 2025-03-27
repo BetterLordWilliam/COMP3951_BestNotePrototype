@@ -22,9 +22,9 @@ xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.M
 
 
     <Grid RowDefinitions="Auto,*">
-        <Grid.BindingContext>
+       <!-- <Grid.BindingContext>
             <local:EmbeddedPdfViewModel/>
-        </Grid.BindingContext>
+        </Grid.BindingContext> -->
 
         <HorizontalStackLayout x:Name="Toolbar" Grid.Row="0">
             <Button x:Name="openFile"

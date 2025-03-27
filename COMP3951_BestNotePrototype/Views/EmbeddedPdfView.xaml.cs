@@ -25,7 +25,7 @@ public partial class EmbeddedPdfView : ContentView
 	public EmbeddedPdfView()
 	{
 		InitializeComponent();
-		EmbeddedPdfViewModel BindingContext = new EmbeddedPdfViewModel();
+		//EmbeddedPdfViewModel BindingContext = new EmbeddedPdfViewModel();
         CustomizePDFToolbar();
 
     }

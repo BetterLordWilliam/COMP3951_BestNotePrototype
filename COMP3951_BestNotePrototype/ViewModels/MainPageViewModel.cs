@@ -30,7 +30,7 @@ namespace BestNote_3951.ViewModels
 
             #region ViewModels
             FileStructureViewModel = new FileStructureViewModel(AlertService, FileManagerService);
-            EmbeddedPdfViewModel = new EmbeddedPdfViewModel();
+            EmbeddedPdfViewModel = new EmbeddedPdfViewModel(FileManagerService);
             MarkdownEditorViewModel = new MarkdownEditorViewModel();
             MarkdownRendererViewModel = new MarkdownRendererViewModel();
             MainPanelViewModel = new MainPanelViewModel(EmbeddedPdfViewModel, MarkdownEditorViewModel, MarkdownRendererViewModel);

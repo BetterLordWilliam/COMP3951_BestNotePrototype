@@ -9,6 +9,7 @@ using BestNote_3951.Models;
 using Syncfusion.Maui.PdfViewer;
 using Syncfusion.Maui.Popup;
 using CommunityToolkit.Maui.Views;
+using BestNote_3951.Services;
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfViewModel file
@@ -24,6 +25,8 @@ namespace BestNote_3951.ViewModels
 {
     public partial class EmbeddedPdfViewModel : ObservableObject
     {
+
+        private readonly FileManagerService fileManagerService;
 
         /// <summary>
         /// Gets and sets the stream of the currently loaded PDF document. Has a binding relationship
@@ -141,20 +144,18 @@ namespace BestNote_3951.ViewModels
                     PdfDocumentStream = await result.OpenReadAsync();
                 } else if (result != null && copyToBestDirectory)
                 {
-                    string resourcesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
-                    resourcesPath = Path.Combine(resourcesPath, "Notes");
-                    resourcesPath = Path.Combine(resourcesPath, "Resources");
-                    string newFilePath = Path.Combine(resourcesPath, result.FileName);
-                    if (!Directory.Exists(resourcesPath))
-                    {
-                        Directory.CreateDirectory(resourcesPath);
-                    }
+                    //string resourcesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
+                    //resourcesPath = Path.Combine(resourcesPath, "Notes");
+                    //resourcesPath = Path.Combine(resourcesPath, "Resources");
+                    //string newFilePath = Path.Combine(resourcesPath, result.FileName);
+                    //if (!Directory.Exists(resourcesPath))
+                    //{
+                    //    Directory.CreateDirectory(resourcesPath);
+                    //}
 
-                    File.Copy(result.FullPath, newFilePath);
-                    PdfPath = result.FullPath;
-
-
-                    PdfDocumentStream = File.OpenRead(newFilePath);
+                    //File.Copy(result.FullPath, newFilePath);
+                    String newFilePath = fileManagerService.AddResourceFile(result.FileName, result.FullPath);
+                    OpenPDFFromPath(newFilePath);
                 }
             }
             catch (Exception ex)
@@ -174,14 +175,43 @@ namespace BestNote_3951.ViewModels
 
 
         /// <summary>
+        /// Displays the pdf passed as a file path into the
+        /// </summary>
+        /// <param name="pdfPath"></param>
+        public void OpenPDFFromPath(String pdfPath)
+        {
+            try
+            {
+                PdfPath = pdfPath;
+                PdfDocumentStream = File.OpenRead(pdfPath);
+            }
+            catch (Exception ex)
+            {
+                String message;
+                if (ex != null && String.IsNullOrEmpty(ex.Message) == false)
+                {
+                    message = ex.Message;
+                }
+                else
+                {
+                    message = "File open failed";
+                }
+                Application.Current?.MainPage?.DisplayAlert("Error", message, "OK");
+            }
+
+        }
+
+
+        /// <summary>
         /// Initializes PageNum to be 0, PdfPath to be an empty string, and ResourceLinks to be
         /// a new empty collection of ResourceLink objects.
         /// </summary>
-        public EmbeddedPdfViewModel()
+        public EmbeddedPdfViewModel(FileManagerService bfs)
         {
             PageNum = 0;
             PdfPath = "";
             ResourceLinks = new Collection<ResourceLink>();
+            fileManagerService = bfs;
         }
 
 
