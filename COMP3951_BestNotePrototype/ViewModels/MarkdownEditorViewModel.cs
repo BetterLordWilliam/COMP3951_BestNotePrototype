@@ -31,6 +31,8 @@ namespace BestNote_3951.ViewModels
 
                 WeakReferenceMessenger.Default.Send(new InsertAtCursorMessage(link));
             });
+
+            WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(markdownText));
         }
 
         /// <summary>
