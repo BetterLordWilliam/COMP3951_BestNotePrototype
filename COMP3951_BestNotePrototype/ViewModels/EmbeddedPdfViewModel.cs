@@ -219,12 +219,11 @@ namespace BestNote_3951.ViewModels
             PdfName = "";
             ResourceLinks = new Collection<ResourceLink>();
             fileManagerService = bfs;
-        }
 
             WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
             {
                 string filePath = message.Value;
-                
+
                 if (filePath != PdfPath)
                 {
                     PdfName = Path.GetFileName(filePath);
@@ -234,6 +233,7 @@ namespace BestNote_3951.ViewModels
                 }
             });
         }
+
     }
 }
 
