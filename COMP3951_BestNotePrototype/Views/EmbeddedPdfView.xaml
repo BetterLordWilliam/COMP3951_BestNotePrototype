@@ -24,7 +24,9 @@ xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.M
     <Grid RowDefinitions="Auto,*">
 
 
-        <HorizontalStackLayout x:Name="Toolbar" Grid.Row="0">
+
+        <HorizontalStackLayout x:Name="Toolbar"
+                               Grid.Row="0">
             <Button x:Name="openFile"
                              Margin="10,10,10,10"
                              Clicked ="showPopup_Clicked"
@@ -58,8 +60,8 @@ xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.M
                                 ShowScrollHead="False"
                                 ShowToolbars="True"
                                 EnableDocumentLinkNavigation="True"
-                                DocumentSource="{Binding PdfDocumentStream}" 
                                 ZoomMode="FitToWidth"
+                                DocumentSource="{Binding PdfDocumentStream}" 
                                 PageNumber ="{Binding PageNum, Mode=TwoWay}"
                                 />
     </Grid>

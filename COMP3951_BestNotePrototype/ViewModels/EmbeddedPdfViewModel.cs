@@ -10,9 +10,12 @@ using Syncfusion.Maui.PdfViewer;
 using Syncfusion.Maui.Popup;
 using CommunityToolkit.Maui.Views;
 using BestNote_3951.Services;
+using CommunityToolkit.Mvvm.Messaging;
+using BestNote_3951.Messages;
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfViewModel file
+///         Bryson Lindy pdfviewmodel - markdown renderer messaging
 /// SOURCES:
 /// Followed this YouTube tutorial to open and display the PDF (see OpenDocument and PickAndShow)
 /// https://www.youtube.com/watch?v=E_-g-GcQZRE&list=PL5IWFN3_TaPrE_3Y10N2XReOe57CpnMjy&index=6
@@ -35,11 +38,16 @@ namespace BestNote_3951.ViewModels
         [ObservableProperty]
         public Stream? _pdfDocumentStream;
 
-
         /// <summary>
         /// Gets and sets the path of the Pdf document.
         /// </summary>
         public String PdfPath;
+
+
+        /// <summary>
+        /// Gets and sets the name of the Pdf document.
+        /// </summary>
+        public String PdfName;
 
 
         /// <summary>
@@ -71,13 +79,20 @@ namespace BestNote_3951.ViewModels
         [RelayCommand]
         internal void CreateResourceLink()
         {
-            if (PdfPath != null && PdfPath != "")
-            {
-                int pageNumber = PageNum;
-                String name = "BestNoteBookmark";
-                ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));              
-            }
 
+            if (!string.IsNullOrEmpty(PdfPath))
+            {
+                int pageNumber    = PageNum;
+                String name       = PdfName;
+                Bookmark bookmark = new Bookmark(name, pageNumber);
+
+                ResourceLink resource = new ResourceLink(new Bookmark(name, pageNumber), PdfPath);
+
+                ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));
+
+                // sends to the registered messenger in the markdowneditor viewmodel constructor
+                WeakReferenceMessenger.Default.Send(new PdfBookmarkTomarkdownMessage(resource));
+            }
         }
 
 
@@ -141,6 +156,7 @@ namespace BestNote_3951.ViewModels
                 if (result != null && !copyToBestDirectory)
                 {
                     PdfPath = result.FullPath;
+                    PdfName = result.FileName;
                     PdfDocumentStream = await result.OpenReadAsync();
                 } else if (result != null && copyToBestDirectory)
                 {
@@ -200,11 +216,24 @@ namespace BestNote_3951.ViewModels
         {
             PageNum = 0;
             PdfPath = "";
+            PdfName = "";
             ResourceLinks = new Collection<ResourceLink>();
             fileManagerService = bfs;
         }
 
-
+            WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
+            {
+                string filePath = message.Value;
+                
+                if (filePath != PdfPath)
+                {
+                    PdfName = Path.GetFileName(filePath);
+                    PdfPath = filePath;
+                    PdfDocumentStream = File.OpenRead(message.Value);
+                    Thread.Sleep(50);
+                }
+            });
+        }
     }
 }
 

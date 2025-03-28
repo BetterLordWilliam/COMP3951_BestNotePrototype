@@ -1,7 +1,17 @@
-﻿namespace BestNote_3951
+﻿using Markdig;
+
+namespace BestNote_3951
 {
     public partial class App : Application
     {
+        public static MarkdownPipeline Pipeline { get; }
+        static App()
+        {
+            Pipeline = new MarkdownPipelineBuilder()
+                .UseAdvancedExtensions()
+                .UseAutoIdentifiers()
+                .Build();
+        }
         public App()
         {
             //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NMaF1cXmhKYVJ0WmFZfVtgdVRMYltbQHJPIiBoS35Rc0VgWXpcc3ZSQmRYV0d/");

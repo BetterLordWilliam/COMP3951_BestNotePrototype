@@ -3,13 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:BestNote_3951.Views"
+             xmlns:templateselectors="clr-namespace:BestNote_3951.Views.TemplateSelectors"
              xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
+             xmlns:models="clr-namespace:BestNote_3951.Models.FileSystem"
              x:Class="BestNote_3951.Views.BestFileTreeView"
+             x:DataType="models:ITreeViewItem"
              x:Name="this">
+
+    <!-- Define the tree view item templates -->
+    <ContentView.Resources>
+        <DataTemplate x:Key="FileTreeItem"
+                      x:DataType="models:IBNFile">
+            <views:BestFileTreeView TreeViewItem="{Binding .}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FolderTreeItem"
+                      x:DataType="models:IBNFolder">
+            <views:BestFileTreeView TreeViewItem="{Binding .}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TempTreeItem">
+            <Entry Placeholder="New Item Name..." />
+        </DataTemplate>
+
+        <templateselectors:TreeViewItemTemplateSelector x:Key="TreeViewItemTemplateSelector"
+            FileTemplate="{StaticResource FileTreeItem}"
+            FolderTemplate="{StaticResource FolderTreeItem}"
+            TemporaryTemplate="{StaticResource TempTreeItem}" />
+    </ContentView.Resources>
 
     <VerticalStackLayout>
         <!-- File Information -->
-        <HorizontalStackLayout Margin="{Binding IndentationPadding}"
+        <HorizontalStackLayout
+                               Margin="{Binding IndentationPadding}"
                                HeightRequest="20">
             <Image Source="{Binding ImageIcon}" />
             <!--<Entry Placeholder="Item name..." HeightRequest="20" MinimumHeightRequest="20" FontSize="5" VerticalTextAlignment="Center" />-->
@@ -18,35 +44,33 @@
             <HorizontalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="OnToggleClicked" />
             </HorizontalStackLayout.GestureRecognizers>
-        </HorizontalStackLayout>
-
-        <!-- Recursive Subfile List -->
-        <CollectionView x:Name="SubFilesCollectionView" IsVisible="True" ItemsSource="{Binding SubFiles}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <views:BestFileTreeView BestFile="{Binding .}"/>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        
-        <!-- Context View To add File to this node -->
-        <FlyoutBase.ContextFlyout>
-            <MenuFlyout>
-                <MenuFlyoutItem
+            <!-- Context View To add File to this node -->
+            <FlyoutBase.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem
                     IsEnabled="False"
                     Text="Rename Item" />
-                <MenuFlyoutItem
-                    IsEnabled="{Binding Parent}"
+                    <MenuFlyoutItem
+                    IsEnabled="{Binding CanHaveChildren}"
                     Text="Add Subfolder"
                     Command="{Binding BindingContext.AddFolderCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
                     CommandParameter="{Binding .}" />
-                <MenuFlyoutItem
-                    IsEnabled="{Binding Parent}"
+                    <MenuFlyoutItem
+                    IsEnabled="{Binding CanHaveChildren}"
                     Text="Add Note"
                     Command="{Binding BindingContext.AddFileCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
                     CommandParameter="{Binding .}" />
-            </MenuFlyout>
-        </FlyoutBase.ContextFlyout>
+                </MenuFlyout>
+            </FlyoutBase.ContextFlyout>
+        </HorizontalStackLayout>
+
+        <!-- Recursive Subfile List -->
+        <CollectionView 
+            x:Name="SubFilesCollectionView"
+            IsEnabled="{Binding CanHaveChildren}"
+            IsVisible="{Binding CanHaveChildren}"
+            ItemsSource="{Binding SafeChildren}"
+            ItemTemplate="{StaticResource TreeViewItemTemplateSelector}" />
     </VerticalStackLayout>
 
 </ContentView>

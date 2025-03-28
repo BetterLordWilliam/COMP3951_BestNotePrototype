@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using BestNote_3951.Messages;
 using Markdig;
 using Microsoft.Maui.Controls;
+using BestNote_3951.Services;
 
 /*
  * Sources:
@@ -37,9 +38,6 @@ namespace BestNote_3951.ViewModels
 
         public MarkdownRendererViewModel()
         {
-            // pipeline gives access to advanced markdown rendering features.
-            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-
             WebViewSource = new HtmlWebViewSource
             {
                 Html = "<html><head><meta charset=\"utf-8\"></head><body></body></html>"
@@ -51,15 +49,10 @@ namespace BestNote_3951.ViewModels
                 //Debug.WriteLine($"received the message: {text}");
 
                 // markdig the text 
-                var htmlBody = Markdown.ToHtml(text, pipeline);
-                var html = $"<html><head><meta charset=\"utf-8\"></head><body>{htmlBody}</body></html>";
+                string? html = TableOfContentBuilder.TableOfContentizer(text);
 
-                // force UI to update on hte main thread
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    WebViewSource = new HtmlWebViewSource { Html = html };
-                    //Debug.WriteLine($"source HTML: {WebViewSource.Html}");
-                });
+                WebViewSource = new HtmlWebViewSource { Html = html };
+                //Debug.WriteLine($"source HTML: {WebViewSource.Html}");
             });
         }
 

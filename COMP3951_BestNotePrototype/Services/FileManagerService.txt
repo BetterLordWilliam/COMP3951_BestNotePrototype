@@ -6,7 +6,6 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using BestNote_3951.Models;
-using BitMiracle.LibTiff.Classic;
 
 ///
 /// Will Otterbein
@@ -16,17 +15,15 @@ namespace BestNote_3951.Services;
 
 ///
 /// Will Otterbein
-/// March 19 2025
+/// March 12 2025
 ///
 public class FileManagerService
 {
     public DirectoryInfo AppDirectory { get; private set; }         // Application data directory
     public DirectoryInfo BestNoteDirectory { get; private set; }    // Notes directory
-    public DirectoryInfo ResourceDirectory { get; private set; }    // Resource Directory
 
     private readonly string _appDirectoryPath;
     private readonly string _bestNoteDirectoryPath;
-    private readonly string _resourceDirectoryPath;
 
     /// <summary>
     /// Service constructor. Use with dependency injection.
@@ -35,11 +32,9 @@ public class FileManagerService
     {
         _appDirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BestNote");
         _bestNoteDirectoryPath = Path.Combine(_appDirectoryPath, "Notes");
-        _resourceDirectoryPath = Path.Combine(_appDirectoryPath, "Resources");
 
         AppDirectory = CreateDirectoryIfNotExists(_appDirectoryPath);
         BestNoteDirectory = CreateDirectoryIfNotExists(_bestNoteDirectoryPath);
-        ResourceDirectory = CreateDirectoryIfNotExists(_resourceDirectoryPath);
     }
 
     /// <summary>
@@ -62,7 +57,7 @@ public class FileManagerService
     /// <param name="folderName"></param>
     /// <param name="parentPath"></param>
     /// <returns></returns>
-    public IEnumerable<FileSystemInfo> GetDirectoryInfoContents(string folderName = "", string? parentPath = null)
+    public List<FileSystemInfo> GetDirectoryInfoContents(string folderName = "", string? parentPath = null)
     {
         string parent = parentPath ?? BestNoteDirectory.FullName;
         string combinedPath = Path.Combine(parent, folderName);
@@ -72,22 +67,20 @@ public class FileManagerService
             return new List<FileSystemInfo>();
         }
 
+        DirectoryInfo directoryInfo = new DirectoryInfo(combinedPath);
+        List<FileSystemInfo> contents = new List<FileSystemInfo>();
+
         try
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(combinedPath);
-            List<FileSystemInfo> contents = new List<FileSystemInfo>();
-
             contents.AddRange(directoryInfo.GetDirectories());
             contents.AddRange(directoryInfo.GetFiles());
-
-            return contents;
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error getting directory contents: {ex.Message}");
-
-            return Enumerable.Empty<FileSystemInfo>();
         }
+
+        return contents;
     }
 
     /// <summary>
@@ -142,16 +135,15 @@ public class FileManagerService
     /// <returns></returns>
     public string ReadFileContents(string filePath)
     {
-        //try
-        //{
-        //    return File.ReadAllText(filePath);
-        //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine($"Error reading file: {ex.Message}");
-        //    return string.Empty;
-        //}
-        return "";
+        try
+        {
+            return File.ReadAllText(filePath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading file: {ex.Message}");
+            return string.Empty;
+        }
     }
 
     /// <summary>
@@ -161,31 +153,14 @@ public class FileManagerService
     /// <param name="content"></param>
     public void WriteFileContents(string filePath, string content)
     {
-        //try
-        //{
-        //    File.WriteAllText(filePath, content);
-        //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine($"Error writing file: {ex.Message}");
-        //}
-    }
-
-    /// <summary>
-    /// Copies a file from a specified file path to the BestNote Resources folder.
-    /// </summary>
-    /// <param name="fileName">the name of the file to copy</param>
-    /// <param name="filePath">the path of the file to copy</param>
-    /// <returns>string, the path of where the file was copied to</returns>
-    public string AddResourceFile(string fileName, string filePath)
-    {
-        Debug.WriteLine(fileName);
-        string parent = ResourceDirectory.FullName;
-        string newPath = Path.Combine(parent, fileName);
-        File.Copy(filePath, newPath);
-        return newPath;
-
-
+        try
+        {
+            File.WriteAllText(filePath, content);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error writing file: {ex.Message}");
+        }
     }
 }
 
