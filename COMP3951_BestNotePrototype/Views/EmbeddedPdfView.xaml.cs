@@ -9,6 +9,7 @@ using Syncfusion.Maui.PdfViewer;
 using BestNote_3951.Messages;
 
 
+
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfView files
 /// SOURCES:
@@ -39,18 +40,21 @@ public partial class EmbeddedPdfView : ContentView
 
         WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
         {
-
+            
             if (pdfViewer.PageCount > 0 && message.Value > 0)
             {
                 if (pdfViewer.GoToPageCommand.CanExecute(message.Value))
                 {
-                    pdfViewer.GoToPageCommand.Execute(message.Value);
+                    pdfViewer.GoToPageCommand.Execute(message.Value);                   
                     pdfViewer.Unfocus();
                 }
             }
+
+            // pdfViewer.ZoomMode = ZoomMode.FitToWidth;
         });
 
     }
+
 
     /// <summary>
     /// Removes the printer, annotations, previous page, next page, and page layour icons from

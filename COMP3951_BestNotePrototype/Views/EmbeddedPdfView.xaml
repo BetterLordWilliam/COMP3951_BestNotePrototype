@@ -47,8 +47,8 @@
                                 ShowScrollHead="False"
                                 ShowToolbars="True"
                                 EnableDocumentLinkNavigation="True"
-                                DocumentSource="{Binding PdfDocumentStream}" 
                                 ZoomMode="FitToWidth"
+                                DocumentSource="{Binding PdfDocumentStream}" 
                                 PageNumber ="{Binding PageNum, Mode=TwoWay}"
                                 />
     </Grid>

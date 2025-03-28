@@ -39,12 +39,13 @@ public partial class MarkdownRendererView : ContentView
             bool isParsed = int.TryParse(query["pg"], out pageNumber);
 			
 
-			if (isParsed)
+			if (isParsed && pdfPath != null)
 			{
-				//pdfPath = "C:\\Users\\olivi\\Documents\\CST_Term_3\\MATH_3042\\3042_CourseOutline.pdf";
 
 				MarkdownLinkClickedPathMessage pdfMsg = new MarkdownLinkClickedPathMessage(pdfPath);
 				WeakReferenceMessenger.Default.Send(pdfMsg);
+
+				
 
 				MarkdownLinkClickedMessage msg = new MarkdownLinkClickedMessage(pageNumber);
 				WeakReferenceMessenger.Default.Send(msg);

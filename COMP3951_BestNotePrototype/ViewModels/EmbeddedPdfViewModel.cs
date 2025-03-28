@@ -39,6 +39,12 @@ namespace BestNote_3951.ViewModels
 
 
         /// <summary>
+        /// Gets and sets the name of the Pdf document.
+        /// </summary>
+        public String PdfName;
+
+
+        /// <summary>
         /// Gets and sets the page number of the PDF. Has a two-way binding relationship with the 
         /// EmbeddedPdfView pdfViewer PageNumber property.
         /// </summary>
@@ -63,7 +69,7 @@ namespace BestNote_3951.ViewModels
             if (!string.IsNullOrEmpty(PdfPath))
             {
                 int pageNumber    = PageNum;
-                String name       = "BestNoteBookmark";
+                String name       = PdfName;
                 Bookmark bookmark = new Bookmark(name, pageNumber);
 
                 ResourceLink resource = new ResourceLink(new Bookmark(name, pageNumber), PdfPath);
@@ -113,6 +119,7 @@ namespace BestNote_3951.ViewModels
                 if (result != null)
                 {
                     PdfPath = result.FullPath;
+                    PdfName = result.FileName;
                     PdfDocumentStream = await result.OpenReadAsync();
                 }
             }
@@ -140,6 +147,7 @@ namespace BestNote_3951.ViewModels
         {
             PageNum = 0;
             PdfPath = "";
+            PdfName = "";
             ResourceLinks = new Collection<ResourceLink>();
 
             WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
@@ -148,8 +156,10 @@ namespace BestNote_3951.ViewModels
                 
                 if (filePath != PdfPath)
                 {
+                    PdfName = Path.GetFileName(filePath);
                     PdfPath = filePath;
                     PdfDocumentStream = File.OpenRead(message.Value);
+                    Thread.Sleep(50);
                 }
             });
         }
