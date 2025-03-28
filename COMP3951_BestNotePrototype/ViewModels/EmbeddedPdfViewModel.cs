@@ -160,7 +160,9 @@ namespace BestNote_3951.ViewModels
                     PdfDocumentStream = await result.OpenReadAsync();
                 } else if (result != null && copyToBestDirectory)
                 {
+                    
                     String newFilePath = fileManagerService.AddResourceFile(result.FileName, result.FullPath);
+                    PdfName = Path.GetFileName(newFilePath);
                     OpenPDFFromPath(newFilePath);
                 }
             }

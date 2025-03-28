@@ -182,7 +182,13 @@ public class FileManagerService
         Debug.WriteLine(fileName);
         string parent = ResourceDirectory.FullName;
         string newPath = Path.Combine(parent, fileName);
-        File.Copy(filePath, newPath);
+
+
+        if (!File.Exists(newPath))
+        {
+            File.Copy(filePath, newPath);
+        }
+
         return newPath;
 
 
