@@ -66,10 +66,12 @@ namespace BestNote_3951.ViewModels
                 String name       = "BestNoteBookmark";
                 Bookmark bookmark = new Bookmark(name, pageNumber);
 
+                ResourceLink resource = new ResourceLink(new Bookmark(name, pageNumber), PdfPath);
+
                 ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));
 
                 // sends to the registered messenger in the markdowneditor viewmodel constructor
-                WeakReferenceMessenger.Default.Send(new PdfBookmarkTomarkdownMessage(bookmark));
+                WeakReferenceMessenger.Default.Send(new PdfBookmarkTomarkdownMessage(resource));
             }
         }
 
@@ -140,11 +142,16 @@ namespace BestNote_3951.ViewModels
             PdfPath = "";
             ResourceLinks = new Collection<ResourceLink>();
 
-            //WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
-            //{
-
-            //    PageNum = message.Value;
-            //});
+            WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
+            {
+                string filePath = message.Value;
+                
+                if (filePath != PdfPath)
+                {
+                    PdfPath = filePath;
+                    PdfDocumentStream = File.OpenRead(message.Value);
+                }
+            });
         }
     }
 }

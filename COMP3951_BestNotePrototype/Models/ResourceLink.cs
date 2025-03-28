@@ -12,7 +12,7 @@ namespace BestNote_3951.Models
     /// contains a path to the PDF path that it is linking to, as well as a Bookmark with the page
     /// number that the the Bookmark is linked to.
     /// </summary>
-    internal class ResourceLink
+    public class ResourceLink
     {
 
         /// <summary>

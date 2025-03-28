@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using BestNote_3951.Messages;
 using Syncfusion.Maui.PdfViewer;
+using BestNote_3951.Models;
 
 /**
  * Authors: Bryson Lindy
@@ -26,8 +27,10 @@ namespace BestNote_3951.ViewModels
         {
             WeakReferenceMessenger.Default.Register<PdfBookmarkTomarkdownMessage>(this, (recipient, message) =>
             {
-                Bookmark bookmark = message.Value;
-                string link = $"[PDF Bookmark (Page {bookmark.PageNumber})](bestnote://bookmark?pg={bookmark.PageNumber})";
+                ResourceLink resource = message.Value;
+                String pdfPath = resource.ResourcePath;
+                Bookmark bookmark = resource.ResourceBookmark;
+                string link = $"[PDF Bookmark (Page {bookmark.PageNumber})](bestnote://bookmark?pg={bookmark.PageNumber}&pdf={pdfPath})";
 
                 WeakReferenceMessenger.Default.Send(new InsertAtCursorMessage(link));
             });

@@ -34,13 +34,23 @@ public partial class MarkdownRendererView : ContentView
 
 			NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
 			int pageNumber;
-			bool isParsed = int.TryParse(query["pg"], out pageNumber);
+			string? pdfPath = query["pdf"];
+
+            bool isParsed = int.TryParse(query["pg"], out pageNumber);
+			
 
 			if (isParsed)
 			{
+				//pdfPath = "C:\\Users\\olivi\\Documents\\CST_Term_3\\MATH_3042\\3042_CourseOutline.pdf";
+
+				MarkdownLinkClickedPathMessage pdfMsg = new MarkdownLinkClickedPathMessage(pdfPath);
+				WeakReferenceMessenger.Default.Send(pdfMsg);
+
 				MarkdownLinkClickedMessage msg = new MarkdownLinkClickedMessage(pageNumber);
 				WeakReferenceMessenger.Default.Send(msg);
-			}
+
+
+            }
 		}
 
 		// if there is a markdown heading in the link, cancel default behavior and use a lil bit of 
