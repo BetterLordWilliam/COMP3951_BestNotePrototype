@@ -30,7 +30,7 @@ namespace BestNote_3951.ViewModels
                 ResourceLink resource = message.Value;
                 String pdfPath = resource.ResourcePath;
                 Bookmark bookmark = resource.ResourceBookmark;
-                string link = $"[PDF Bookmark (Page {bookmark.PageNumber})](bestnote://bookmark?pg={bookmark.PageNumber}&pdf={pdfPath})";
+                string link = $"[PDF Bookmark (Page {bookmark.PageNumber})](<bestnote://bookmark?pg={bookmark.PageNumber}&pdf={pdfPath}>)";
 
                 WeakReferenceMessenger.Default.Send(new InsertAtCursorMessage(link));
             });

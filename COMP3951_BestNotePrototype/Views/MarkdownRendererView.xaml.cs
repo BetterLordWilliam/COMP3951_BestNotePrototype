@@ -48,8 +48,6 @@ public partial class MarkdownRendererView : ContentView
 
 				MarkdownLinkClickedMessage msg = new MarkdownLinkClickedMessage(pageNumber);
 				WeakReferenceMessenger.Default.Send(msg);
-
-
             }
 		}
 
