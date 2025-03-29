@@ -25,37 +25,115 @@ namespace BestNote_3951.Services
             MarkdownDocument doc               = Markdown.Parse(markdown, pipeline);
             IEnumerable<HeadingBlock> headings = doc.Descendants<HeadingBlock>();
 
+            int[] counters    = new int[7];
+            int previousLevel = 0;
+
             StringBuilder toc = new StringBuilder();
+
+            toc.AppendLine(@"<style>
+                nav {
+                    font-family: Arial, sans-serif;
+                    font-weight: bold;
+                    margin-bottom: 1em;
+                }
+                nav ul {
+                    list-style-type: none;
+                    margin: 0;
+                    padding: 0;
+                }
+                nav li {
+                    margin: 0.25em 0;
+                }
+                nav li a {
+                    text-decoration: none;
+                    color: #333;
+                }
+                nav li a:hover {
+                    text-decoration: underline;
+                }
+            </style>");
+
             toc.AppendLine("<nav>");
+            toc.AppendLine("Table of Contents");
             toc.AppendLine("<ul>");
 
             foreach (HeadingBlock heading in headings)
             {
-                string? id = heading.GetAttributes().Id;
+                int currentLevel = heading.Level;
 
-                // literal inline is for normal text. right now headings can only be normal text
-                // but should be able to handle different types of headings like heading that are 
-                // pdf links or bolded/stylized but this works for now.
+                // at each new heading level, increment that levels counter and reset
+                // for sub levels.
+                counters[currentLevel]++;
+                for (int i = currentLevel + 1; i < counters.Length; i++)
+                {
+                    counters[i] = 0;
+                }
+
+                // add ul tags if current level is deeper than prev.
+                // close ul tags if if it's shallower
+                if (currentLevel > previousLevel)
+                {
+                    for (int i = previousLevel; i < currentLevel; i++)
+                    {
+                        toc.AppendLine("<ul>");
+                    }
+                }
+                else if (currentLevel < previousLevel)
+                {
+                    for (int i = currentLevel; i < previousLevel; i++)
+                    {
+                        toc.AppendLine("</ul>");
+                    }
+                }
+
+                previousLevel = currentLevel;
+
+                string? numbering = BuildNumberString(counters, currentLevel);
+
+                string? id                       = heading.GetAttributes().Id;
                 LiteralInline? headingTextInline = heading.Inline?.FirstChild as LiteralInline;
                 string headingContent            = headingTextInline?.Content.ToString() ?? "Unknown";
 
-                toc.AppendLine($"<li><a href=\"#{id}\">{headingContent}</a></li>");
+                toc.AppendLine($"<li><a href=\"#{id}\">{numbering} {headingContent}</a></li>");
             }
 
-            toc.AppendLine("</ul>");
+            // close all the ul tags
+            for (int i = previousLevel; i > 0; i--)
+            {
+                toc.AppendLine("</ul>");
+            }
+
             toc.AppendLine("</nav>");
 
             string newMarkdown = Markdown.ToHtml(markdown, pipeline);
+
             string html = $@"
-            <html>
-                <head><meta charset=""utf-8"" /></head>
-                <body>
-                    {toc}
-                    {newMarkdown}
-                </body>
-            </html>";
+                <html>
+                    <head><meta charset=""utf-8"" /></head>
+                    <body>
+                        {toc}
+                        {newMarkdown}
+                    </body>
+                </html>";
 
             return html;
+        }
+
+        /// <summary>
+        /// Given the counters array and the current heading level, build a string like '1.2.1'.
+        /// </summary>
+        private static string BuildNumberString(int[] counters, int level)
+        {
+            // if counters = [0,1,2,0,0,0,0] and level = 2 then we want 1.2
+            List<int> parts = [];
+            for (int i = 1; i <= level; i++)
+            {
+                if (counters[i] > 0)
+                {
+                    parts.Add(counters[i]);
+                }
+            }
+            return string.Join(".", parts);
         }
     }
 }
