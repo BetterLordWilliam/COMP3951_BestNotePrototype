@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BestNote_3951.Models;
 using BitMiracle.LibTiff.Classic;
+using System.Text.RegularExpressions;
 
 ///
 /// Will Otterbein
@@ -180,8 +181,12 @@ public class FileManagerService
     public string AddResourceFile(string fileName, string filePath)
     {
         Debug.WriteLine(fileName);
+        // remove special characters from files that are saved to the resource folder
+        // because the webview treats it like a link fragment and drops everything after it
+        // there might be a better fix but this works
+        string name = Regex.Replace(fileName, @"[^\w\s\.\-]", "");
         string parent = ResourceDirectory.FullName;
-        string newPath = Path.Combine(parent, fileName);
+        string newPath = Path.Combine(parent, name);
 
 
         if (!File.Exists(newPath))

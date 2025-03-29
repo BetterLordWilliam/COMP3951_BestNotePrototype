@@ -12,6 +12,7 @@ using CommunityToolkit.Maui.Views;
 using BestNote_3951.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using BestNote_3951.Messages;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfViewModel file
