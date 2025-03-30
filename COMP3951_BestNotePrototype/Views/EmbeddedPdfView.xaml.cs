@@ -11,6 +11,7 @@ using BestNote_3951.Messages;
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfView files
+///         Bryson Lindy - worked on the MarkdownLinkClickedMessage code
 /// SOURCES:
 /// Used the following Syncfusion PDF viewer documentatiion to customize the toolbar:
 /// https://help.syncfusion.com/maui/pdf-viewer/toolbar
@@ -29,7 +30,6 @@ public partial class EmbeddedPdfView : ContentView
 	public EmbeddedPdfView()
 	{
 		InitializeComponent();
-		//EmbeddedPdfViewModel BindingContext = new EmbeddedPdfViewModel();
         CustomizePDFToolbar();
         pdfViewer.DocumentLoaded += PdfViewer_DocumentLoaded;
 
@@ -50,7 +50,6 @@ public partial class EmbeddedPdfView : ContentView
                 }
             }
 
-            // pdfViewer.ZoomMode = ZoomMode.FitToWidth;
         });
 
     }
@@ -78,25 +77,11 @@ public partial class EmbeddedPdfView : ContentView
         }
     }
 
-
     /// <summary>
-    /// When the view model's PageNum changes, we use the GoToPageCommand to navigate.
+    /// Used to navigate to a page when the PageNum property is changed in the PDF View Model.
     /// </summary>
-    //private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-    //{
-    //    if (sender is EmbeddedPdfViewModel vm && e.PropertyName == nameof(vm.PageNum))
-    //    {
-    //        if (pdfViewer.PageCount > 0 && vm.PageNum > 0)
-    //        {
-    //            if (pdfViewer.GoToPageCommand.CanExecute(vm.PageNum))
-    //            {
-    //                pdfViewer.GoToPageCommand.Execute(vm.PageNum);
-    //                pdfViewer.Unfocus();
-    //            }
-    //        }
-    //    }
-    //}
-
+    /// <param name="sender">the PDF View Model</param>
+    /// <param name="e">a property change event</param>
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (sender is EmbeddedPdfViewModel vm && e.PropertyName == nameof(vm.PageNum))
@@ -132,6 +117,11 @@ public partial class EmbeddedPdfView : ContentView
         }
     }
 
+    /// <summary>
+    /// Display the Copy to Resources popup when the Open PDF button is clicked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void showPopup_Clicked(object sender, EventArgs e)
     {
         popup.Show();

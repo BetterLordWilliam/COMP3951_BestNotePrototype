@@ -5,6 +5,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.Specialized;
 using System.Web;
 
+
+/// <summary>
+///  Authors: Bryson Lindy
+///			  Olivia Gracy - Worked on some of the MarkdownWebView_Navigating function
+/// </summary>
 namespace BestNote_3951.Views;
 
 public partial class MarkdownRendererView : ContentView

@@ -6,6 +6,7 @@ using BestNote_3951.Models;
 
 /**
  * Authors: Bryson Lindy
+ *          Olivia Grace - worked on part of the Pdf link messaging
  */
 namespace BestNote_3951.ViewModels
 {

@@ -13,6 +13,8 @@ using System.Text.RegularExpressions;
 /// Will Otterbein
 /// March 12 2025
 /// 
+/// Olivia Grace - Added code to create Resources directory and AddResourceFile method
+/// 
 namespace BestNote_3951.Services;
 
 ///

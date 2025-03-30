@@ -27,6 +27,12 @@ using System.Text.RegularExpressions;
 /// </summary>
 namespace BestNote_3951.ViewModels
 {
+    /// <summary>
+    /// ViewModel for displaying the PDF.
+    /// 
+    /// Has methods and properties for opening PDFs from the user's file system and navigating to specific
+    /// pages within a PDF.
+    /// </summary>
     public partial class EmbeddedPdfViewModel : ObservableObject
     {
 
@@ -57,25 +63,11 @@ namespace BestNote_3951.ViewModels
         /// </summary>
         [ObservableProperty]
         public int _pageNum;
-
-
-        ///// <summary>
-        ///// Gets and sets the page number of the PDF. Has a two-way binding relationship with the 
-        ///// EmbeddedPdfView pdfViewer PageNumber property.
-        ///// </summary>
-        //[ObservableProperty]
-        //public SfPopup _popup;
-
-
-        /// <summary>
-        /// A collection of ResourceLink objects.
-        /// </summary>
-        internal Collection<ResourceLink> ResourceLinks;
        
 
         /// <summary>
-        /// Creates a new ResourceLink object and adds it to the ResourceLink collection for this
-        /// PDF.
+        /// Creates a new ResourceLink object and sends it to the views and view models that are registered
+        /// to the PdfBookmarkTomarkdownMessage. This method is bound to the Add Link button.
         /// </summary>
         [RelayCommand]
         internal void CreateResourceLink()
@@ -89,8 +81,6 @@ namespace BestNote_3951.ViewModels
 
                 ResourceLink resource = new ResourceLink(new Bookmark(name, pageNumber), PdfPath);
 
-                ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));
-
                 // sends to the registered messenger in the markdowneditor viewmodel constructor
                 WeakReferenceMessenger.Default.Send(new PdfBookmarkTomarkdownMessage(resource));
             }
@@ -98,7 +88,9 @@ namespace BestNote_3951.ViewModels
 
 
         /// <summary>
-        /// Creates a file picker that allows the user to select a file chos
+        /// Creates a file picker that allows the user to select a PDF file from their file system, copy it to the
+        /// BestNote Resources folder, and then display the copied file in the PDF viewer. This method is binded to
+        /// the Copy to Resources button in the PDF View.
         /// </summary>
         [RelayCommand]
         async void OpenDocumentAndCopy()
@@ -121,7 +113,8 @@ namespace BestNote_3951.ViewModels
 
 
         /// <summary>
-	    /// Creates a file picker that allows the user to select a file chos
+	    /// Creates a file picker that allows the user to select a file from their file system and display it in the
+        /// PDF viewer. This method is binded to the No Thanks! button in the PDF View.
 	    /// </summary>
         [RelayCommand]
 	    async void OpenDocument()
@@ -143,12 +136,13 @@ namespace BestNote_3951.ViewModels
 
 
         /// <summary>
-        /// Displays a FilePicker object for the user to select a pdf file from. Sets the
-        /// PdfDocumentStream to the chosen PDF file and the PdfPath to the path of the 
-        /// chosen PDF file.
+        /// Displays a FilePicker object for the user to select a PDF file from their file syste. If 
+        /// copyToBestDirectory is True then the selected PDF is copied to the BestNote Resources folder and the
+        /// copied file is used. PdfPath, PdfName, and PdfDocumentStream are all updated to the selected file.
         /// </summary>
-        /// <param name="options"></param>
-        /// <returns></returns>
+        /// <param name="options">a PickOptions object for choosing a PDF file</param>
+        /// <param name="copyToBestDirectory">a bool value indicating if the PDF should be copied to Resources</param>
+        /// <returns>Task</returns>
         public async Task PickAndShow(PickOptions options, bool copyToBestDirectory)
         {
             try
@@ -184,9 +178,9 @@ namespace BestNote_3951.ViewModels
 
 
         /// <summary>
-        /// Displays the pdf passed as a file path into the
+        /// Displays the PDF passed as a file path in the PDF View.
         /// </summary>
-        /// <param name="pdfPath"></param>
+        /// <param name="pdfPath">a String, the path of the PDF to display</param>
         public void OpenPDFFromPath(String pdfPath)
         {
             try
@@ -212,17 +206,18 @@ namespace BestNote_3951.ViewModels
 
 
         /// <summary>
-        /// Initializes PageNum to be 0, PdfPath to be an empty string, and ResourceLinks to be
-        /// a new empty collection of ResourceLink objects.
+        /// Initializes PageNum to be 0, PdfPath and PdfName to be empty strings, and FileManagerService to be the 
+        /// specified FileManagerService object. Registers the MarkdownLinkClickedPathMessage to open the correct
+        /// PDF when a Markdown link is clicked.
         /// </summary>
         public EmbeddedPdfViewModel(FileManagerService bfs)
         {
             PageNum = 0;
             PdfPath = "";
             PdfName = "";
-            ResourceLinks = new Collection<ResourceLink>();
             fileManagerService = bfs;
 
+            // Open the specified PDF
             WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
             {
                 string filePath = message.Value;

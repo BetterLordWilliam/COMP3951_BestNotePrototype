@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Syncfusion.Maui.PdfViewer;
 
+/// <summary>
+/// Author: Olivia Grace
+/// </summary>
 namespace BestNote_3951.Models
 {
     /// <summary>
