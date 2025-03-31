@@ -44,12 +44,13 @@ public class MarkdownFile : IBNFile, IBNWritable, IBNReadable
     }
 
     /// <summary>
-    /// Move this file to a new location in the file system.
+    /// Moves the file to a new folder location in the file system.
     /// </summary>
     /// <param name="NewParent"></param>
     public void Move(FolderTreeItem NewParent)
     {
-
+        FileInfo NewFileInfo = _fileManagerService.MoveFile(FileInfo, NewParent.DirectoryInfo);
+        FileInfo = NewFileInfo;
     }
 
     public string ReadFileContents()

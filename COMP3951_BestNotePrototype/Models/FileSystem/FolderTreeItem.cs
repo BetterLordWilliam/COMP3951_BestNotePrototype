@@ -18,24 +18,20 @@ namespace BestNote_3951.Models.FileSystem;
 public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
 {
     private readonly IBNFolder _sourceFolder;
-    private readonly FileManagerService _fileManagerService;
 
     /// <summary>
     /// File tree folder constructor.
     /// </summary>
-    /// <param name="FileManagerService"></param>
     /// <param name="itemLevel"></param>
     /// <param name="indentationPadding"></param>
     /// <param name="sourceFolder"></param>
     public FolderTreeItem(
-        FileManagerService  FileManagerService,
         int                 itemLevel,
         Thickness           indentationPadding,
         IBNFolder           sourceFolder
     )
     {
         _sourceFolder = sourceFolder;
-        _fileManagerService = FileManagerService;
 
         ItemName = sourceFolder.DirectoryInfo.Name;
         ImageIcon = "folder_icon.png";
@@ -77,7 +73,7 @@ public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
         NewChild.TreeViewItem.ItemLevel = ChildLevel;
         NewChild.TreeViewItem.IndentationPadding = ChildIndentationPadding;
 
-        _sourceFolder.AddChild(NewChild);
+        Children.Add(NewChild);
     }
     
     /// <summary>
@@ -86,7 +82,7 @@ public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
     /// <param name="TargetChild"></param>
     public void RemoveChild(BestFileTreeItemViewModel TargetChild)
     {
-        _sourceFolder.RemoveChild(TargetChild);
+        Children.Remove(TargetChild);
     }
 
     /// <summary>
@@ -107,9 +103,11 @@ public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
     public override void Move(FolderTreeItem NewParent)
     {
         // Use the file manager service to move the item
-        DirectoryInfo NewDirInfo = _fileManagerService.MoveFolder(DirectoryInfo, NewParent.DirectoryInfo);
-        DirectoryInfo = NewDirInfo;
-        Parent = NewParent;
+        _sourceFolder.Move(NewParent);
+
+        // Update the level and padding values according to the move
+        ItemLevel = (ItemLevel == 0) ? 0 : NewParent.ItemLevel + 10;
+        IndentationPadding = NewParent.IndentationPadding + new Thickness(10, 0, 0, 0);
     }
 
     /// <summary>

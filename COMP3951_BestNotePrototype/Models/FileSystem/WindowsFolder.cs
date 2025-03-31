@@ -75,7 +75,8 @@ public class WindowsFolder : IBNFolder
     /// <param name="NewParent"></param>
     public void Move(FolderTreeItem NewParent)
     {
-
+        DirectoryInfo NewDirInfo = _fileManagerService.MoveFolder(DirectoryInfo, NewParent.DirectoryInfo);
+        DirectoryInfo = NewDirInfo;
     }
 
     /// <summary>

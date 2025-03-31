@@ -30,8 +30,6 @@ namespace BestNote_3951.ViewModels
         [ObservableProperty]
         public partial string                       RenameItemText { get; set; } = "";
 
-        [ObservableProperty]
-        public partial BestFileTreeItemViewModel?   Dragger { get; set; } = null;
 
         /// <summary>
         /// Constructor for the BestFileTreeViewModel.
@@ -47,27 +45,6 @@ namespace BestNote_3951.ViewModels
             this.TreeViewItem       = TreeViewItem;
             this.FileManagerService = FileManagerService;
             this.AlertService       = AlertService;
-        }
-
-        /// <summary>
-        /// Creates a note file as a child of this item.
-        /// This command should only be available if ITreeViewItem is capable of having children.
-        /// </summary>
-        [RelayCommand]
-        public void CreateChildFile(string NewFileName)
-        {
-            try
-            {
-                if (!TreeViewItem.CanHaveChildren)
-                    throw new NotImplementedException();
-
-                // Use the FileManagerService to create a child file
-                FileManagerService.CreateFile(NewFileName, ((IBNFolder)TreeViewItem).DirectoryInfo.FullName);
-            }
-            catch (NotImplementedException ex)
-            {
-                Debug.WriteLine($"Could not add item: {ex}");
-            }
         }
 
         /// <summary>
@@ -194,8 +171,9 @@ namespace BestNote_3951.ViewModels
                     Dragged.TreeViewItem.Move(ParentFolder);
 
                     // Update the state object children contents
-                    ParentFolder.AddChild(Dragged);
+                    ParentFolder.Children.Add(Dragged);
                     Dragged.TreeViewItem.Parent?.RemoveChild(Dragged);
+                    Dragged.TreeViewItem.Parent = ParentFolder;
 
                     Debug.WriteLine($"Destination Item: {TreeViewItem.ItemName}\tNew item: {Dragged.TreeViewItem.ItemName}");
                 }

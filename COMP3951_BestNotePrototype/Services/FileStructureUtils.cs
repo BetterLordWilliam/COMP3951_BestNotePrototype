@@ -117,7 +117,7 @@ namespace BestNote_3951.Services
             Debug.WriteLine($"File system info object {FileInfo} w/ extension {FileExtension}");
 
             var MarkdownFile = new MarkdownFile(FileInfo, FileManagerService);
-            var FileTreeItem = new FileTreeItem(FileManagerService, ItemLevel, IndentationPadding, MarkdownFile);
+            var FileTreeItem = new FileTreeItem(ItemLevel, IndentationPadding, MarkdownFile);
 
             return FileTreeItem;
         }
@@ -142,7 +142,7 @@ namespace BestNote_3951.Services
             Debug.WriteLine($"File system info object {DirectoryInfo}.");
 
             var WindowsFolder = new WindowsFolder(DirectoryInfo, FileManagerService);
-            var FolderTreeItem = new FolderTreeItem(FileManagerService, ItemLevel, IndentationPadding, WindowsFolder);
+            var FolderTreeItem = new FolderTreeItem(ItemLevel, IndentationPadding, WindowsFolder);
 
             return FolderTreeItem;
         }

@@ -35,6 +35,7 @@ namespace BestNote_3951.Models.FileSystem
     {
         FileInfo FileInfo { get; set; }
         void Rename(string NewFileName);
+        void Move(FolderTreeItem NewParent);
     }
 
     /// <summary>
@@ -45,6 +46,7 @@ namespace BestNote_3951.Models.FileSystem
         DirectoryInfo DirectoryInfo { get; set; }
         ObservableCollection<BestFileTreeItemViewModel> Children { get; set; }
         void Rename(string NewFolderName);
+        void Move(FolderTreeItem NewParent);
         void AddChild(BestFileTreeItemViewModel item);
         void RemoveChild(BestFileTreeItemViewModel item);
         void LoadFileSystemObjects();
@@ -76,7 +78,7 @@ namespace BestNote_3951.Models.FileSystem
     /// It is still expected for specific types that further implementation for functionality
     /// such as reading or writing to files is provided via composition and delegation of functionality.
     /// </p>
-    public abstract class TreeViewItemBase : ITreeViewItem
+    public abstract class TreeViewItemBase : ObservableObject, ITreeViewItem
     {
         private string itemName;
         private int itemLevel;

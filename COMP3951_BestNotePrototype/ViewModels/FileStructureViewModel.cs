@@ -28,16 +28,14 @@ namespace BestNote_3951.ViewModels
         private readonly AlertService AlertService;
 
         [ObservableProperty]
-        public partial string TestingInputName { get; set; }
-
-        [ObservableProperty]
         public partial BestFileTreeItemViewModel? Dragger { get; set; } = null;
 
         /// <summary>
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
-        public BestFileTreeItemViewModel Root { get; private set; }
+        [ObservableProperty]
+        public partial BestFileTreeItemViewModel Root { get; private set; }
 
         /// <summary>
         /// Initializes the file structure view model with.
@@ -54,11 +52,9 @@ namespace BestNote_3951.ViewModels
 
             // Root folder
             var RootFolder = new WindowsFolder(FileManagerService.BestNoteDirectory, FileManagerService);
-            var RootFolderTreeItem = new FolderTreeItem(FileManagerService, 0, Thickness.Zero, RootFolder);
+            var RootFolderTreeItem = new FolderTreeItem(0, Thickness.Zero, RootFolder);
 
             Root = new BestFileTreeItemViewModel(RootFolderTreeItem, FileManagerService, AlertService);
-
-            TestingInputName = "Will Testing Item";
 
             FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, AlertService, Root);
         }
@@ -98,71 +94,5 @@ namespace BestNote_3951.ViewModels
         {
             AlertService.ShowAlertAsync("Info", AlertMessage);
         }
-
-        /// <summary>
-        /// Retrieves the contents of a specified Parent tree item.
-        /// </summary>
-        /// <param name="Parent"></param>
-        //[RelayCommand]
-        //public void RetrieveContents(BestFileTreeItemViewModel? ParentModel = null)
-        //{
-        //    Debug.WriteLine($"Retrieve file called. {ParentModel is null}");
-
-        //    if (ParentModel is null)
-        //    {
-        //        FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, AlertService, FileSystem);
-        //        return;
-        //    }
-        //    else if (ParentModel.TreeViewItem is FolderTreeItem FolderTreeItem)
-        //    {
-        //        FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, AlertService, FolderTreeItem.Children);
-        //    }
-        //}
-
-        /// <summary>
-        /// Adds a file to a specified parent item in the tree view.
-        /// </summary>
-        /// <param name="Parent"></param>
-        //[RelayCommand]
-        //public void AddFile(FolderTreeItem Parent)
-        //{
-        //    Debug.WriteLine("Add File method called");
-
-        //    try
-        //    {
-        //        FileInfo NewFileInfo = FileManagerService.CreateFile();
-        //        ITreeViewItem NewItem = FileStructureViewUtils.CreateTreeViewItem(FileManagerService, NewFileInfo);
-        //        BestFileTreeItemViewModel NewViewModel = new (NewItem, FileManagerService, AlertService);
-        //        Root..Add(NewViewModel);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        AlertService.ShowAlertAsync("Invalid action", "The action you have take is one the system cannot accomodate.");
-        //        Debug.WriteLine(ex);
-        //    }
-        //}
-
-        /// <summary>
-        /// Adds a folder to a specified parent item in the tree view.
-        /// </summary>
-        /// <param name="Parent"></param>
-        //[RelayCommand]
-        //public void AddFolder(FolderTreeItem Parent)
-        //{
-        //    Debug.WriteLine("Add folder method called.");
-
-        //    try
-        //    {
-        //        DirectoryInfo NewDirectoryInfo = FileManagerService.CreateDirectory();
-        //        ITreeViewItem NewItem = FileStructureViewUtils.CreateTreeViewItem(FileManagerService, NewDirectoryInfo);
-        //        BestFileTreeItemViewModel NewViewModel = new (NewItem, FileManagerService, AlertService);
-        //        FileSystem.Add(NewViewModel);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        AlertService.ShowAlertAsync("Invalid action", "The action you have take is one the system cannot accomodate.");
-        //        Debug.WriteLine(ex);
-        //    }
-        //}
     }
 }
