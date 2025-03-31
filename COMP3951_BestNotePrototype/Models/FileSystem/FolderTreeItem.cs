@@ -60,6 +60,24 @@ public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
     }
 
     /// <summary>
+    /// Adds a tree item to the nodes collection of children.
+    /// </summary>
+    /// <param name="NewChild"></param>
+    public void AddChild(BestFileTreeItemViewModel NewChild)
+    {
+        _sourceFolder.AddChild(NewChild);
+    }
+    
+    /// <summary>
+    /// Removes a target folder from the nodes collection of children.
+    /// </summary>
+    /// <param name="TargetChild"></param>
+    public void RemoveChild(BestFileTreeItemViewModel TargetChild)
+    {
+        _sourceFolder.RemoveChild(TargetChild);
+    }
+
+    /// <summary>
     /// Safe children implementations, returns the children of the item.
     /// </summary>
     public override IEnumerable<BestFileTreeItemViewModel> SafeChildren

@@ -43,8 +43,8 @@ namespace BestNote_3951.Models.FileSystem
     {
         DirectoryInfo DirectoryInfo { get; set; }
         ObservableCollection<BestFileTreeItemViewModel> Children { get; set; }
-        // interface method for adding a child item.
-        // define contract that these items need to define for UI purposes.
+        public void AddChild(BestFileTreeItemViewModel item);
+        public void RemoveChild(BestFileTreeItemViewModel item);
     }
 
     /// <summary>

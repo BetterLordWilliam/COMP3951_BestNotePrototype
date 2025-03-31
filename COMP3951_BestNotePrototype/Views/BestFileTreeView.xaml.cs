@@ -9,23 +9,6 @@ public partial class BestFileTreeView : ContentView
 	{
         InitializeComponent();
 	}
-
-    /// <summary>
-    /// Event handler for file tree items being clicked.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void OnToggleClicked(object sender, EventArgs e)
-    {
-        // Only invoke the command if the tree is not visible
-        //ITreeViewItem TreeViewItem = BestFileTreeItemViewModel.TreeViewItem;
-        //if (!SubFilesCollectionView.IsVisible && TreeViewItem.CanHaveChildren && TreeViewItem is FolderTreeItem FolderTreeItem)
-        //{
-        //    Debug.WriteLine("Clicked and condition validated.");
-        //    ((FileStructureViewModel)((FileStructureView)fileTreeItem.BindingContext).BindingContext).RetrieveContents(BestFileTreeItemViewModel);
-        //}
-        //SubFilesCollectionView.IsVisible = !SubFilesCollectionView.IsVisible;
-    }
     
     /// <summary>
     /// Event handler for the rename context button being clicked.
@@ -62,5 +45,15 @@ public partial class BestFileTreeView : ContentView
             fileTreeName.IsVisible = true;
             fileTreeRename.Completed -= OnRenameComplete;
         }
+    }
+
+    /// <summary>
+    /// Event handler for the dragged over action.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void DraggedOver(object sender, DragEventArgs e)
+    {
+
     }
 }

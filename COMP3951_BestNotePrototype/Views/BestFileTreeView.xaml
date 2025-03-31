@@ -62,6 +62,12 @@
 
             <HorizontalStackLayout.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding RetrieveContentsCommand}" />
+                <DragGestureRecognizer
+                    DragStartingCommand="{Binding x:DataType='viewmodels:FileStructureViewModel', Source={RelativeSource AncestorType={x:Type viewmodels:FileStructureViewModel}}, Path=DragCommand}"
+                    DragStartingCommandParameter="{Binding .}"/>
+                <DropGestureRecognizer
+                    DropCommand="{Binding DropCommand}"
+                    DropCommandParameter="{Binding x:DataType='viewmodels:FileStructureViewModel', Source={RelativeSource AncestorType={x:Type viewmodels:FileStructureViewModel}}, Path=Dragger}" />
             </HorizontalStackLayout.GestureRecognizers>
         </HorizontalStackLayout>
 

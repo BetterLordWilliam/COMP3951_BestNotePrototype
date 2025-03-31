@@ -30,6 +30,9 @@ namespace BestNote_3951.ViewModels
         [ObservableProperty]
         public partial string RenameItemText { get; set; } = "";
 
+        [ObservableProperty]
+        public partial BestFileTreeItemViewModel? Dragger { get; set; } = null;
+
         /// <summary>
         /// Constructor for the BestFileTreeViewModel.
         /// </summary>
@@ -63,7 +66,7 @@ namespace BestNote_3951.ViewModels
             }
             catch (NotImplementedException ex)
             {
-
+                Debug.WriteLine($"Could not add item: {ex}");
             }
         }
 
@@ -174,6 +177,27 @@ namespace BestNote_3951.ViewModels
             {
                 AlertService.ShowAlertAsync("Invalid action", "The action you have take is one the system cannot accomodate.");
                 Debug.WriteLine(ex);
+            }
+        }
+
+        /// <summary>
+        /// Handles the on drop command.
+        /// </summary>
+        [RelayCommand]
+        public void Drop(BestFileTreeItemViewModel? Dragged)
+        {
+            try
+            {
+                if (!TreeViewItem.CanHaveChildren || Dragged is null)
+                    return;
+
+
+
+                Debug.WriteLine($"Destination Item: {TreeViewItem.ItemName}\tNew item: {Dragged.TreeViewItem.ItemName}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in the file system {ex}");
             }
         }
     }

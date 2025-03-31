@@ -39,5 +39,24 @@ public class WindowsFolder : IBNFolder
         get => children;
         set => children = value;
     }
+
+    /// <summary>
+    /// Adds a new child to folders collection of children.
+    /// </summary>
+    /// <param name="NewChild"></param>
+    public void AddChild(BestFileTreeItemViewModel NewChild)
+    {
+        children.Add(NewChild);
+    }
+
+    /// <summary>
+    /// Removes a child node from the nodes collection of children.
+    /// </summary>
+    /// <param name="TargetChild"></param>
+    public void RemoveChild(BestFileTreeItemViewModel TargetChild)
+    {
+        bool status = children.Remove(TargetChild);
+        Debug.WriteLine(status);
+    }
 }
 
