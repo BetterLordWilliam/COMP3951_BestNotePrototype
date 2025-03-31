@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using BestNote_3951.Models.FileSystem;
 
+///
+/// Will Otterbein
+/// March 30, 2025
+/// 
 namespace BestNote_3951.Services
 {
     /// <summary>
@@ -23,10 +27,6 @@ namespace BestNote_3951.Services
     /// </summary>
     class FileStructureViewUtils
     {
-        delegate ITreeViewItem CreateTreeItemBase(FileSystemInfo FileSystemInfo, int Level, Thickness? IndentationPadding);
-        delegate IBNFolder CreateFolderItemBase(DirectoryInfo DirectoryInfo);
-        delegate IBNFile CreateFileItemBase(FileInfo FileInfo);
-
         /// <summary>
         /// Returns an observable collection of ITreeViewItems.
         /// Returns an empty singleton list if there are no children.
@@ -45,7 +45,8 @@ namespace BestNote_3951.Services
             ObservableCollection<BestFileTreeItemViewModel> TargetCollection,
             DirectoryInfo? TargetDirectory = null,
             int Level = 0,
-            Thickness? IndentationPadding = null
+            Thickness? IndentationPadding = null,
+            FolderTreeItem? Parent = null
         )
         {
             try
@@ -57,6 +58,7 @@ namespace BestNote_3951.Services
                 foreach (var item in contents)
                 {
                     ITreeViewItem TreeItem = CreateTreeViewItem(FileManagerService, item, Level, IndentationPadding);
+                    TreeItem.Parent = Parent;
                     BestFileTreeItemViewModel TreeItemViewModel = new(TreeItem, FileManagerService, AlertManagerService);
                     TargetCollection.Add(TreeItemViewModel);
                 }
@@ -87,7 +89,8 @@ namespace BestNote_3951.Services
                     FolderItem.Children,
                     FolderItem.DirectoryInfo,
                     FolderItem.ItemLevel,
-                    FolderItem.IndentationPadding
+                    FolderItem.IndentationPadding,
+                    FolderItem
                 );
             }
         }
@@ -114,7 +117,7 @@ namespace BestNote_3951.Services
             Debug.WriteLine($"File system info object {FileInfo} w/ extension {FileExtension}");
 
             var MarkdownFile = new MarkdownFile(FileInfo, FileManagerService);
-            var FileTreeItem = new FileTreeItem(ItemLevel, IndentationPadding, MarkdownFile);
+            var FileTreeItem = new FileTreeItem(FileManagerService, ItemLevel, IndentationPadding, MarkdownFile);
 
             return FileTreeItem;
         }
@@ -139,7 +142,7 @@ namespace BestNote_3951.Services
             Debug.WriteLine($"File system info object {DirectoryInfo}.");
 
             var WindowsFolder = new WindowsFolder(DirectoryInfo, FileManagerService);
-            var FolderTreeItem = new FolderTreeItem(ItemLevel, IndentationPadding, WindowsFolder);
+            var FolderTreeItem = new FolderTreeItem(FileManagerService, ItemLevel, IndentationPadding, WindowsFolder);
 
             return FolderTreeItem;
         }

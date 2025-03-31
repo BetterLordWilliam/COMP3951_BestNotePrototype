@@ -34,6 +34,7 @@ namespace BestNote_3951.Models.FileSystem
     public interface IBNFile
     {
         FileInfo FileInfo { get; set; }
+        void Rename(string NewFileName);
     }
 
     /// <summary>
@@ -43,8 +44,10 @@ namespace BestNote_3951.Models.FileSystem
     {
         DirectoryInfo DirectoryInfo { get; set; }
         ObservableCollection<BestFileTreeItemViewModel> Children { get; set; }
-        public void AddChild(BestFileTreeItemViewModel item);
-        public void RemoveChild(BestFileTreeItemViewModel item);
+        void Rename(string NewFolderName);
+        void AddChild(BestFileTreeItemViewModel item);
+        void RemoveChild(BestFileTreeItemViewModel item);
+        void LoadFileSystemObjects();
     }
 
     /// <summary>
@@ -52,15 +55,18 @@ namespace BestNote_3951.Models.FileSystem
     /// </summary>
     public interface ITreeViewItem : INotifyPropertyChanged
     {
-        public string ItemName { get; set; }
-        public int ItemLevel { get; set; }
-        public bool HasChildren { get; }
-        public bool CanHaveChildren { get; }
-        public bool CanRename { get; set; }
-        public bool ItemRename { get; set; }
-        public Thickness IndentationPadding { get; set; }
-        public IEnumerable<BestFileTreeItemViewModel> SafeChildren { get; }
-        public ImageSource ImageIcon { get; }
+        string      ItemName { get; set; }
+        int         ItemLevel { get; set; }
+        bool        HasChildren { get; }
+        bool        CanHaveChildren { get; }
+        bool        CanRename { get; set; }
+        bool        ItemRename { get; set; }
+        Thickness   IndentationPadding { get; set; }
+        IBNFolder?  Parent { get; set; }
+        ImageSource ImageIcon { get; }
+        IEnumerable<BestFileTreeItemViewModel> SafeChildren { get; }
+        void Rename(string NewItemName);
+        void Move(FolderTreeItem NewParent);
     }
 
     /// <summary>
@@ -76,6 +82,7 @@ namespace BestNote_3951.Models.FileSystem
         private int itemLevel;
         private Thickness indentationPadding;
         private ImageSource imageIcon;
+        private IBNFolder? parent;
 
         /// <summary>
         /// Integer representing the depth of this item in the tree.
@@ -130,6 +137,19 @@ namespace BestNote_3951.Models.FileSystem
         }
 
         /// <summary>
+        /// Reference to the parent tree item, may be null (top level).
+        /// </summary>
+        public IBNFolder? Parent
+        {
+            get => parent;
+            set
+            {
+                parent = value;
+                RaisedOnPropertyChanged(nameof(parent));
+            }
+        }
+
+        /// <summary>
         /// Flag indicating whether the item has children.
         /// </summary>
         public virtual bool HasChildren => false;
@@ -153,6 +173,18 @@ namespace BestNote_3951.Models.FileSystem
         /// Safe access the contents of a nodes children. Used during data binding.
         /// </summary>
         public virtual IEnumerable<BestFileTreeItemViewModel> SafeChildren => Enumerable.Empty<BestFileTreeItemViewModel>();
+
+        /// <summary>
+        /// Rename a file system item.
+        /// </summary>
+        /// <param name="NewItemName"></param>
+        public abstract void Rename(string NewItemName);
+
+        /// <summary>
+        /// Move a file system item to it's new parent.
+        /// </summary>
+        /// <param name="NewParent"></param>
+        public abstract void Move(FolderTreeItem NewParent);
 
         /// <summary>
         /// Property changed event.

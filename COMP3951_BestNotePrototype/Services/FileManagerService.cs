@@ -202,15 +202,33 @@ namespace BestNote_3951.Services
         }
 
         /// <summary>
-        /// Rename a folder in the file system.
+        /// Moves a specified file system object into another specified directory.
         /// </summary>
-        /// <param name="newName"></param>
-        /// <param name=""></param>
+        /// <param name="TargetItem"></param>
+        /// <param name="DestinationPath"></param>
         /// <returns></returns>
-        //public DirectoryInfo RenameFolder(string newName, DirectoryInfo)
-        //{
-        //    return null;
-        //}
+        public FileInfo MoveFile(FileInfo TargetItem, DirectoryInfo DestinationPath)
+        {
+            string Target = TargetItem.Name;
+            string NewPath = Path.Combine(DestinationPath.FullName, Target);
+
+            TargetItem.MoveTo(NewPath);
+            return TargetItem;
+        }
+
+        /// <summary>
+        /// Moves a specified file system object into another specified directory
+        /// </summary>
+        /// <param name="DestinationPath"></param>
+        /// <returns></returns>
+        public DirectoryInfo MoveFolder(DirectoryInfo TargetItem, DirectoryInfo DestinationPath)
+        {
+            string Target = TargetItem.Name;    
+            string NewPath = Path.Combine(DestinationPath.FullName, Target);
+
+            TargetItem.MoveTo(NewPath);
+            return TargetItem;
+        }
 
         /// <summary>
         /// Reads the contents of a file.

@@ -41,6 +41,16 @@ public class WindowsFolder : IBNFolder
     }
 
     /// <summary>
+    /// Renames a windows folder object.
+    /// </summary>
+    /// <param name="NewItemName"></param>
+    public void Rename(string NewItemName)
+    {
+        DirectoryInfo UpdatedDirectoryInfo = _fileManagerService.RenameFolder(NewItemName, DirectoryInfo);
+        DirectoryInfo = UpdatedDirectoryInfo;
+    }
+
+    /// <summary>
     /// Adds a new child to folders collection of children.
     /// </summary>
     /// <param name="NewChild"></param>
@@ -57,6 +67,23 @@ public class WindowsFolder : IBNFolder
     {
         bool status = children.Remove(TargetChild);
         Debug.WriteLine(status);
+    }
+
+    /// <summary>
+    /// Move this item to the new item location in the file systme.
+    /// </summary>
+    /// <param name="NewParent"></param>
+    public void Move(FolderTreeItem NewParent)
+    {
+
+    }
+
+    /// <summary>
+    /// Loads the contents of the file system of this folder.
+    /// </summary>
+    public void LoadFileSystemObjects()
+    {
+
     }
 }
 

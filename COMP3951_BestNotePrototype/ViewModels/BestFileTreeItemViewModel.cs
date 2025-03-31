@@ -20,18 +20,18 @@ namespace BestNote_3951.ViewModels
     /// </summary>
     public partial class BestFileTreeItemViewModel : ObservableObject
     {
-        public ITreeViewItem        TreeViewItem { get; private set; }
-        public FileManagerService   FileManagerService { get; private set; }
-        public AlertService         AlertService { get; private set; }
+        public ITreeViewItem                        TreeViewItem { get; private set; }
+        public FileManagerService                   FileManagerService { get; private set; }
+        public AlertService                         AlertService { get; private set; }
 
         [ObservableProperty]
-        public partial bool Expanded { get; set; } = false;
+        public partial bool                         Expanded { get; set; } = false;
 
         [ObservableProperty]
-        public partial string RenameItemText { get; set; } = "";
+        public partial string                       RenameItemText { get; set; } = "";
 
         [ObservableProperty]
-        public partial BestFileTreeItemViewModel? Dragger { get; set; } = null;
+        public partial BestFileTreeItemViewModel?   Dragger { get; set; } = null;
 
         /// <summary>
         /// Constructor for the BestFileTreeViewModel.
@@ -78,6 +78,7 @@ namespace BestNote_3951.ViewModels
         public void RenameItem(string NewItemName)
         {
             Debug.WriteLine($"Rename item command invoked, new name: {NewItemName}");
+
             if (string.IsNullOrWhiteSpace(NewItemName))
             {
                 AlertService.ShowAlertAsync("Invalid Action", "Item name cannot be empty.");
@@ -86,25 +87,22 @@ namespace BestNote_3951.ViewModels
 
             try
             {
-                if (TreeViewItem is FileTreeItem FileTreeItem)
-                {
-                    FileInfo UpdatedFileInfo = FileManagerService.RenameFile(NewItemName, FileTreeItem.FileInfo);
-                    FileTreeItem.FileInfo = UpdatedFileInfo;
-                    FileTreeItem.ItemName = UpdatedFileInfo.Name;
-                }
-                if (TreeViewItem is FolderTreeItem FolderTreeItem)
-                {
-                    DirectoryInfo UpdatedDirectoryInfo = FileManagerService.RenameFolder(NewItemName, FolderTreeItem.DirectoryInfo);
-                    FolderTreeItem.DirectoryInfo = UpdatedDirectoryInfo;
-                    FolderTreeItem.ItemName = UpdatedDirectoryInfo.Name;
-                }
-
+                TreeViewItem.Rename(NewItemName);
                 Debug.WriteLine($"Worked\n\nUpdated name: {TreeViewItem.ItemName}");
             }
             catch (NullReferenceException ex)
             {
                 Debug.WriteLine($"Error renaming the file tree item {ex}");
                 AlertService.ShowAlertAsync("Invalid Action", "You changes could not be applied.");
+            }
+            catch (IOException ex)
+            {
+                Debug.WriteLine($"Error renaming the file tree item {ex}");
+                AlertService.ShowAlertAsync("Invalid Action", $"{ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex.ToString());
             }
         }
 
@@ -143,6 +141,7 @@ namespace BestNote_3951.ViewModels
                 {
                     FileInfo NewFileInfo = FileManagerService.CreateFile(TargetPath: FolderTreeItem.DirectoryInfo.FullName);
                     ITreeViewItem NewItem = FileStructureViewUtils.CreateTreeViewItem(FileManagerService, NewFileInfo, FolderTreeItem.ItemLevel, FolderTreeItem.IndentationPadding);
+                    NewItem.Parent = FolderTreeItem;
                     BestFileTreeItemViewModel NewFileViewModel = new BestFileTreeItemViewModel(NewItem, FileManagerService, AlertService);
                     FolderTreeItem.Children.Add(NewFileViewModel);
                 }
@@ -169,6 +168,7 @@ namespace BestNote_3951.ViewModels
                 {
                     DirectoryInfo NewFileInfo = FileManagerService.CreateDirectory(TargetPath: FolderTreeItem.DirectoryInfo.FullName);
                     ITreeViewItem NewItem = FileStructureViewUtils.CreateTreeViewItem(FileManagerService, NewFileInfo, FolderTreeItem.ItemLevel, FolderTreeItem.IndentationPadding);
+                    NewItem.Parent = FolderTreeItem;
                     BestFileTreeItemViewModel NewFileViewModel = new BestFileTreeItemViewModel(NewItem, FileManagerService, AlertService);
                     FolderTreeItem.Children.Add(NewFileViewModel);
                 }
@@ -188,15 +188,21 @@ namespace BestNote_3951.ViewModels
         {
             try
             {
-                if (!TreeViewItem.CanHaveChildren || Dragged is null)
-                    return;
+                if (TreeViewItem is FolderTreeItem ParentFolder && Dragged is not null)
+                {
+                    // Move the item in the system
+                    Dragged.TreeViewItem.Move(ParentFolder);
 
+                    // Update the state object children contents
+                    ParentFolder.AddChild(Dragged);
+                    Dragged.TreeViewItem.Parent?.RemoveChild(Dragged);
 
-
-                Debug.WriteLine($"Destination Item: {TreeViewItem.ItemName}\tNew item: {Dragged.TreeViewItem.ItemName}");
+                    Debug.WriteLine($"Destination Item: {TreeViewItem.ItemName}\tNew item: {Dragged.TreeViewItem.ItemName}");
+                }
             }
             catch (Exception ex)
             {
+                AlertService.ShowAlertAsync("Action Could Not Be Complete", "Could not move item to the desired location.");
                 Debug.WriteLine($"Exception in the file system {ex}");
             }
         }

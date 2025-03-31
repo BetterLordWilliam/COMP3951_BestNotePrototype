@@ -33,6 +33,25 @@ public class MarkdownFile : IBNFile, IBNWritable, IBNReadable
         set => fileInfo = value;
     }
 
+    /// <summary>
+    /// Renames a file in the file system.
+    /// </summary>
+    /// <param name="NewItemName"></param>
+    public void Rename(string NewItemName)
+    {
+        FileInfo UpdatedFileInfo = _fileManagerService.RenameFile(NewItemName, FileInfo);
+        FileInfo = UpdatedFileInfo;
+    }
+
+    /// <summary>
+    /// Move this file to a new location in the file system.
+    /// </summary>
+    /// <param name="NewParent"></param>
+    public void Move(FolderTreeItem NewParent)
+    {
+
+    }
+
     public string ReadFileContents()
     {
         return "";

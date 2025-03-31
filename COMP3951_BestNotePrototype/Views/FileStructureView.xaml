@@ -27,16 +27,15 @@
                 <ScrollView Orientation="Horizontal">
                     <HorizontalStackLayout Spacing="5"
                                     Padding="5">
-                        <Button x:Name="addFile" IsEnabled="True" Text="Add File" Command="{Binding AddFileCommand}"></Button>
-                        <Button x:Name="addFolder" IsEnabled="True" Text="Add Folder" Command="{Binding AddFolderCommand}"></Button>
-                        <Button x:Name="deleteItem" IsEnabled="False" Text="Delete"></Button>
+                        <Button x:Name="addFile" IsEnabled="True" Text="Add File" Command="{Binding Root.AddFileCommand}"></Button>
+                        <Button x:Name="addFolder" IsEnabled="True" Text="Add Folder" Command="{Binding Root.AddFolderCommand}"></Button>
                     </HorizontalStackLayout>
                 </ScrollView>
             </VerticalStackLayout>
             
             <!-- Bind to the FileSystem Items -->
             <ScrollView Grid.Row="1" Orientation="Both">
-                <CollectionView ItemsSource="{Binding FileSystem}">
+                <CollectionView ItemsSource="{Binding Root.TreeViewItem.SafeChildren}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewmodels:BestFileTreeItemViewModel">
                             <views:BestFileTreeView BindingContext="{Binding .}"/>
@@ -52,7 +51,7 @@
                 <MenuFlyoutItem
                             IsEnabled="True"
                             Text="Reload Files"
-                            Command="{Binding RetrieveContentsCommand}"></MenuFlyoutItem>
+                            Command="{Binding Root.RetrieveContentsCommand}"></MenuFlyoutItem>
             </MenuFlyout>
         </FlyoutBase.ContextFlyout>
     </Border>
