@@ -1,8 +1,13 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
 using BestNote_3951.ViewModels;
+using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.PdfViewer;
+using BestNote_3951.Messages;
+
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfView files
@@ -24,8 +29,26 @@ public partial class EmbeddedPdfView : ContentView
 	public EmbeddedPdfView()
 	{
 		InitializeComponent();
-		EmbeddedPdfViewModel BindingContext = new EmbeddedPdfViewModel();
         CustomizePDFToolbar();
+        pdfViewer.DocumentLoaded += PdfViewer_DocumentLoaded;
+
+        if (this.BindingContext is EmbeddedPdfViewModel vm)
+        {
+            vm.PropertyChanged += OnPropertyChanged;
+        }
+
+        WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
+        {
+
+            if (pdfViewer.PageCount > 0 && message.Value > 0)
+            {
+                if (pdfViewer.GoToPageCommand.CanExecute(message.Value))
+                {
+                    pdfViewer.GoToPageCommand.Execute(message.Value);
+                    pdfViewer.Unfocus();
+                }
+            }
+        });
 
     }
 
@@ -48,6 +71,60 @@ public partial class EmbeddedPdfView : ContentView
             prevPage.IsVisible = false;
             nextPage.IsVisible = false;
             pageLayout.IsVisible = false;
+        }
+    }
+
+
+    /// <summary>
+    /// When the view model's PageNum changes, we use the GoToPageCommand to navigate.
+    /// </summary>
+    //private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    //{
+    //    if (sender is EmbeddedPdfViewModel vm && e.PropertyName == nameof(vm.PageNum))
+    //    {
+    //        if (pdfViewer.PageCount > 0 && vm.PageNum > 0)
+    //        {
+    //            if (pdfViewer.GoToPageCommand.CanExecute(vm.PageNum))
+    //            {
+    //                pdfViewer.GoToPageCommand.Execute(vm.PageNum);
+    //                pdfViewer.Unfocus();
+    //            }
+    //        }
+    //    }
+    //}
+
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (sender is EmbeddedPdfViewModel vm && e.PropertyName == nameof(vm.PageNum))
+        {
+            if (pdfViewer.PageCount > 0 && vm.PageNum > 0)
+            {
+                if (pdfViewer.GoToPageCommand.CanExecute(vm.PageNum))
+                {
+                    pdfViewer.GoToPageCommand.Execute(vm.PageNum);
+                    pdfViewer.Unfocus();
+                }
+            }
+        }
+    }
+
+
+
+    /// <summary>
+    /// When the document loads, navigate to the page specified in the view model.
+    /// </summary>
+    private async void PdfViewer_DocumentLoaded(object sender, System.EventArgs e)
+    {
+        if (BindingContext is EmbeddedPdfViewModel vm && vm.PageNum > 0)
+        {
+            if (pdfViewer.PageCount > 0)
+            {
+                if (pdfViewer.GoToPageCommand.CanExecute(vm.PageNum))
+                {
+                    pdfViewer.GoToPageCommand.Execute(vm.PageNum);
+                    pdfViewer.Unfocus();
+                }
+            }
         }
     }
 

@@ -20,11 +20,10 @@
 
 
     <Grid RowDefinitions="Auto,*">
-        <Grid.BindingContext>
-            <local:EmbeddedPdfViewModel/>
-        </Grid.BindingContext>
 
-        <HorizontalStackLayout x:Name="Toolbar" Grid.Row="0">
+
+        <HorizontalStackLayout x:Name="Toolbar"
+                               Grid.Row="0">
             <Button x:Name="openFile"
                              Margin="10,10,10,10"
                              Command="{Binding OpenDocumentCommand}"
