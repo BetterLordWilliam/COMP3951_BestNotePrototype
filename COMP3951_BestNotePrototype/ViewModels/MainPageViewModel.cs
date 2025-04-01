@@ -22,6 +22,13 @@ namespace BestNote_3951.ViewModels
         public MarkdownRendererViewModel MarkdownRendererViewModel { get; private set; }
         #endregion
 
+        private string _themeText;
+        public string ThemeText
+        {
+            get => _themeText;
+            set => SetProperty(ref _themeText, value);
+        }
+
         public MainPageViewModel()
         {
             #region Services
@@ -36,20 +43,35 @@ namespace BestNote_3951.ViewModels
             MarkdownRendererViewModel = new MarkdownRendererViewModel();
             MainPanelViewModel = new MainPanelViewModel(EmbeddedPdfViewModel, MarkdownEditorViewModel, MarkdownRendererViewModel);
             #endregion
+
+            if (Application.Current.UserAppTheme == AppTheme.Light)
+            {
+                _themeText = "Light";
+            }
+            else if (Application.Current.UserAppTheme == AppTheme.Dark)
+            {
+                _themeText = "Dark";
+            }
+            else
+            {
+                _themeText = "Switch Theme";
+            }
         }
 
         [RelayCommand]
         private void SwitchTheme()
         {
-            var currentTheme = Application.Current.UserAppTheme;
+            var currentTheme = Application.Current?.UserAppTheme;
 
             if (currentTheme == AppTheme.Light)
             {
                 Application.Current.UserAppTheme = AppTheme.Dark;
+                ThemeText = "Dark";
             }
             else
             {
                 Application.Current.UserAppTheme = AppTheme.Light;
+                ThemeText = "Light";
             }
         }
     }

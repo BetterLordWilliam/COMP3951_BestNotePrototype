@@ -13,10 +13,8 @@
     x:DataType="viewmodels:MainPageViewModel">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Theme"
-                     IconImageSource="theme.png"
+        <ToolbarItem Text="{Binding ThemeText}"
                      Command="{Binding SwitchThemeCommand}"/>
-        
     </ContentPage.ToolbarItems>
     
     <Border Stroke="#474747"

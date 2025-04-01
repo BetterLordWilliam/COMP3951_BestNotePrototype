@@ -29,10 +29,10 @@ namespace BestNote_3951.ViewModels
             WeakReferenceMessenger.Default.Register<PdfBookmarkTomarkdownMessage>(this, (recipient, message) =>
             {
                 ResourceLink resource = message.Value;
-                String pdfPath = resource.ResourcePath;
-                Bookmark bookmark = resource.ResourceBookmark;
-                String pdfName = bookmark.Name;
-                string link = $"[{pdfName} (Page {bookmark.PageNumber})](<bestnote://bookmark?pg={bookmark.PageNumber}&pdf={pdfPath}>)";
+                String pdfPath        = resource.ResourcePath;
+                Bookmark bookmark     = resource.ResourceBookmark;
+                String pdfName        = bookmark.Name;
+                string link           = $"[{pdfName} (Page {bookmark.PageNumber})](<bestnote://bookmark?pg={bookmark.PageNumber}&pdf={pdfPath}>)";
 
                 WeakReferenceMessenger.Default.Send(new InsertAtCursorMessage(link));
             });
