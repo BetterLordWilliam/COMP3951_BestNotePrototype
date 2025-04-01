@@ -19,9 +19,10 @@ namespace BestNote_3951
             InitializeComponent();
         }
 
+        // navigation page for native navigation bar, allows ToolBarItem in MainPage xaml
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new MainPage());
+            return new Window(new NavigationPage(new MainPage()));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BestNote_3951.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BestNote_3951.ViewModels
 {
@@ -35,6 +36,21 @@ namespace BestNote_3951.ViewModels
             MarkdownRendererViewModel = new MarkdownRendererViewModel();
             MainPanelViewModel = new MainPanelViewModel(EmbeddedPdfViewModel, MarkdownEditorViewModel, MarkdownRendererViewModel);
             #endregion
+        }
+
+        [RelayCommand]
+        private void SwitchTheme()
+        {
+            var currentTheme = Application.Current.UserAppTheme;
+
+            if (currentTheme == AppTheme.Light)
+            {
+                Application.Current.UserAppTheme = AppTheme.Dark;
+            }
+            else
+            {
+                Application.Current.UserAppTheme = AppTheme.Light;
+            }
         }
     }
 }

@@ -12,6 +12,13 @@
     x:Class="BestNote_3951.MainPage"
     x:DataType="viewmodels:MainPageViewModel">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Theme"
+                     IconImageSource="theme.png"
+                     Command="{Binding SwitchThemeCommand}"/>
+        
+    </ContentPage.ToolbarItems>
+    
     <Border Stroke="#474747"
             StrokeThickness="2"
             StrokeShape="RoundRectangle 0,0,5,5"
