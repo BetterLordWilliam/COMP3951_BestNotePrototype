@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 
 namespace BestNote_3951
@@ -16,6 +17,7 @@ namespace BestNote_3951
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseSkiaSharp()
                 .ConfigureSyncfusionCore()
                 .ConfigureFonts(fonts =>
                 {
