@@ -231,6 +231,24 @@ namespace BestNote_3951.Services
         }
 
         /// <summary>
+        /// Deletes the target folder in the file system.
+        /// </summary>
+        /// <param name="TargetItem"></param>
+        public void DeleteFolder(DirectoryInfo TargetItem, bool recursive = false)
+        {
+            TargetItem.Delete(recursive);
+        }
+
+        /// <summary>
+        /// Deletes the target file in the file system.
+        /// </summary>
+        /// <param name="TargetItem"></param>
+        public void DeleteFile(FileInfo TargetItem)
+        {
+            TargetItem.Delete();
+        }
+
+        /// <summary>
         /// Reads the contents of a file.
         /// </summary>
         /// <param name="filePath"></param>

@@ -53,6 +53,14 @@ public class MarkdownFile : IBNFile, IBNWritable, IBNReadable
         FileInfo = NewFileInfo;
     }
 
+    /// <summary>
+    /// Deletes a markdown file form the file system.
+    /// </summary>
+    public void Delete()
+    {
+        _fileManagerService.DeleteFile(FileInfo);
+    }
+
     public string ReadFileContents()
     {
         return "";

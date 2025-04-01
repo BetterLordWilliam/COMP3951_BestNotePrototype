@@ -150,10 +150,49 @@ namespace BestNote_3951.ViewModels
                     FolderTreeItem.Children.Add(NewFileViewModel);
                 }
             }
+
             catch (Exception ex)
             {
                 AlertService.ShowAlertAsync("Invalid action", "The action you have take is one the system cannot accomodate.");
                 Debug.WriteLine(ex);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the file tree item from the tree and file system.
+        /// </summary>
+        [RelayCommand]
+        public void Delete()
+        {
+            try
+            {
+                // Recursive file delete
+                if (TreeViewItem.HasChildren && TreeViewItem is FolderTreeItem FolderItem)
+                {
+                    AlertService.ShowConfirmation("Confirm", "Would you like to recursively delete children?", (result =>
+                    {
+                        if (result)
+                        {
+                            FolderItem.DeleteAll();
+                            TreeViewItem?.Parent?.Children.Remove(this);
+                        }
+                    }));
+                }
+                else
+                {
+                    TreeViewItem.Delete();
+                    TreeViewItem?.Parent?.Children.Remove(this);
+                }
+            }
+            catch (System.IO.IOException ex)
+            {
+
+                Debug.WriteLine($"Exception {ex}");
+            }
+            catch (Exception ex)
+            {
+                AlertService.ShowAlertAsync("Invalid action", "The action you have taken is one the system cannot accomodate.");
+                Debug.WriteLine($"Exception {ex}");
             }
         }
 

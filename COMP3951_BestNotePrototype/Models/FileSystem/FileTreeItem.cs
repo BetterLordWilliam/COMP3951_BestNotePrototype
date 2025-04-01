@@ -70,4 +70,13 @@ public partial class FileTreeItem : TreeViewItemBase, IBNFile
         ItemLevel = (ItemLevel == 0) ? 0 : NewParent.ItemLevel + 10;
         IndentationPadding = NewParent.IndentationPadding + new Thickness(10, 0, 0, 0);
     }
+
+    /// <summary>
+    /// Deletes a file tree item from the file system.
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    public override void Delete()
+    {
+        _sourceFile.Delete();
+    }
 }

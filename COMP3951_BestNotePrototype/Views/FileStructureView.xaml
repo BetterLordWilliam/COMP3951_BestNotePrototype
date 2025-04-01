@@ -45,7 +45,7 @@
                     </CollectionView>
 
                     <!-- Area for the parent file structure view, drags, context menu -->
-                    <BoxView Grid.Row="1" MinimumHeightRequest="20">
+                    <BoxView Grid.Row="1" MinimumHeightRequest="20" Color="Transparent">
                         <!-- Draggable Area for the Root Directory -->
                         <BoxView.GestureRecognizers>
                             <DropGestureRecognizer

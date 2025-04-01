@@ -102,6 +102,10 @@
                     IsEnabled="{Binding TreeViewItem.CanHaveChildren}"
                     Text="Add Note"
                     Command="{Binding AddFileCommand}" />
+                <MenuFlyoutItem
+                    IsEnabled="True"
+                    Text="Delete"
+                    Command="{Binding DeleteCommand}" />
             </MenuFlyout>
         </FlyoutBase.ContextFlyout>
     </VerticalStackLayout>

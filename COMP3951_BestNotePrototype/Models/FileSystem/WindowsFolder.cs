@@ -80,6 +80,22 @@ public class WindowsFolder : IBNFolder
     }
 
     /// <summary>
+    /// Deletes a windows folder from the file system.
+    /// </summary>
+    public void Delete()
+    {
+        _fileManagerService.DeleteFolder(DirectoryInfo);
+    }
+
+    /// <summary>
+    /// Deletes a windows folder form the file system and it's sub items.
+    /// </summary>
+    public void DeleteAll()
+    {
+        _fileManagerService.DeleteFolder(DirectoryInfo, true);
+    }
+
+    /// <summary>
     /// Loads the contents of the file system of this folder.
     /// </summary>
     public void LoadFileSystemObjects()

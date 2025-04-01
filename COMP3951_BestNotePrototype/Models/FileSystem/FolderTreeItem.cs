@@ -111,6 +111,24 @@ public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
     }
 
     /// <summary>
+    /// Deletes a folder item from the file sytsem.
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    public override void Delete()
+    {
+        _sourceFolder.Delete();
+    }
+
+    /// <summary>
+    /// Delete a folder and it's contents recursively in the file system.
+    /// </summary>
+    /// <param name="recursive"></param>
+    public void DeleteAll()
+    {
+        _sourceFolder.DeleteAll();
+    }
+
+    /// <summary>
     /// Load the objects 
     /// </summary>
     public void LoadFileSystemObjects()

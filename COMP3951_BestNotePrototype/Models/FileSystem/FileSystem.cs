@@ -36,6 +36,7 @@ namespace BestNote_3951.Models.FileSystem
         FileInfo FileInfo { get; set; }
         void Rename(string NewFileName);
         void Move(FolderTreeItem NewParent);
+        void Delete();
     }
 
     /// <summary>
@@ -47,6 +48,8 @@ namespace BestNote_3951.Models.FileSystem
         ObservableCollection<BestFileTreeItemViewModel> Children { get; set; }
         void Rename(string NewFolderName);
         void Move(FolderTreeItem NewParent);
+        void Delete();
+        void DeleteAll();
         void AddChild(BestFileTreeItemViewModel item);
         void RemoveChild(BestFileTreeItemViewModel item);
         void LoadFileSystemObjects();
@@ -69,6 +72,7 @@ namespace BestNote_3951.Models.FileSystem
         IEnumerable<BestFileTreeItemViewModel> SafeChildren { get; }
         void Rename(string NewItemName);
         void Move(FolderTreeItem NewParent);
+        void Delete();
     }
 
     /// <summary>
@@ -187,6 +191,11 @@ namespace BestNote_3951.Models.FileSystem
         /// </summary>
         /// <param name="NewParent"></param>
         public abstract void Move(FolderTreeItem NewParent);
+
+        /// <summary>
+        /// Deletes file tree item.
+        /// </summary>
+        public abstract void Delete();
 
         /// <summary>
         /// Property changed event.
