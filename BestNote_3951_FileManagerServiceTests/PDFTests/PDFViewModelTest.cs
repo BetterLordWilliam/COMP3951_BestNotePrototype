@@ -44,6 +44,9 @@ public class PDFViewModelTest
         Assert.AreEqual(pdfViewModel.PdfPath, testPath);
     }
 
+    /// <summary>
+    /// Tests that the PdfName is set to an empty string when an EmbeddedPdfiewModel is initialized.
+    /// </summary>
     [TestMethod]
     public void PDFName_Initial()
     {
@@ -61,6 +64,9 @@ public class PDFViewModelTest
         Assert.AreEqual(pdfViewModel.PdfName, testName);
     }
 
+    /// <summary>
+    /// Tests that the PageNum is set to 0 when an EmbeddedPdfiewModel is initialized.
+    /// </summary>
     [TestMethod]
     public void PDFPageNum_Initial()
     {
