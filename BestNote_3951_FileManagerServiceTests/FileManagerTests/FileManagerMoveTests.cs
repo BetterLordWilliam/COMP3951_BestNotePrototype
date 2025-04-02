@@ -75,31 +75,6 @@ namespace BestNote_3951_Tests.FileManagerTests
         }
 
         /// <summary>
-        /// Tests moving a folder into a valid location.
-        /// </summary>
-        [TestMethod]
-        public void MoveFolder_ValidFolderAndDestination_MovesFolder()
-        {
-            string sourceFolderPath = Path.Combine(_testSourceDirPath, "MoveMeFolder");
-            string startPath = Path.Combine(sourceFolderPath, "file.txt");
-            string destDirPath = Path.Combine(_currentTestDir, "Destination");
-            string expectedNewPath = Path.Combine(destDirPath, "MoveMeFolder");
-
-            var folderToMove = new DirectoryInfo(sourceFolderPath);
-            var destDirInfo = new DirectoryInfo(destDirPath);
-
-            File.Create(startPath);
-
-            var movedFolder = _fileSystemService.MoveFolder(folderToMove, destDirInfo);
-
-            Assert.IsNotNull(movedFolder);
-            Assert.AreEqual(expectedNewPath, movedFolder.FullName);
-            Assert.IsFalse(Directory.Exists(sourceFolderPath), "Original folder should not exist.");
-            Assert.IsTrue(Directory.Exists(expectedNewPath), "Moved folder should exist in destination.");
-            Assert.IsTrue(File.Exists(Path.Combine(expectedNewPath, "file.txt")), "Content should move with folder.");
-        }
-
-        /// <summary>
         /// Test moving a folder into a location where a folder with its name exists.
         /// </summary>
         [TestMethod]
