@@ -2,57 +2,97 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using BestNote_3951.ViewModels;
 
 ///
 /// Will Otterbein
-/// March 19 2025
+/// March 23 2025
 ///
 namespace BestNote_3951.Models.FileSystem
 {
+    /// <summary>
+    /// Best note readable base type.
+    /// </summary>
     public interface IBNReadable
     {
         // StreamReader Reader { get; set; }
         string ReadFileContents();
     }
 
+    /// <summary>
+    /// Best note writable base type.
+    /// </summary>
     public interface IBNWritable
     {
         // StreamWriter Writer { get; set; }
         void WriteToFile(string Content);
     }
 
+    /// <summary>
+    /// Best note tree view file base type.
+    /// </summary>
     public interface IBNFile
     {
         FileInfo FileInfo { get; set; }
-    }
-
-    public interface IBNFolder
-    {
-        DirectoryInfo DirectoryInfo { get; set; }
-        ObservableCollection<ITreeViewItem> Children { get; set; }
-    }
-
-    public interface ITreeViewItem : INotifyPropertyChanged
-    {
-        public string ItemName { get; set; }
-        public int ItemLevel { get; set; }
-        public bool HasChildren { get; }
-        public bool CanHaveChildren { get; }
-        public Thickness IndentationPadding { get; set; }
-        public IEnumerable<ITreeViewItem> SafeChildren { get; }
-        public ImageSource ImageIcon { get; }
+        void Rename(string NewFileName);
+        void Move(FolderTreeItem NewParent);
+        void Delete();
     }
 
     /// <summary>
-    /// Base class for tree items.
+    /// Best note tree view folder base type.
     /// </summary>
-    public abstract class TreeViewItemBase : ITreeViewItem
+    public interface IBNFolder
+    {
+        DirectoryInfo DirectoryInfo { get; set; }
+        ObservableCollection<BestFileTreeItemViewModel> Children { get; set; }
+        void Rename(string NewFolderName);
+        void Move(FolderTreeItem NewParent);
+        void Delete();
+        void DeleteAll();
+        void AddChild(BestFileTreeItemViewModel item);
+        void RemoveChild(BestFileTreeItemViewModel item);
+        void LoadFileSystemObjects();
+    }
+
+    /// <summary>
+    /// Tree view item base type.
+    /// </summary>
+    public interface ITreeViewItem : INotifyPropertyChanged
+    {
+        string      ItemName { get; set; }
+        int         ItemLevel { get; set; }
+        bool        HasChildren { get; }
+        bool        CanHaveChildren { get; }
+        bool        CanRename { get; set; }
+        bool        ItemRename { get; set; }
+        Thickness   IndentationPadding { get; set; }
+        IBNFolder?  Parent { get; set; }
+        ImageSource ImageIcon { get; }
+        IEnumerable<BestFileTreeItemViewModel> SafeChildren { get; }
+        void Rename(string NewItemName);
+        void Move(FolderTreeItem NewParent);
+        void Delete();
+    }
+
+    /// <summary>
+    /// Base class for tree items, provides implementations that are common to most tree items.
+    /// </summary>
+    /// <p>
+    /// It is still expected for specific types that further implementation for functionality
+    /// such as reading or writing to files is provided via composition and delegation of functionality.
+    /// </p>
+    public abstract class TreeViewItemBase : ObservableObject, ITreeViewItem
     {
         private string itemName;
         private int itemLevel;
         private Thickness indentationPadding;
         private ImageSource imageIcon;
+        private IBNFolder? parent;
 
+        /// <summary>
+        /// Integer representing the depth of this item in the tree.
+        /// </summary>
         public int ItemLevel
         {
             get => itemLevel;
@@ -63,6 +103,9 @@ namespace BestNote_3951.Models.FileSystem
             }
         }
 
+        /// <summary>
+        /// The indentation of this item in the tree view.
+        /// </summary>
         public Thickness IndentationPadding
         {
             get => indentationPadding;
@@ -73,6 +116,9 @@ namespace BestNote_3951.Models.FileSystem
             }
         }
 
+        /// <summary>
+        /// The name of the item as it would appear in the tree.
+        /// </summary>
         public string ItemName
         {
             get => itemName;
@@ -83,6 +129,9 @@ namespace BestNote_3951.Models.FileSystem
             }
         }
 
+        /// <summary>
+        /// Image icon displayed for the tree item.
+        /// </summary>
         public ImageSource ImageIcon
         {
             get => imageIcon;
@@ -93,106 +142,73 @@ namespace BestNote_3951.Models.FileSystem
             }
         }
 
+        /// <summary>
+        /// Reference to the parent tree item, may be null (top level).
+        /// </summary>
+        public IBNFolder? Parent
+        {
+            get => parent;
+            set
+            {
+                parent = value;
+                RaisedOnPropertyChanged(nameof(parent));
+            }
+        }
+
+        /// <summary>
+        /// Flag indicating whether the item has children.
+        /// </summary>
         public virtual bool HasChildren => false;
 
+        /// <summary>
+        /// Flag indicating whether the item is capable of having children. False by default.
+        /// </summary>
         public virtual bool CanHaveChildren => false;
 
-        public virtual IEnumerable<ITreeViewItem> SafeChildren => Enumerable.Empty<ITreeViewItem>();
+        /// <summary>
+        /// Flag indicating whether the item is renameable or not.
+        /// </summary>
+        public virtual bool CanRename { get; set; } = true;
 
+        /// <summary>
+        /// Flag indicating whether the item is being renamed or not.
+        /// </summary>
+        public virtual bool ItemRename { get; set; } = false;
+
+        /// <summary>
+        /// Safe access the contents of a nodes children. Used during data binding.
+        /// </summary>
+        public virtual IEnumerable<BestFileTreeItemViewModel> SafeChildren => Enumerable.Empty<BestFileTreeItemViewModel>();
+
+        /// <summary>
+        /// Rename a file system item.
+        /// </summary>
+        /// <param name="NewItemName"></param>
+        public abstract void Rename(string NewItemName);
+
+        /// <summary>
+        /// Move a file system item to it's new parent.
+        /// </summary>
+        /// <param name="NewParent"></param>
+        public abstract void Move(FolderTreeItem NewParent);
+
+        /// <summary>
+        /// Deletes file tree item.
+        /// </summary>
+        public abstract void Delete();
+
+        /// <summary>
+        /// Property changed event.
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        /// <summary>
+        /// Invoke the event handler for property the on property changed event.
+        /// </summary>
+        /// <param name="propertyName"></param>
         public void RaisedOnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    /// <summary>
-    /// Temporary tree item.
-    /// </summary>
-    public partial class FileTreeTemp : TreeViewItemBase
-    {
-    }
-
-    /// <summary>
-    /// Tree File Items.
-    /// </summary>
-    public partial class FileTreeItem : TreeViewItemBase, IBNFile
-    {
-        private readonly IBNFile _sourceFile;
-
-        /// <summary>
-        /// File tree file item class.
-        /// </summary>
-        /// <param name="sourceFile"></param>
-        /// <param name=""></param>
-        public FileTreeItem(
-            int itemLevel,
-            Thickness indentationPadding,
-            IBNFile sourceFile
-        )
-        {
-            _sourceFile = sourceFile;
-            ItemName = sourceFile.FileInfo.Name;
-            ImageIcon = "md_file.png";
-            ItemLevel = itemLevel;
-            IndentationPadding = indentationPadding;
-        }
-
-        // Source file delegated implementations
-        public FileInfo FileInfo
-        {
-            get => _sourceFile.FileInfo;
-            set => _sourceFile.FileInfo = value;
-        }
-    }
-
-    /// <summary>
-    /// Tree Folder Items.
-    /// </summary>
-    public partial class FolderTreeItem : TreeViewItemBase, IBNFolder
-    {
-        private readonly IBNFolder _sourceFolder;
-
-        /// <summary>
-        /// File tree folder constructor.
-        /// </summary>
-        /// <param name="itemLevel"></param>
-        /// <param name="indentationPadding"></param>
-        /// <param name="sourceFolder"></param>
-        public FolderTreeItem(
-            int itemLevel,
-            Thickness indentationPadding,
-            IBNFolder sourceFolder
-        )
-        {
-            _sourceFolder = sourceFolder;
-            ItemName = sourceFolder.DirectoryInfo.Name;
-            ImageIcon = "folder_icon.png";
-            ItemLevel = itemLevel;
-            IndentationPadding = indentationPadding;
-        }
-
-        // Define folder specific tree view item properties
-        public override bool CanHaveChildren => true;
-        public override bool HasChildren => _sourceFolder.Children.Count > 0;
-
-        // Source folder delegated implementation
-        public DirectoryInfo DirectoryInfo
-        {
-            get =>  _sourceFolder.DirectoryInfo;
-            set => _sourceFolder.DirectoryInfo = value;
-        }
-
-        public ObservableCollection<ITreeViewItem> Children
-        {
-            get => _sourceFolder.Children;
-            set => _sourceFolder.Children = value;
-        }
-
-        public override IEnumerable<ITreeViewItem> SafeChildren
-        {
-            get => _sourceFolder.Children;
         }
     }
 }
