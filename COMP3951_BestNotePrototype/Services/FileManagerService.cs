@@ -34,9 +34,9 @@ namespace BestNote_3951.Services
     ///
     public class FileManagerService
     {
-        public DirectoryInfo AppDirectory { get; private set; }         // Application data directory
-        public DirectoryInfo BestNoteDirectory { get; private set; }    // Notes directory
-        public DirectoryInfo ResourceDirectory { get; private set; }    // Resource Directory
+        public DirectoryInfo AppDirectory { get; set; }
+        public DirectoryInfo BestNoteDirectory { get; set; }
+        public DirectoryInfo ResourceDirectory { get; set; }
 
         private readonly string _appDirectoryPath;
         private readonly string _bestNoteDirectoryPath;
@@ -298,6 +298,12 @@ namespace BestNote_3951.Services
         public string AddResourceFile(string fileName, string filePath)
         {
             Debug.WriteLine(fileName);
+
+            if (string.IsNullOrWhiteSpace(fileName))
+                throw new ArgumentException("File name cannot be null or whitespace.");
+            if (string.IsNullOrEmpty(filePath))
+                throw new ArgumentException("Folder path cannot be null or whitespace.");
+
             // remove special characters from files that are saved to the resource folder
             // because the webview treats it like a link fragment and drops everything after it
             // there might be a better fix but this works
