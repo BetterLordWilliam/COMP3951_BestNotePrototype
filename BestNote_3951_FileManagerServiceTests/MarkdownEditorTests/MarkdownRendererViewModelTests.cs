@@ -8,7 +8,7 @@ namespace BestNote_3951_Tests.MarkdownEditorTests
     public class MarkdownRendererViewModelTests
     {
         [TestMethod]
-        public void SetsDefeaultWebView()
+        public void SetsDefaultWebView()
         {
             // Arrange and Act
             var vm = new MarkdownRendererViewModel();
