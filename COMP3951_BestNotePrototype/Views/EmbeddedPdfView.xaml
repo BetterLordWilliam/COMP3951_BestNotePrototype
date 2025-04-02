@@ -20,50 +20,51 @@ xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.M
              xmlns:local="clr-namespace:BestNote_3951.ViewModels"
              x:DataType="local:EmbeddedPdfViewModel">
 
-
-    <Grid RowDefinitions="Auto,*">
-
-
-
-        <HorizontalStackLayout x:Name="Toolbar"
-                               Grid.Row="0">
-            <Button x:Name="openFile"
-                             Margin="10,10,10,10"
-                             Clicked ="showPopup_Clicked"
-                             HeightRequest="40"
-                             VerticalOptions="Center"
-                             Text="Open PDF"
-                             WidthRequest="100" />
-            <Button x:Name="addLink"
-                             Margin="10,10,10,10"
-                             Command="{Binding CreateResourceLinkCommand}" 
-                             HeightRequest="40"
-                             VerticalOptions="Center"
-                             Text="Add Link"
-                             WidthRequest="100" />
-        </HorizontalStackLayout>
-
-        <syncfusionPopup:SfPopup x:Name="popup" ShowFooter ="True" AppearanceMode="TwoButton" HeaderTitle="Copy to Resources" 
-                                 Message="Would you like to copy the selected PDF to your BestNote Resources directory?"
-                                 DeclineCommand="{Binding OpenDocumentCommand}"
-                                 AcceptCommand="{Binding OpenDocumentAndCopyCommand}" 
-                                 AcceptButtonText="Copy to Resources" 
-                                 DeclineButtonText="No Thanks!" >
-
-        </syncfusionPopup:SfPopup>
+    <Border Style="{StaticResource PaneBorderStyle}">
+        <Grid RowDefinitions="Auto,*">
 
 
-        <syncfusion:SfPdfViewer x:Name="pdfViewer"
-                                Grid.Row="1"
-                                VerticalOptions="FillAndExpand"
-                                IsOutlineViewVisible="True"
-                                ShowScrollHead="False"
-                                ShowToolbars="True"
-                                EnableDocumentLinkNavigation="True"
-                                ZoomMode="FitToWidth"
-                                DocumentSource="{Binding PdfDocumentStream}" 
-                                PageNumber ="{Binding PageNum, Mode=TwoWay}"
-                                />
-    </Grid>
+
+            <HorizontalStackLayout x:Name="Toolbar"
+                                   Grid.Row="0">
+                <Button x:Name="openFile"
+                                 Margin="10,10,10,10"
+                                 Clicked ="showPopup_Clicked"
+                                 HeightRequest="40"
+                                 VerticalOptions="Center"
+                                 Text="Open PDF"
+                                 WidthRequest="100" />
+                <Button x:Name="addLink"
+                                 Margin="10,10,10,10"
+                                 Command="{Binding CreateResourceLinkCommand}" 
+                                 HeightRequest="40"
+                                 VerticalOptions="Center"
+                                 Text="Add Link"
+                                 WidthRequest="100" />
+            </HorizontalStackLayout>
+
+            <syncfusionPopup:SfPopup x:Name="popup" ShowFooter ="True" AppearanceMode="TwoButton" HeaderTitle="Copy to Resources" 
+                                     Message="Would you like to copy the selected PDF to your BestNote Resources directory?"
+                                     DeclineCommand="{Binding OpenDocumentCommand}"
+                                     AcceptCommand="{Binding OpenDocumentAndCopyCommand}" 
+                                     AcceptButtonText="Copy to Resources" 
+                                     DeclineButtonText="No Thanks!" >
+
+            </syncfusionPopup:SfPopup>
+
+
+            <syncfusion:SfPdfViewer x:Name="pdfViewer"
+                                    Grid.Row="1"
+                                    VerticalOptions="FillAndExpand"
+                                    IsOutlineViewVisible="True"
+                                    ShowScrollHead="False"
+                                    ShowToolbars="True"
+                                    EnableDocumentLinkNavigation="True"
+                                    ZoomMode="FitToWidth"
+                                    DocumentSource="{Binding PdfDocumentStream}" 
+                                    PageNumber ="{Binding PageNum, Mode=TwoWay}"
+                                    />
+        </Grid>
+    </Border>
 </ContentView>
 

@@ -10,6 +10,9 @@
              x:DataType="models:ITreeViewItem"
              x:Name="this">
 
+
+        
+    
     <!-- Define the tree view item templates -->
     <ContentView.Resources>
         <DataTemplate x:Key="FileTreeItem"
@@ -31,6 +34,7 @@
             FolderTemplate="{StaticResource FolderTreeItem}"
             TemporaryTemplate="{StaticResource TempTreeItem}" />
     </ContentView.Resources>
+
 
     <VerticalStackLayout>
         <!-- File Information -->
@@ -72,5 +76,6 @@
             ItemsSource="{Binding SafeChildren}"
             ItemTemplate="{StaticResource TreeViewItemTemplateSelector}" />
     </VerticalStackLayout>
+
 
 </ContentView>

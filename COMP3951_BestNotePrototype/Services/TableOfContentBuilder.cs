@@ -51,6 +51,9 @@ namespace BestNote_3951.Services
                 nav li a:hover {
                     text-decoration: underline;
                 }
+                body {
+                    background-color: #919191;
+                }
             </style>");
 
             toc.AppendLine("<nav>");

@@ -6,12 +6,15 @@
     xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
     x:Class="BestNote_3951.Views.MarkdownRendererView"
     x:DataType="viewmodels:MarkdownRendererViewModel">
-    <Grid Padding="10" VerticalOptions="FillAndExpand">
-        <Label Text="Markdown Renderer"
-               FontSize="Title"
-               HorizontalOptions="Center" />
-        <WebView x:Name="MarkdownWebView"
-                 VerticalOptions="FillAndExpand"
-                 Source="{Binding WebViewSource}" />
-    </Grid>
+
+    <Border Style="{StaticResource PaneBorderStyle}">
+        <Grid Padding="10" VerticalOptions="FillAndExpand">
+            <Label Text="Markdown Renderer"
+                   FontSize="Title"
+                   HorizontalOptions="Center" />
+            <WebView x:Name="MarkdownWebView"
+                     VerticalOptions="FillAndExpand"
+                     Source="{Binding WebViewSource}"/>
+        </Grid>
+    </Border>
 </ContentView>

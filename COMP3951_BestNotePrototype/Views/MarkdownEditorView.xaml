@@ -6,19 +6,16 @@
     xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
     x:Class="BestNote_3951.Views.MarkdownEditorView"
     x:DataType="viewmodels:MarkdownEditorViewModel">
-    <Grid Padding="10" RowDefinitions="Auto,*">
-        <!-- label can be removed if we just want the text editor to fill the pane -->
-        <Label Text="Markdown Editor" 
-           FontSize="Title"
-           HorizontalOptions="Center"
-           Grid.Row="0" />
-        <!-- text editor control, two way mode binding stores the editor text in the view model property -->
-        <Editor 
-            x:Name="EditorControl"
-            Text="{Binding MarkdownText, Mode=TwoWay}"
-            AutoSize="Disabled"
-            VerticalOptions="FillAndExpand"
-            Grid.Row="1"
-            Placeholder="marky markdown..." />
-    </Grid>
+    <Border Style="{StaticResource PaneBorderStyle}">
+        <Grid Padding="10" RowDefinitions="Auto,*">
+            <!-- text editor control, two way mode binding stores the editor text in the view model property -->
+            <Editor 
+                x:Name="EditorControl"
+                Text="{Binding MarkdownText, Mode=TwoWay}"
+                AutoSize="Disabled"
+                VerticalOptions="FillAndExpand"
+                Grid.Row="1"
+                Placeholder="marky markdown..." />
+        </Grid>
+    </Border>
 </ContentView>

@@ -19,7 +19,6 @@
             <MenuFlyoutItem Text="Dark"
                             Command="{Binding SwitchThemeCommand}"
                             CommandParameter="Dark" />
-            <MenuFlyoutItem Text="Custom..." />
 
         </MenuBarItem>
     </ContentPage.MenuBarItems>
