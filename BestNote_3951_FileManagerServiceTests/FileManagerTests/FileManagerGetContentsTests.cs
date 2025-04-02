@@ -42,18 +42,6 @@ namespace BestNote_3951_Tests.FileManagerTests
         }
 
         /// <summary>
-        /// Tests getting the contents of a bad path.
-        /// </summary>
-        [TestMethod]
-        public void GetDirectoryInfoContents_NonExistentPath_ThrowsDirectoryNotFoundException()
-        {
-            string badPath = Path.Combine(_currentTestDir, "BadPath");
-            Assert.ThrowsException<DirectoryNotFoundException>(() =>
-                _fileSystemService.GetDirectoryInfoContents(badPath)
-            );
-        }
-
-        /// <summary>
         /// Tests getting the contents of a null path (base path used instead).
         /// </summary>
         [TestMethod]

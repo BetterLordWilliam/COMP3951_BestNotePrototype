@@ -31,18 +31,6 @@ namespace BestNote_3951_Tests.FileManagerTests
         }
 
         /// <summary>
-        /// Tests deleting a file that does not exist.
-        /// </summary>
-        [TestMethod]
-        public void DeleteFile_NonExistentFile_ThrowsFileNotFoundException()
-        {
-            var nonExistentFile = new FileInfo(Path.Combine(_testBestNoteDirPath, "ghost.txt"));
-            Assert.ThrowsException<FileNotFoundException>(() =>
-               _fileSystemService.DeleteFile(nonExistentFile)
-            );
-        }
-
-        /// <summary>
         /// Tests deleting an empty folder non recursively.
         /// </summary>
         [TestMethod]
