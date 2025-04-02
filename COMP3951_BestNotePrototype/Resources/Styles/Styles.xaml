@@ -453,7 +453,7 @@
     <Style x:Key="PaneBorderStyle"
            TargetType="Border">
         <Setter Property="BackgroundColor" 
-                Value="{StaticResource Gray400}" />
+                Value="{StaticResource Gray400}" /> <!-- if you change this color you also have to change the color in TableOfContentBuilder for hte HTML body -->
 
         <Setter Property="Stroke"
                 Value="#474747" />
