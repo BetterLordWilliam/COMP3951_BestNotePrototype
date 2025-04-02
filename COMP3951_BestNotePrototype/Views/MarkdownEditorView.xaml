@@ -7,15 +7,13 @@
     x:Class="BestNote_3951.Views.MarkdownEditorView"
     x:DataType="viewmodels:MarkdownEditorViewModel">
     <Border Style="{StaticResource PaneBorderStyle}">
-        <Grid Padding="10" RowDefinitions="Auto,*">
-            <!-- text editor control, two way mode binding stores the editor text in the view model property -->
-            <Editor 
+        <!-- text editor control, two way mode binding stores the editor text in the view model property -->
+        <Editor 
                 x:Name="EditorControl"
                 Text="{Binding MarkdownText, Mode=TwoWay}"
                 AutoSize="Disabled"
                 VerticalOptions="FillAndExpand"
                 Grid.Row="1"
                 Placeholder="marky markdown..." />
-        </Grid>
     </Border>
 </ContentView>
