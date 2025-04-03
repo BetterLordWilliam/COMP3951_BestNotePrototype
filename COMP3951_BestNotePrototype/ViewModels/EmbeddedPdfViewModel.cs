@@ -211,7 +211,8 @@ namespace BestNote_3951.ViewModels
             try
             {
                 PdfPath = pdfPath;
-                PdfDocumentStream = File.OpenRead(pdfPath);
+                // PdfDocumentStream = File.OpenRead(pdfPath);
+                PdfDocumentStream = new FileStream(pdfPath, FileMode.Open, FileAccess.Read);
             }
             catch (Exception ex)
             {
@@ -252,8 +253,9 @@ namespace BestNote_3951.ViewModels
                 {
                     PdfName = Path.GetFileName(filePath);
                     PdfPath = filePath;
-                    PdfDocumentStream = File.OpenRead(message.Value);
-                    Thread.Sleep(50);
+                    // DocumentStream = File.OpenRead(message.Value);
+                    //penPDFFromPath(message.Value);
+                    // Thread.Sleep(50);
                 }
             });
         }

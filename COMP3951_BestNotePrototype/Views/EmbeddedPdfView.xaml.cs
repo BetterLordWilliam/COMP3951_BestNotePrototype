@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.PdfViewer;
 using Syncfusion.Maui.Popup;
 using BestNote_3951.Messages;
+using Syncfusion.Pdf.Graphics;
 
 
 /// <summary>
@@ -39,9 +40,17 @@ public partial class EmbeddedPdfView : ContentView
             vm.PropertyChanged += OnPropertyChanged;
         }
 
+        // Open the specified PDF
+        WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
+        {
+
+                pdfViewer.LoadDocument(new FileStream(message.Value, FileMode.Open, FileAccess.Read));
+
+        });
+
         WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
         {
-            
+            //pdfViewer.LoadDocument();
             if (pdfViewer.PageCount > 0 && message.Value > 0)
             {
                 if (pdfViewer.GoToPageCommand.CanExecute(message.Value))
