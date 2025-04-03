@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using BestNote_3951.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.PdfViewer;
+using Syncfusion.Maui.Popup;
 using BestNote_3951.Messages;
 
 
