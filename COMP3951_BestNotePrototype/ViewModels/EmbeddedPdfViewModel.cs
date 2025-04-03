@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using BestNote_3951.Models;
 using Syncfusion.Maui.PdfViewer;
-using Syncfusion.Maui.Popup;
 using CommunityToolkit.Maui.Views;
 using BestNote_3951.Services;
 using CommunityToolkit.Mvvm.Messaging;

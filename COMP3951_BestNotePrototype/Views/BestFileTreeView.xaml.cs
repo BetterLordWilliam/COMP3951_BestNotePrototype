@@ -5,37 +5,55 @@ namespace BestNote_3951.Views;
 
 public partial class BestFileTreeView : ContentView
 {
-    public static readonly BindableProperty TreeViewItemProperty =
-		BindableProperty.Create(nameof(TreeViewItem), typeof(ITreeViewItem), typeof(BestFileTreeView), propertyChanged: OnBestFileChanged);
-
-    public ITreeViewItem TreeViewItem
-	{
-		get { return (ITreeViewItem)GetValue(TreeViewItemProperty);  }
-		set { SetValue(TreeViewItemProperty, value); }
-	}
-
 	public BestFileTreeView()
 	{
         InitializeComponent();
 	}
-
-    private static void OnBestFileChanged(BindableObject bindable, object oldValue, object newValue)
+    
+    /// <summary>
+    /// Event handler for the rename context button being clicked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnRenameClicked(object sender, EventArgs e)
     {
-        var view = (BestFileTreeView)bindable;
-        if (newValue is ITreeViewItem file)
+        if (!((BestFileTreeItemViewModel)BindingContext).TreeViewItem.CanRename)
+            return;
+
+        // Only invoke the command if the item can be renamed
+        if (!fileTreeRename.IsVisible)
         {
-            view.BindingContext = file;
+            Debug.WriteLine("Rename clicked.");
+            fileTreeRename.IsVisible = true;
+            fileTreeName.IsVisible = false;
+            fileTreeRename.Focus();
+            fileTreeRename.Completed += OnRenameComplete;
         }
     }
 
-    private void OnToggleClicked(object sender, EventArgs e)
+    /// <summary>
+    /// Event handler for the rename completed action.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnRenameComplete(object sender, EventArgs e)
     {
-        // Only invoke the command if the tree is not visible
-        if (!SubFilesCollectionView.IsVisible && TreeViewItem.CanHaveChildren)
+        if (sender is Entry renameEntry)
         {
-            Debug.WriteLine("Clicked and condition validated.");
-            ((FileStructureViewModel)((FileStructureView)fileTreeItem.BindingContext).BindingContext).RetrieveContents(TreeViewItem);
+            Debug.WriteLine($"Item renamed to {renameEntry.Text}");
+            fileTreeRename.IsVisible = false;
+            fileTreeName.IsVisible = true;
+            fileTreeRename.Completed -= OnRenameComplete;
         }
-        SubFilesCollectionView.IsVisible = !SubFilesCollectionView.IsVisible;
+    }
+
+    /// <summary>
+    /// Event handler for the dragged over action.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void DraggedOver(object sender, DragEventArgs e)
+    {
+
     }
 }

@@ -7,22 +7,25 @@
              xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
              xmlns:models="clr-namespace:BestNote_3951.Models.FileSystem"
              x:Class="BestNote_3951.Views.BestFileTreeView"
-             x:DataType="models:ITreeViewItem"
+             x:DataType="viewmodels:BestFileTreeItemViewModel"
              x:Name="this">
 
 
         
     
     <!-- Define the tree view item templates -->
+    <!-- Update: This is no longer used as I have implemented a full on view model for these items. -->
     <ContentView.Resources>
         <DataTemplate x:Key="FileTreeItem"
-                      x:DataType="models:IBNFile">
-            <views:BestFileTreeView TreeViewItem="{Binding .}"/>
+                      x:DataType="viewmodels:BestFileTreeItemViewModel">
+            <views:BestFileTreeView BindingContext="{Binding .}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="FolderTreeItem"
-                      x:DataType="models:IBNFolder">
-            <views:BestFileTreeView TreeViewItem="{Binding .}"/>
+                      x:DataType="viewmodels:BestFileTreeItemViewModel">
+            <VerticalStackLayout>
+                <views:BestFileTreeView BindingContext="{Binding .}"/>
+            </VerticalStackLayout>
         </DataTemplate>
 
         <DataTemplate x:Key="TempTreeItem">
@@ -39,42 +42,76 @@
     <VerticalStackLayout>
         <!-- File Information -->
         <HorizontalStackLayout
-                               Margin="{Binding IndentationPadding}"
+                               Margin="{Binding TreeViewItem.IndentationPadding}"
                                HeightRequest="20">
-            <Image Source="{Binding ImageIcon}" />
-            <!--<Entry Placeholder="Item name..." HeightRequest="20" MinimumHeightRequest="20" FontSize="5" VerticalTextAlignment="Center" />-->
-            <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
-            <Label x:Name="fileTreeItem" IsEnabled="False" IsVisible="False" BindingContext="{Binding ., Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}" />
+            <Image Source="{Binding TreeViewItem.ImageIcon}" />
+
+            <Entry
+                x:Name="fileTreeRename"
+                Placeholder="Item name..."
+                HeightRequest="20"
+                MinimumHeightRequest="30"
+                FontSize="10"
+                VerticalTextAlignment="Center"
+                IsVisible="False" 
+                Text="{Binding RenameItemText}"
+                ReturnCommand="{Binding RenameItemCommand}"
+                ReturnCommandParameter="{Binding RenameItemText}" />
+            
+            <Label 
+                x:Name="fileTreeName"
+                Text="{Binding TreeViewItem.ItemName}"
+                IsVisible="True"
+                VerticalTextAlignment="Center" />
+
             <HorizontalStackLayout.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnToggleClicked" />
+                <TapGestureRecognizer Command="{Binding RetrieveContentsCommand}" />
+                <DragGestureRecognizer
+                    DragStartingCommand="{Binding x:DataType='viewmodels:FileStructureViewModel', Source={RelativeSource AncestorType={x:Type viewmodels:FileStructureViewModel}}, Path=DragCommand}"
+                    DragStartingCommandParameter="{Binding .}"/>
+                <DropGestureRecognizer
+                    DropCommand="{Binding DropCommand}"
+                    DropCommandParameter="{Binding x:DataType='viewmodels:FileStructureViewModel', Source={RelativeSource AncestorType={x:Type viewmodels:FileStructureViewModel}}, Path=Dragger}" />
             </HorizontalStackLayout.GestureRecognizers>
-            <!-- Context View To add File to this node -->
-            <FlyoutBase.ContextFlyout>
-                <MenuFlyout>
-                    <MenuFlyoutItem
-                    IsEnabled="False"
-                    Text="Rename Item" />
-                    <MenuFlyoutItem
-                    IsEnabled="{Binding CanHaveChildren}"
-                    Text="Add Subfolder"
-                    Command="{Binding BindingContext.AddFolderCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
-                    CommandParameter="{Binding .}" />
-                    <MenuFlyoutItem
-                    IsEnabled="{Binding CanHaveChildren}"
-                    Text="Add Note"
-                    Command="{Binding BindingContext.AddFileCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
-                    CommandParameter="{Binding .}" />
-                </MenuFlyout>
-            </FlyoutBase.ContextFlyout>
+            
         </HorizontalStackLayout>
 
         <!-- Recursive Subfile List -->
         <CollectionView 
             x:Name="SubFilesCollectionView"
-            IsEnabled="{Binding CanHaveChildren}"
-            IsVisible="{Binding CanHaveChildren}"
-            ItemsSource="{Binding SafeChildren}"
-            ItemTemplate="{StaticResource TreeViewItemTemplateSelector}" />
+            IsEnabled="{Binding TreeViewItem.CanHaveChildren}"
+            IsVisible="{Binding Expanded}"
+            ItemsSource="{Binding TreeViewItem.SafeChildren}" >
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <views:BestFileTreeView BindingContext="{Binding .}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+        </CollectionView>
+
+        <!-- Context View To add File to this node -->
+        <FlyoutBase.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem
+                    IsEnabled="{Binding TreeViewItem.CanRename}"
+                    Clicked="OnRenameClicked"
+                    Text="Rename Item" />
+                <MenuFlyoutItem
+                    IsEnabled="{Binding TreeViewItem.CanHaveChildren}"
+                    Text="Add Subfolder"
+                    Command="{Binding AddFolderCommand}" />
+                <MenuFlyoutItem
+                    IsEnabled="{Binding TreeViewItem.CanHaveChildren}"
+                    Text="Add Note"
+                    Command="{Binding AddFileCommand}" />
+                <MenuFlyoutItem
+                    IsEnabled="True"
+                    Text="Delete"
+                    Command="{Binding DeleteCommand}" />
+            </MenuFlyout>
+        </FlyoutBase.ContextFlyout>
     </VerticalStackLayout>
 
 

@@ -34,7 +34,7 @@ namespace BestNote_3951.ViewModels
         /// Property for the webviewsource that displays the rendered markdown.
         /// </summary>
         [ObservableProperty]
-        private HtmlWebViewSource webViewSource;
+        public HtmlWebViewSource webViewSource;
 
         public MarkdownRendererViewModel()
         {

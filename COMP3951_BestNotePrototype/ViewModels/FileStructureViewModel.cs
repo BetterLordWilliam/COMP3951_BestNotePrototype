@@ -1,10 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Windows.Input;
 using BestNote_3951.Models.FileSystem;
 using BestNote_3951.Services;
 using Syncfusion.Pdf;
+using System.IO;
+using System.Net.Http.Headers;
+using System.ComponentModel;
+using System.Reflection.Metadata;
 
 ///
 /// Will Otterbein
@@ -19,90 +24,39 @@ namespace BestNote_3951.ViewModels
     /// </summary>
     public partial class FileStructureViewModel : ObservableObject
     {
-        private readonly FileManagerService fileManagerService;
-        private readonly AlertService alertService;
+        private readonly FileManagerService FileManagerService;
+        private readonly AlertService AlertService;
 
         [ObservableProperty]
-        public partial string TestingInputName { get; set; }
+        public partial BestFileTreeItemViewModel? Dragger { get; set; } = null;
 
         /// <summary>
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
+        [ObservableProperty]
+        public partial BestFileTreeItemViewModel Root { get; private set; }
 
-        public ObservableCollection<ITreeViewItem> FileSystem { get; private set;  } = new ObservableCollection<ITreeViewItem>();
-        public ObservableCollection<string> FileNames { get; private set; } = new ObservableCollection<string>();
-
-        public FileStructureViewModel(AlertService als, FileManagerService bfs)
-        {
+        /// <summary>
+        /// Initializes the file structure view model with.
+        /// </summary>
+        /// <param name="AlertService"></param>
+        /// <param name="FileManagerService"></param>
+        public FileStructureViewModel(
+            AlertService AlertService,
+            FileManagerService FileManagerService
+        ) {
             // FileSystem = GenerateSource();
-            fileManagerService = bfs;
-            alertService = als;
-            TestingInputName = "Will Testing Item";
+            this.FileManagerService = FileManagerService;
+            this.AlertService = AlertService;
 
-            LoadFileSystemContents();
-        }
+            // Root folder
+            var RootFolder = new WindowsFolder(FileManagerService.BestNoteDirectory, FileManagerService);
+            var RootFolderTreeItem = new FolderTreeItem(0, Thickness.Zero, RootFolder);
 
-        /// <summary>
-        /// Load file system contents, initial method and on refresh.
-        /// </summary>
-        /// <param name="folderName"></param>
-        /// <param name="parentPath"></param>
-        private void LoadFileSystemContents(string folderName = "", string? parentPath = null)
-        {
-            FileSystem.Clear();
+            Root = new BestFileTreeItemViewModel(RootFolderTreeItem, FileManagerService, AlertService);
 
-            var contents = fileManagerService.GetDirectoryInfoContents(folderName, parentPath);
-            foreach (var item in contents)
-            {
-                FileSystem.Add(CreateTreeItem(item, 0, new Thickness(0)));
-            }
-        }
-        
-        /// <summary>
-        /// Load the children of a specfic parent node, expand action on a IBNFolder item.
-        /// </summary>
-        /// <param name="parent"></param>
-        private void LoadChildren(FolderTreeItem parent)
-        {
-            parent.Children.Clear();
-
-            var contents = fileManagerService.GetDirectoryInfoContents(parent.DirectoryInfo.Name, parent.DirectoryInfo.Parent?.FullName);
-            int childLevel = parent.ItemLevel + 1;
-            Thickness childPadding = parent.IndentationPadding + new Thickness(20, 0, 0, 0);
-
-            foreach (var item in contents)
-            {
-                parent.Children.Add(CreateTreeItem(item, childLevel, childPadding));
-            }
-        }
-
-        private ITreeViewItem CreateTreeItem(FileSystemInfo fileSystemInfo, int itemLevel, Thickness indentationPadding)
-        {
-            if (fileSystemInfo is FileInfo fileInfo)
-            {
-                return CreateFileTreeItem(fileInfo, itemLevel, indentationPadding);
-            }
-            else if (fileSystemInfo is DirectoryInfo directoryInfo)
-            {
-                return CreateFolderTreeItem(directoryInfo, itemLevel, indentationPadding);
-            }
-            else
-            {
-                throw new ArgumentException("Unknown FileSystemInfo type");
-            }
-        }
-
-        private ITreeViewItem CreateFileTreeItem(FileInfo fileInfo, int itemLevel, Thickness indentationPadding)
-        {
-            IBNFile bnFile = new MarkdownFile(fileInfo, fileManagerService);
-            return new FileTreeItem(itemLevel, indentationPadding, bnFile);
-        }
-
-        private ITreeViewItem CreateFolderTreeItem(DirectoryInfo directoryInfo, int itemLevel, Thickness indentationPadding)
-        {
-            IBNFolder bnFolder = new WindowsFolder(directoryInfo, fileManagerService);
-            return new FolderTreeItem(itemLevel, indentationPadding, bnFolder);
+            FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, AlertService, Root);
         }
 
         [RelayCommand]
@@ -111,40 +65,34 @@ namespace BestNote_3951.ViewModels
             // TODO: open file logic
         }
 
+        /// <summary>
+        /// Sets the value of the dragged item
+        /// </summary>
+        /// <param name="Dragged"></param>
         [RelayCommand]
-        public void RetrieveContents(ITreeViewItem? parent)
+        public void Drag(BestFileTreeItemViewModel Dragged)
         {
-            Debug.WriteLine($"Retrieve file called. {parent is null}");
-            if (parent == null)
-            {
-                LoadFileSystemContents();
-                return;
-            }
-            if (parent is FolderTreeItem parentFolder)
-            {
-                LoadChildren(parentFolder);
-                return;
-            }
-            else
-            {
-                Debug.WriteLine($"Retrieve file called. Unknown parent type {parent is null}");
-            }
+            Debug.WriteLine($"Dragged item: {Dragged.TreeViewItem.ItemName}");
+            Dragger = Dragged;
         }
 
+        /// <summary>
+        /// Returns the dragger reference to null.
+        /// </summary>
         [RelayCommand]
-        public void AddFile(ITreeViewItem? parent)
+        public void EndDrag()
         {
-            // AddItem(parent, CreateFileBestFile);
-            if (parent == null)
-                return;
+            Dragger = null;
         }
 
+        /// <summary>
+        /// TEMP, show an alert message.
+        /// </summary>
+        /// <param name="AlertMessage"></param>
         [RelayCommand]
-        public void AddFolder(ITreeViewItem? parent)
+        public void ShowAlertMessage(string AlertMessage)
         {
-            // AddItem(parent, CreateFolderBestFile);
-            if (parent == null)
-                return;
+            AlertService.ShowAlertAsync("Info", AlertMessage);
         }
     }
 }
