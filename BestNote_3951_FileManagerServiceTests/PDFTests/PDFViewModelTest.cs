@@ -21,7 +21,7 @@ public class PDFViewModelTest
     [TestInitialize]
     public void TestInitialize()
     {
-        pdfViewModel = new EmbeddedPdfViewModel(new BestNote_3951.Services.FileManagerService());
+        pdfViewModel = new EmbeddedPdfViewModel(new BestNote_3951.Services.AlertService(), new BestNote_3951.Services.FileManagerService());
     }
 
     /// <summary>

@@ -15,7 +15,8 @@
     x:DataType="viewmodels:FileStructureViewModel"
     x:Name="this">
 
-    <Border Stroke="#2e2e2e">
+    <Border Stroke="#2e2e2e"
+            Style="{StaticResource PaneBorderStyle}" >
 
         <Grid RowDefinitions="Auto,*"
               VerticalOptions="Fill">
