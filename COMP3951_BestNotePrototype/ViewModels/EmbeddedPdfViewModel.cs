@@ -36,6 +36,7 @@ namespace BestNote_3951.ViewModels
     {
 
         private readonly FileManagerService fileManagerService;
+        private readonly AlertService alertService;
 
         /// <summary>
         /// Gets and sets the stream of the currently loaded PDF document. Has a binding relationship
@@ -62,7 +63,32 @@ namespace BestNote_3951.ViewModels
         /// </summary>
         [ObservableProperty]
         public int _pageNum;
-       
+
+        /// <summary>
+        /// Property indicating whether the move PDF popup is open or not.
+        /// </summary>
+        [ObservableProperty]
+        public partial bool IsOpen { get; set; } = false;
+
+        /// <summary>
+        /// Opens a move popup confirmation dialog.
+        /// </summary>
+        [RelayCommand]
+        public void OpenMovePopup()
+        {
+            // IsOpen = true;
+            alertService.ShowConfirmation("Copy PDF to BestNote Resources", "Would you like to copy this PDF file to best notes resources directory?", (result =>
+            {
+                if (result)
+                {
+                    OpenDocumentAndCopy();
+                }
+                else
+                {
+                    OpenDocument();
+                }
+            }));
+        }
 
         /// <summary>
         /// Creates a new ResourceLink object and sends it to the views and view models that are registered
@@ -92,7 +118,7 @@ namespace BestNote_3951.ViewModels
         /// the Copy to Resources button in the PDF View.
         /// </summary>
         [RelayCommand]
-        async void OpenDocumentAndCopy()
+        public async Task OpenDocumentAndCopy()
         {
             FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
             {
@@ -116,7 +142,7 @@ namespace BestNote_3951.ViewModels
         /// PDF viewer. This method is binded to the No Thanks! button in the PDF View.
 	    /// </summary>
         [RelayCommand]
-	    async void OpenDocument()
+	    async Task OpenDocument()
 	    {
 		    FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
 		    {
@@ -209,12 +235,13 @@ namespace BestNote_3951.ViewModels
         /// specified FileManagerService object. Registers the MarkdownLinkClickedPathMessage to open the correct
         /// PDF when a Markdown link is clicked.
         /// </summary>
-        public EmbeddedPdfViewModel(FileManagerService bfs)
+        public EmbeddedPdfViewModel(AlertService alertService, FileManagerService bfs)
         {
             PageNum = 0;
             PdfPath = "";
             PdfName = "";
             fileManagerService = bfs;
+            this.alertService = alertService;
 
             // Open the specified PDF
             WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
