@@ -29,7 +29,7 @@ xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.M
                                    Grid.Row="0">
                 <Button x:Name="openFile"
                                  Margin="10,10,10,10"
-                                 Clicked ="showPopup_Clicked"
+                                 Command ="{Binding OpenMovePopupCommand}"
                                  HeightRequest="40"
                                  VerticalOptions="Center"
                                  Text="Open PDF"
@@ -43,14 +43,17 @@ xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.M
                                  WidthRequest="100" />
             </HorizontalStackLayout>
 
+            <!--
             <syncfusionPopup:SfPopup x:Name="popup" ShowFooter ="True" AppearanceMode="TwoButton" HeaderTitle="Copy to Resources" 
                                      Message="Would you like to copy the selected PDF to your BestNote Resources directory?"
                                      DeclineCommand="{Binding OpenDocumentCommand}"
-                                     AcceptCommand="{Binding OpenDocumentAndCopyCommand}" 
+                                     AcceptCommand="{Binding OpenDocumentAndCopyCommand}"
+                                     IsOpen="{Binding IsOpen}"
                                      AcceptButtonText="Copy to Resources" 
                                      DeclineButtonText="No Thanks!" >
 
             </syncfusionPopup:SfPopup>
+            -->
 
 
             <syncfusion:SfPdfViewer x:Name="pdfViewer"

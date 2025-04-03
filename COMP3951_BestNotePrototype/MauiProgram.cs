@@ -25,7 +25,6 @@ namespace BestNote_3951
 
 #if DEBUG
     		builder.Logging.AddDebug();
-            builder.ConfigureSyncfusionCore();
 #endif
 
             return builder.Build();

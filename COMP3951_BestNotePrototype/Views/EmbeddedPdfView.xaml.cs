@@ -123,8 +123,8 @@ public partial class EmbeddedPdfView : ContentView
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void showPopup_Clicked(object sender, EventArgs e)
-    {
-        popup.Show();
-    }
+    //private void showPopup_Clicked(object sender, EventArgs e)
+    //{
+    //    popup.Show(false);
+    //}
 }
