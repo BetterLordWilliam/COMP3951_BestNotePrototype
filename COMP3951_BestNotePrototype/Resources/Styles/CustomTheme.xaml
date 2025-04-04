@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BestNote_3951.Resources.Styles.CustomTheme">
+
+
+    <Color x:Key="Key_Primary_White">#397aab</Color>
+    <Color x:Key="Key_Primary_Tertiary">#9eab9a</Color> <!-- button color-->
+    <Color x:Key="Key_Secondary_Gray200">#dfeefb</Color>
+
+    <Color x:Key="Key_Gray200_Gray200">#dfeefb</Color>
+    <Color x:Key="Key_Gray200_Gray500">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_Gray600">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_Gray950">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_White">#C8C8C8</Color>
+    <Color x:Key="Key_Gray300_Gray600">#ACACAC</Color>
+    <Color x:Key="Key_Gray400_Gray500">#919191</Color>
+    <Color x:Key="Key_Gray600_White">#dfeefb</Color> <!-- text color for navbar-->
+    <Color x:Key="Key_Gray900_Gray200">#212121</Color>
+    <Color x:Key="Key_Gray950_Gray100">#141414</Color>
+    <Color x:Key="Key_Gray950_Gray200">#141414</Color>
+
+    <Color x:Key="Key_White_Gray100">#dfeefb</Color> <!-- button text-->
+    <Color x:Key="Key_White_Gray950">#16537e</Color>
+    <Color x:Key="Key_White_White">#16537e</Color>
+    <Color x:Key="Key_White_Black">#16537e</Color>
+    <Color x:Key="Key_White_OffBlack">#074e67</Color> <!-- background color of the app-->
+    <Color x:Key="Key_Pane_Color">#f4f3ef</Color> <!-- color of the view panes-->
+    <Color x:Key="Key_Black_White">#090101</Color>
+    <Color x:Key="Key_Black_SecondaryDarkText">#090101</Color>
+    <Color x:Key="Key_MidnightBlue_White">#190649</Color>
+    <Color x:Key="Key_Magenta_White">Magenta</Color>
+
+</ResourceDictionary>

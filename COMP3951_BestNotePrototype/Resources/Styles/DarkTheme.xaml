@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BestNote_3951.Resources.Styles.DarkTheme">
+
+    <!-- Key_LightMode_DarkMode, the key defines what should be there for
+light and dark mode to align with the OS themes-->
+
+    <Color x:Key="Key_Primary_White">White</Color>
+    <Color x:Key="Key_Primary_Tertiary">#2B0B98</Color>
+    <Color x:Key="Key_Secondary_Gray200">#C8C8C8</Color>
+
+    <Color x:Key="Key_Gray200_Gray200">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_Gray500">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_Gray600">#6E6E6E</Color>
+    <Color x:Key="Key_Gray200_Gray950">#141414</Color>
+    <Color x:Key="Key_Gray200_White">White</Color>
+    <Color x:Key="Key_Gray300_Gray600">#404040</Color>
+    <Color x:Key="Key_Gray400_Gray500">#6E6E6E</Color>
+    <Color x:Key="Key_Gray600_White">White</Color>
+    <Color x:Key="Key_Gray900_Gray200">#C8C8C8</Color>
+    <Color x:Key="Key_Gray950_Gray100">#E1E1E1</Color>
+    <Color x:Key="Key_Gray950_Gray200">#C8C8C8</Color>
+
+    <Color x:Key="Key_White_Gray100">#E1E1E1</Color>
+    <Color x:Key="Key_White_Gray950">#141414</Color>
+    <Color x:Key="Key_White_White">White</Color>
+    <Color x:Key="Key_White_Black">Black</Color>
+    <Color x:Key="Key_White_OffBlack">#1f1f1f</Color>
+    <Color x:Key="Key_Black_White">White</Color>
+    <Color x:Key="Key_Black_SecondaryDarkText">#9880e5</Color>
+    <Color x:Key="Key_MidnightBlue_White">White</Color>
+    <Color x:Key="Key_Magenta_White">White</Color>
+
+</ResourceDictionary>
