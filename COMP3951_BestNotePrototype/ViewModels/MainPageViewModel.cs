@@ -1,6 +1,9 @@
 ﻿using BestNote_3951.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using BestNote_3951.Resources.Styles;
+using CommunityToolkit.Mvvm.Messaging;
+using BestNote_3951.Messages;
 
 namespace BestNote_3951.ViewModels
 {
@@ -38,17 +41,33 @@ namespace BestNote_3951.ViewModels
             #endregion
         }
 
+
         [RelayCommand]
         private void SwitchTheme(string theme)
         {
-            if (theme == "Light")
+            var mergedDictionaries = Application.Current!.Resources.MergedDictionaries;
+
+            var toRemove = mergedDictionaries
+                .Where(md => md is LightTheme || md is DarkTheme || md is BlueTheme)
+                .ToList();
+
+            foreach (var dict in toRemove)
             {
-                Application.Current!.UserAppTheme = AppTheme.Light;
+                mergedDictionaries.Remove(dict);
             }
-            else if (theme == "Dark")
+
+            ResourceDictionary newTheme = theme switch
             {
-                Application.Current!.UserAppTheme = AppTheme.Dark;
-            }
+                "Light" => new LightTheme(),
+                "Dark" => new DarkTheme(),
+                "Blue" => new BlueTheme(),
+                "BlueDark" => new BlueThemeDark(),
+                _ => new LightTheme() 
+            };
+
+            mergedDictionaries.Add(newTheme);
+
+            WeakReferenceMessenger.Default.Send(new ThemeChangedMessage());
         }
     }
 }

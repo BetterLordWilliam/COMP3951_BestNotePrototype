@@ -24,8 +24,10 @@ namespace BestNote_3951.Services
             MarkdownPipeline pipeline          = App.Pipeline;
             MarkdownDocument doc               = Markdown.Parse(markdown, pipeline);
             IEnumerable<HeadingBlock> headings = doc.Descendants<HeadingBlock>();
-            Color color                        = (Color)Application.Current?.Resources["Key_Pane_Color"];
+            Color color                        = (Color)Application.Current!.Resources["Key_Pane_Color"];
             String paneColor                   = color.ToArgbHex(false);
+            color                              = (Color)Application.Current!.Resources["Key_Black_White"];
+            String textColor                   = color.ToArgbHex(false);
 
             int[] counters    = new int[7];
             int previousLevel = 0;
@@ -55,6 +57,7 @@ namespace BestNote_3951.Services
                 }
                 body {");
             toc.AppendFormat("background-color: {0};", paneColor);
+            toc.AppendFormat("color: {0};", textColor);
             toc.AppendLine(@"
                 }
             </style>");

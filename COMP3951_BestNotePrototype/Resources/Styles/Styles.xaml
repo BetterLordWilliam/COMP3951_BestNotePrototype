@@ -453,7 +453,7 @@
     <Style x:Key="PaneBorderStyle"
            TargetType="Border">
         <Setter Property="BackgroundColor" 
-                Value="{DynamicResource Key_Pane_Color}" /> <!-- if you change this color you also have to change the color in TableOfContentBuilder for hte HTML body -->
+                Value="{DynamicResource Key_Pane_Color}" />
 
         <Setter Property="Stroke"
                 Value="#474747" />
@@ -469,6 +469,4 @@
         <Setter Property="Padding"
                 Value="8" />
     </Style>
-
-
 </ResourceDictionary>

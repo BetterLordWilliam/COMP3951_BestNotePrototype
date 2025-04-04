@@ -23,10 +23,9 @@ namespace BestNote_3951.ViewModels
     /// 
     /// This defines the logic that displays the rendered markdown in the MarkdownView file.
     /// Registers the viewmodel with the MarkdownTextChanged messaged so that it can receive real-time
-    /// updates for the text change in the MarkdownEditor. 
+    /// updates for the text change in the MarkdownEditor.
     /// 
     /// Uses a webviewsource to display the rendered markdown.
-    /// 
     /// </summary>
     public partial class MarkdownRendererViewModel : ObservableObject
     {
@@ -34,7 +33,9 @@ namespace BestNote_3951.ViewModels
         /// Property for the webviewsource that displays the rendered markdown.
         /// </summary>
         [ObservableProperty]
-        public HtmlWebViewSource webViewSource;
+        private HtmlWebViewSource webViewSource;
+
+        private string _currentMarkdown = "";
 
         public MarkdownRendererViewModel()
         {
@@ -44,17 +45,34 @@ namespace BestNote_3951.ViewModels
             };
 
             WeakReferenceMessenger.Default.Register<MarkdownTextChangedMessage>(this, (recipient, message) =>
-            {         
-                string text = message.Value;
-                //Debug.WriteLine($"received the message: {text}");
+            {
+                string text      = message.Value;
+                _currentMarkdown = text;
+                // Debug.WriteLine($"received the message: {text}");
 
-                // markdig the text 
-                string? html = TableOfContentBuilder.TableOfContentizer(text);
+                // markdig the markdown
+                string html = TableOfContentBuilder.TableOfContentizer(text);
+        
 
                 WebViewSource = new HtmlWebViewSource { Html = html };
-                //Debug.WriteLine($"source HTML: {WebViewSource.Html}");
-            });
-        }
+                // Debug.WriteLine($"source HTML: {WebViewSource.Html}");
 
+
+            });
+
+            WeakReferenceMessenger.Default.Register<ThemeChangedMessage>(this, async (recipient, message) =>
+            {
+                string text = _currentMarkdown;
+                // Debug.WriteLine($"received the message: {text}");
+
+                // markdig the markdown
+                string html = TableOfContentBuilder.TableOfContentizer(text);
+
+                WebViewSource = new HtmlWebViewSource { Html = html };
+                // Debug.WriteLine($"source HTML: {WebViewSource.Html}");
+            });
+
+
+        }
     }
 }

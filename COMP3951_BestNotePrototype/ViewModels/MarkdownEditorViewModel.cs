@@ -37,6 +37,11 @@ namespace BestNote_3951.ViewModels
                 WeakReferenceMessenger.Default.Send(new InsertAtCursorMessage(link));
             });
 
+            WeakReferenceMessenger.Default.Register<ThemeChangedMessage>(this, async (recipient, message) =>
+            {
+
+            });
+
             WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(markdownText));
         }
 

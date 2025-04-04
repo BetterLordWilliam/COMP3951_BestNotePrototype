@@ -19,6 +19,13 @@
             <MenuFlyoutItem Text="Dark"
                             Command="{Binding SwitchThemeCommand}"
                             CommandParameter="Dark" />
+            <MenuFlyoutItem Text="Blue"
+                            Command="{Binding SwitchThemeCommand}"
+                            CommandParameter="Blue" />
+            <MenuFlyoutItem Text="Blue Dark"
+                            Command="{Binding SwitchThemeCommand}"
+                            CommandParameter="BlueDark" />
+
 
         </MenuBarItem>
     </ContentPage.MenuBarItems>

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui;
+﻿using BestNote_3951.Models;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 
@@ -24,7 +25,7 @@ namespace BestNote_3951
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
