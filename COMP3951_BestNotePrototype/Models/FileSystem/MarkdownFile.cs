@@ -61,13 +61,25 @@ public class MarkdownFile : IBNFile, IBNWritable, IBNReadable
         _fileManagerService.DeleteFile(FileInfo);
     }
 
+    /// <summary>
+    /// Reads the contents of the file as a UTF8 string.
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public string ReadFileContents()
     {
-        return "";
+        string Content = File.ReadAllText(fileInfo.FullName);
+        return Content;
     }
 
+    /// <summary>
+    /// Takes a string which represents the new contents of the file.
+    /// 
+    /// Converts these contents to a UTF-8 string and writes the contents to the file.
+    /// </summary>
+    /// <param name="Content"></param>
     public void WriteToFile(string Content)
     {
-        
+        File.WriteAllText(FileInfo.FullName, Content);
     }
 }
