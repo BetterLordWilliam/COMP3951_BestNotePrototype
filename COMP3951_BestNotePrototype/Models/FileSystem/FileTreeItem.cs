@@ -79,4 +79,22 @@ public partial class FileTreeItem : TreeViewItemBase, IBNFile
     {
         _sourceFile.Delete();
     }
+
+    /// <summary>
+    /// Reads contents of file.
+    /// </summary>
+    /// <returns></returns>
+    public string ReadFileContents()
+    {
+        return _sourceFile.ReadFileContents();
+    }
+
+    /// <summary>
+    /// Writes contents to file.
+    /// </summary>
+    /// <param name="Content"></param>
+    public void WriteToFile(string Content)
+    {
+        _sourceFile.WriteToFile(Content);
+    }
 }

@@ -1,0 +1,28 @@
+Messager
+
+`IMessenger` interface describes the publish-subscribe pattern allowing message-based communication between components that are inconvenient to link by object and type references.
+
+`CommunityToolkit.Mvvm` package (we are good)
+
+User `Messenger` instead of `MessagingCenter` class
+
+- Multi-cast publisher subscriber message pattern
+- Multiple publishers publishing messages
+- Subscribers listening to messages
+
+# WeakReferenceMessenger
+
+Implementation used by `WeakReferenceMessenger.Default`
+
+## Define a Message
+
+```
+public class SomethingHappenedMessage : ValueChanged<T>
+{
+	public SomethingHappenedMessage(T thing) : base(thing)
+}
+```
+
+- T any type needed to pass data.
+- Publishers and observers can expect messages of this type
+

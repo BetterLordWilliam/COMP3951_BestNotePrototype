@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Markdig.Extensions.SelfPipeline;
+using CommunityToolkit.Mvvm.Messaging;
+using BestNote_3951.Messages;
 
 ///
 /// Will Otterbein
@@ -221,6 +223,32 @@ namespace BestNote_3951.ViewModels
             {
                 AlertService.ShowAlertAsync("Action Could Not Be Complete", "Could not move item to the desired location.");
                 Debug.WriteLine($"Exception in the file system {ex}");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        [RelayCommand]
+        public void OpenFile()
+        {
+            // If the item is indeed a file
+            if (TreeViewItem is null || TreeViewItem is not FileTreeItem)
+                return;
+
+            Debug.WriteLine($"Test Trigger on double-click.");
+
+            try
+            {
+                // IBNFile sourceFile = (TreeViewItem as FileTreeItem).source
+
+                // Send message that a file is being opened, attach the IBNFile object.
+                WeakReferenceMessenger.Default.Send<FileOpenedMessage>(new FileOpenedMessage(TreeViewItem as FileTreeItem));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Something has gone terribly wrong!");
             }
         }
     }
