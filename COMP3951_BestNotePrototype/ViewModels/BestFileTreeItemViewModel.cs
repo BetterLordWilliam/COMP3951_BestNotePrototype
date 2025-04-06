@@ -244,7 +244,7 @@ namespace BestNote_3951.ViewModels
                 // IBNFile sourceFile = (TreeViewItem as FileTreeItem).source
 
                 // Send message that a file is being opened, attach the IBNFile object.
-                WeakReferenceMessenger.Default.Send<FileOpenedMessage>(new FileOpenedMessage(TreeViewItem as FileTreeItem));
+                WeakReferenceMessenger.Default.Send<FileOpenedMessage>(new FileOpenedMessage((FileTreeItem)TreeViewItem));
             }
             catch (Exception e)
             {
