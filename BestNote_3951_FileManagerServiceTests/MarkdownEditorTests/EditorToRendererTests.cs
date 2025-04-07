@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BestNote_3951.ViewModels;
 using BestNote_3951.Messages;
+using BestNote_3951.Services;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace BestNote_3951_Tests.MarkdownEditorTests
@@ -18,7 +19,7 @@ namespace BestNote_3951_Tests.MarkdownEditorTests
         public void ChangingMarkdownText_SendsMarkdownTextChangedMessage()
         {
             // Arrange
-            var vm = new MarkdownEditorViewModel();
+            var vm = new MarkdownEditorViewModel(new AlertService());
             string? receivedMarkdown = null;
 
             WeakReferenceMessenger.Default.Register<MarkdownTextChangedMessage>(this,

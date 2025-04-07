@@ -31,7 +31,7 @@ namespace BestNote_3951.Models.FileSystem
     /// <summary>
     /// Best note tree view file base type.
     /// </summary>
-    public interface IBNFile
+    public interface IBNFile : IBNReadable, IBNWritable
     {
         FileInfo FileInfo { get; set; }
         void Rename(string NewFileName);
