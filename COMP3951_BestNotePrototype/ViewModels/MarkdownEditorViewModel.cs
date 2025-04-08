@@ -38,7 +38,7 @@ namespace BestNote_3951.ViewModels
         /// Property indicating the saved status of the document.
         /// </summary>
         [ObservableProperty]
-        public partial string Saved { get; set; } = UNSAVED;
+        public partial string Saved { get; set; } = SAVED;
 
         public MarkdownEditorViewModel(AlertService AlertService)
         {
