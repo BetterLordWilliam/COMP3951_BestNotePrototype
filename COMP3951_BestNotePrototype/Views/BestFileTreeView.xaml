@@ -3,50 +3,119 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:BestNote_3951.Views"
+             xmlns:templateselectors="clr-namespace:BestNote_3951.Views.TemplateSelectors"
              xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
+             xmlns:models="clr-namespace:BestNote_3951.Models.FileSystem"
              x:Class="BestNote_3951.Views.BestFileTreeView"
+             x:DataType="viewmodels:BestFileTreeItemViewModel"
              x:Name="this">
+
+
+    <!-- Gesture Recognizer Docs -->
+    <!-- Drag: https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/gestures/drag-and-drop?view=net-maui-9.0&tabs=windows -->
+    <!-- Tap: https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/gestures/tap?view=net-maui-9.0 -->
+    
+    <!-- Define the tree view item templates -->
+    <!-- Update: This is no longer used as I have implemented a full on view model for these items. -->
+    <ContentView.Resources>
+        <DataTemplate x:Key="FileTreeItem"
+                      x:DataType="viewmodels:BestFileTreeItemViewModel">
+            <views:BestFileTreeView BindingContext="{Binding .}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FolderTreeItem"
+                      x:DataType="viewmodels:BestFileTreeItemViewModel">
+            <VerticalStackLayout>
+                <views:BestFileTreeView BindingContext="{Binding .}"/>
+            </VerticalStackLayout>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TempTreeItem">
+            <Entry Placeholder="New Item Name..." />
+        </DataTemplate>
+
+        <templateselectors:TreeViewItemTemplateSelector x:Key="TreeViewItemTemplateSelector"
+            FileTemplate="{StaticResource FileTreeItem}"
+            FolderTemplate="{StaticResource FolderTreeItem}"
+            TemporaryTemplate="{StaticResource TempTreeItem}" />
+    </ContentView.Resources>
+
 
     <VerticalStackLayout>
         <!-- File Information -->
-        <HorizontalStackLayout Margin="{Binding IndentationPadding}"
+        <HorizontalStackLayout
+                               Margin="{Binding TreeViewItem.IndentationPadding}"
                                HeightRequest="20">
-            <Image Source="{Binding ImageIcon}" />
-            <!--<Entry Placeholder="Item name..." HeightRequest="20" MinimumHeightRequest="20" FontSize="5" VerticalTextAlignment="Center" />-->
-            <Label Text="{Binding ItemName}" VerticalTextAlignment="Center" />
-            <Label x:Name="fileTreeItem" IsEnabled="False" IsVisible="False" BindingContext="{Binding ., Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}" />
+            <Image Source="{Binding TreeViewItem.ImageIcon}" />
+
+            <Entry
+                x:Name="fileTreeRename"
+                Placeholder="Item name..."
+                HeightRequest="20"
+                MinimumHeightRequest="30"
+                FontSize="10"
+                VerticalTextAlignment="Center"
+                IsVisible="False" 
+                Text="{Binding RenameItemText}"
+                ReturnCommand="{Binding RenameItemCommand}"
+                ReturnCommandParameter="{Binding RenameItemText}" />
+            
+            <Label 
+                x:Name="fileTreeName"
+                Text="{Binding TreeViewItem.ItemName}"
+                IsVisible="True"
+                VerticalTextAlignment="Center" />
+
             <HorizontalStackLayout.GestureRecognizers>
-                <TapGestureRecognizer Tapped="OnToggleClicked" />
+                <TapGestureRecognizer Command="{Binding RetrieveContentsCommand}" />
+                <TapGestureRecognizer Command="{Binding OpenFileCommand}" NumberOfTapsRequired="2" />
+                <DragGestureRecognizer
+                    DragStartingCommand="{Binding x:DataType='viewmodels:FileStructureViewModel', Source={RelativeSource AncestorType={x:Type viewmodels:FileStructureViewModel}}, Path=DragCommand}"
+                    DragStartingCommandParameter="{Binding .}"/>
+                <DropGestureRecognizer
+                    DropCommand="{Binding DropCommand}"
+                    DropCommandParameter="{Binding x:DataType='viewmodels:FileStructureViewModel', Source={RelativeSource AncestorType={x:Type viewmodels:FileStructureViewModel}}, Path=Dragger}" />
             </HorizontalStackLayout.GestureRecognizers>
+            
         </HorizontalStackLayout>
 
         <!-- Recursive Subfile List -->
-        <CollectionView x:Name="SubFilesCollectionView" IsVisible="True" ItemsSource="{Binding SubFiles}">
+        <CollectionView 
+            x:Name="SubFilesCollectionView"
+            IsEnabled="{Binding TreeViewItem.CanHaveChildren}"
+            IsVisible="{Binding Expanded}"
+            ItemsSource="{Binding TreeViewItem.SafeChildren}" >
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <views:BestFileTreeView BestFile="{Binding .}"/>
+                    <views:BestFileTreeView BindingContext="{Binding .}" />
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+            
         </CollectionView>
-        
+
         <!-- Context View To add File to this node -->
         <FlyoutBase.ContextFlyout>
             <MenuFlyout>
                 <MenuFlyoutItem
-                    IsEnabled="False"
+                    IsEnabled="{Binding TreeViewItem.CanRename}"
+                    Clicked="OnRenameClicked"
                     Text="Rename Item" />
                 <MenuFlyoutItem
-                    IsEnabled="{Binding Parent}"
+                    IsEnabled="{Binding TreeViewItem.CanHaveChildren}"
                     Text="Add Subfolder"
-                    Command="{Binding BindingContext.AddFolderCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
-                    CommandParameter="{Binding .}" />
+                    Command="{Binding AddFolderCommand}" />
                 <MenuFlyoutItem
-                    IsEnabled="{Binding Parent}"
+                    IsEnabled="{Binding TreeViewItem.CanHaveChildren}"
                     Text="Add Note"
-                    Command="{Binding BindingContext.AddFileCommand, Source={RelativeSource AncestorType={x:Type views:FileStructureView}}}"
-                    CommandParameter="{Binding .}" />
+                    Command="{Binding AddFileCommand}" />
+                <MenuFlyoutItem
+                    IsEnabled="True"
+                    Text="Delete"
+                    Command="{Binding DeleteCommand}" />
             </MenuFlyout>
         </FlyoutBase.ContextFlyout>
     </VerticalStackLayout>
+
 
 </ContentView>

@@ -1,10 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Windows.Input;
-using Syncfusion.Maui.TreeView;
-using BestNote_3951.Models;
+using BestNote_3951.Models.FileSystem;
 using BestNote_3951.Services;
+using Syncfusion.Pdf;
+using System.IO;
+using System.Net.Http.Headers;
+using System.ComponentModel;
+using System.Reflection.Metadata;
 
 ///
 /// Will Otterbein
@@ -19,159 +24,75 @@ namespace BestNote_3951.ViewModels
     /// </summary>
     public partial class FileStructureViewModel : ObservableObject
     {
-        private readonly FileManagerService fileManagerService;
-        private readonly AlertService alertService;
-
-        private delegate BestFile? CreateBestFile(BestFile? parent);
+        private readonly FileManagerService FileManagerService;
+        private readonly AlertService AlertService;
 
         [ObservableProperty]
-        public string testingInputName;
+        public partial BestFileTreeItemViewModel? Dragger { get; set; } = null;
 
         /// <summary>
         /// Files property is an ObservableCollection of BestFiles. ObservableCollection is part of the MVVM toolkit and it 
         /// allows the View to automatically be notified when items are added/removed/updated.
         /// </summary>
+        [ObservableProperty]
+        public partial BestFileTreeItemViewModel Root { get; private set; }
 
-        public ObservableCollection<BestFile> FileSystem { get; private set;  } = new ObservableCollection<BestFile>();
-        public ObservableCollection<string> FileNames { get; private set; } = new ObservableCollection<string>();
-
-        public FileStructureViewModel(AlertService als, FileManagerService bfs)
-        {
+        /// <summary>
+        /// Initializes the file structure view model with.
+        /// </summary>
+        /// <param name="AlertService"></param>
+        /// <param name="FileManagerService"></param>
+        public FileStructureViewModel(
+            AlertService AlertService,
+            FileManagerService FileManagerService
+        ) {
             // FileSystem = GenerateSource();
-            fileManagerService = bfs;
-            alertService = als;
-            TestingInputName = "Will Testing Item";
+            this.FileManagerService = FileManagerService;
+            this.AlertService = AlertService;
 
-            LoadFileSystemContents();
+            // Root folder
+            var RootFolder = new WindowsFolder(FileManagerService.BestNoteDirectory, FileManagerService);
+            var RootFolderTreeItem = new FolderTreeItem(0, Thickness.Zero, RootFolder);
+
+            Root = new BestFileTreeItemViewModel(RootFolderTreeItem, FileManagerService, AlertService);
+
+            FileStructureViewUtils.LoadFileSystemObjects(FileManagerService, AlertService, Root);
         }
 
-        /// <summary>
-        /// Load files/folders from the system.
-        /// </summary>
-        /// <param name="bfParent"></param>
-        private void LoadFileSystemContents(BestFile? bfParent = null)
-        {
-            try
-            {
-                // Get details of where the file should go
-                IReadOnlyCollection<BestFile> contents;
-                ObservableCollection<BestFile> destination;
-                if (bfParent is null)
-                {
-                    contents = fileManagerService.GetFolderContents();
-                    FileSystem.Clear();
-                    destination = FileSystem;
-                }
-                else
-                {
-                    contents = fileManagerService.GetFolderContents(parentPath: bfParent.DirectoryInfo.FullName);
-                    bfParent.SubFiles.Clear();
-                    destination = bfParent.SubFiles;
-                }
-                if (contents is null)
-                    return;
-
-                // Add to either filesystem toplevel or subfiles
-                foreach (BestFile bf in contents)
-                {
-                    bf.Level = bfParent?.Level + 10 ?? 0; 
-                    destination.Add(bf);
-                }
-            }
-            catch (Exception e)
-            {
-                string message = "Startup action failed.\n\nSystem contents could not be loaded.";
-#if DEBUG
-                message = $"Startup action failed.\n\n{e}\n\nSystem contents could not be loaded.";
-#endif
-                alertService.ShowAlertAsync("Error", message);
-                TestingInputName = "";
-                Debug.WriteLine($"Exception occured {e}");
-            }
-        }
-
-        private void AddItem(BestFile? bfParent, CreateBestFile cbf)
-        {
-            Debug.WriteLine("Add item called. ");
-
-            try
-            {
-                if (string.IsNullOrEmpty(TestingInputName))
-                    throw new Exception("Empty item name");
-
-                BestFile? bf = cbf(bfParent);
-
-                if (bf is null)
-                    return;
-
-                if (bfParent is not null)
-                {
-                    bf.Level = bfParent.Level + 10;
-                    bfParent.SubFiles.Add(bf);
-                }
-                else
-                {
-                    FileSystem.Add(bf);
-                }
-
-                TestingInputName = "";
-            }
-            catch (Exception e)
-            {
-                string message = "Your action could not be complete.\n\nFolder or file name cannot be empty.";
-#if DEBUG
-                message = $"Your action could not be complete\n\n{e}";
-#endif
-                alertService.ShowAlertAsync("Error", message);
-                TestingInputName = "";
-                Debug.WriteLine($"Exception occured {e}");
-            }
-        }
-
-        private BestFile? CreateFolderBestFile(BestFile? bfParent)
-        {
-            return (bfParent is not null)
-                ? fileManagerService.AddFolder(TestingInputName, parentPath: bfParent.ItemDirectory.FullName)
-                : fileManagerService.AddFolder(TestingInputName);
-        }
-
-        private BestFile? CreateFileBestFile(BestFile? bfParent)
-        {
-            return (bfParent is not null)
-                ? fileManagerService.AddFile($"{TestingInputName}.md", parentPath: bfParent.ItemDirectory.FullName)
-                : fileManagerService.AddFile($"{TestingInputName}.md");
-        }
-
-        /// <summary>
-        /// Handles the open file logic (eventually)
-        /// 
-        /// The relay command attribute automatically generates a command property that can be invoked.
-        /// It basically just implements a Command  design pattern with a decorator instead of having to write that crap ourselves.
-        /// </summary>
-        /// <param name="file"></param>
         [RelayCommand]
-        public void OpenFile(BestFile file)
+        public void OpenFile()
         {
             // TODO: open file logic
         }
 
+        /// <summary>
+        /// Sets the value of the dragged item
+        /// </summary>
+        /// <param name="Dragged"></param>
         [RelayCommand]
-        public void RetrieveContents(BestFile? parent)
+        public void Drag(BestFileTreeItemViewModel Dragged)
         {
-            Debug.WriteLine($"Retrieve file called. Parent null: {parent is null}");
-            LoadFileSystemContents(parent);
+            Debug.WriteLine($"Dragged item: {Dragged.TreeViewItem.ItemName}");
+            Dragger = Dragged;
         }
 
+        /// <summary>
+        /// Returns the dragger reference to null.
+        /// </summary>
         [RelayCommand]
-        public void AddFile(BestFile? parent)
+        public void EndDrag()
         {
-            AddItem(parent, CreateFileBestFile);
+            Dragger = null;
         }
 
+        /// <summary>
+        /// TEMP, show an alert message.
+        /// </summary>
+        /// <param name="AlertMessage"></param>
         [RelayCommand]
-        public void AddFolder(BestFile? parent)
+        public void ShowAlertMessage(string AlertMessage)
         {
-            AddItem(parent, CreateFolderBestFile);
+            AlertService.ShowAlertAsync("Info", AlertMessage);
         }
     }
 }

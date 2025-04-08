@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BestNote_3951.Resources.Styles.LightTheme">
+
+    <!-- Key_LightMode_DarkMode, the key defines what should be there for
+    light and dark mode to align with the OS themes-->
+
+    <Color x:Key="ButtonBackground">#512BD4</Color>
+    <Color x:Key="ButtonText">White</Color>
+
+    <Color x:Key="NavBackground">White</Color>
+    <Color x:Key="NavText">#141414</Color>
+    <Color x:Key="ShadowColor">#141414</Color>
+
+    <Color x:Key="PageBackground">White</Color>
+
+    <Color x:Key="EditorText">Black</Color>
+
+    <Color x:Key="BorderBackground">#f4f3ef</Color>
+    
+    <Color x:Key="Key_Primary_White">#512BD4</Color>
+    <Color x:Key="Key_Primary_Tertiary">#512BD4</Color>
+    <Color x:Key="Key_Secondary_Gray200">#DFD8F7</Color>
+
+    <Color x:Key="Key_Gray200_Gray200">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_Gray500">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_Gray600">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_Gray950">#C8C8C8</Color>
+    <Color x:Key="Key_Gray200_White">#C8C8C8</Color>
+    <Color x:Key="Key_Gray300_Gray600">#ACACAC</Color>
+    <Color x:Key="Key_Gray400_Gray500">#919191</Color>
+    <Color x:Key="Key_Gray600_White">#141414</Color>
+    <Color x:Key="Key_Gray900_Gray200">#212121</Color>
+    <Color x:Key="Key_Gray950_Gray100">#141414</Color>
+    <Color x:Key="Key_Gray950_Gray200">#141414</Color>
+    
+    <Color x:Key="Key_White_Gray100">White</Color>
+    <Color x:Key="Key_White_Gray950">White</Color>
+    <Color x:Key="Key_White_White">White</Color>
+    <Color x:Key="Key_White_Black">White</Color>
+    <Color x:Key="Key_White_OffBlack">White</Color>
+    <Color x:Key="Key_Pane_Color">#f4f3ef</Color>
+    <Color x:Key="Key_Black_White">Black</Color>
+    <Color x:Key="Key_Black_SecondaryDarkText">Black</Color>
+    <Color x:Key="Key_MidnightBlue_White">#190649</Color>
+    <Color x:Key="Key_Magenta_White">Magenta</Color>
+
+    <Color x:Key="Primary">#512BD4</Color>
+    <Color x:Key="PrimaryDark">#ac99ea</Color>
+    <Color x:Key="PrimaryDarkText">#242424</Color>
+    <Color x:Key="Secondary">#DFD8F7</Color>
+    <Color x:Key="SecondaryDarkText">#9880e5</Color>
+    <Color x:Key="Tertiary">#2B0B98</Color>
+
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+    <Color x:Key="Magenta">#D600AA</Color>
+    <Color x:Key="MidnightBlue">#190649</Color>
+    <Color x:Key="OffBlack">#1f1f1f</Color>
+
+    <Color x:Key="Gray100">#E1E1E1</Color>
+    <Color x:Key="Gray200">#C8C8C8</Color>
+    <Color x:Key="Gray300">#ACACAC</Color>
+    <Color x:Key="Gray400">#919191</Color>
+    <Color x:Key="Gray500">#6E6E6E</Color>
+    <Color x:Key="Gray600">#404040</Color>
+    <Color x:Key="Gray900">#212121</Color>
+    <Color x:Key="Gray950">#141414</Color>
+
+</ResourceDictionary>

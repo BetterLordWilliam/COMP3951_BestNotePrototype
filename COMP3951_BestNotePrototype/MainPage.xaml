@@ -8,17 +8,29 @@
     xmlns:views="clr-namespace:BestNote_3951.Views"
     xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    Title="BestNote"
-    x:Class="BestNote_3951.MainPage">
+    x:Class="BestNote_3951.MainPage"
+    x:DataType="viewmodels:MainPageViewModel">
 
-    <ContentPage.BindingContext>
-        <viewmodels:MainPageViewModel />
-    </ContentPage.BindingContext>
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="Themes">
+            <MenuFlyoutItem Text="Light"
+                            Command="{Binding SwitchThemeCommand}"
+                            CommandParameter="Light" />
+            <MenuFlyoutItem Text="Dark"
+                            Command="{Binding SwitchThemeCommand}"
+                            CommandParameter="Dark" />
+            <MenuFlyoutItem Text="Blue"
+                            Command="{Binding SwitchThemeCommand}"
+                            CommandParameter="Blue" />
+            <MenuFlyoutItem Text="Blue Dark"
+                            Command="{Binding SwitchThemeCommand}"
+                            CommandParameter="BlueDark" />
 
-    <Border Stroke="#474747"
-            StrokeThickness="2"
-            StrokeShape="RoundRectangle 0,0,5,5"
-            Padding="8,8">
+
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+
+    <Border>
 
         <toolkit:DockLayout VerticalOptions="FillAndExpand"
                             HorizontalOptions="FillAndExpand"
@@ -49,3 +61,4 @@
         </toolkit:DockLayout>
     </Border>
 </ContentPage>
+

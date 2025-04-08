@@ -23,7 +23,7 @@ namespace BestNote_3951.Views
         private void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // makes sure we're selecting a BestFile
-            if (e.CurrentSelection.FirstOrDefault() is Models.BestFile selectedFile)
+            if (e.CurrentSelection.FirstOrDefault() is Models.FileSystem.ITreeViewItem selectedFile)
             {
                 // passes the selected file to the OpenFile command
                 ((FileStructureViewModel)BindingContext).OpenFileCommand.Execute(selectedFile);

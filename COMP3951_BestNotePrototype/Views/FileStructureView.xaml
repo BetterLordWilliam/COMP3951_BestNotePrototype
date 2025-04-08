@@ -10,47 +10,61 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
     xmlns:views="clr-namespace:BestNote_3951.Views"
-    xmlns:models="clr-namespace:BestNote_3951.Models"
+    xmlns:models="clr-namespace:BestNote_3951.Models.FileSystem"
     x:Class="BestNote_3951.Views.FileStructureView"
+    x:DataType="viewmodels:FileStructureViewModel"
     x:Name="this">
 
-    <Border Stroke="#2e2e2e">
+    <Border StrokeThickness="1">
 
         <Grid RowDefinitions="Auto,*"
               VerticalOptions="Fill">
+
             <!-- File Tree Options Menu TEMP -->
             <VerticalStackLayout Grid.Row="0">
                 <Label Text="File Manager Options"/>
-                <Entry x:Name="testingItemNameInput" Text="{Binding TestingInputName}"></Entry>
                 <ScrollView Orientation="Horizontal">
                     <HorizontalStackLayout Spacing="5"
                                     Padding="5">
-                        <Button x:Name="addFile" IsEnabled="True" Text="Add File" Command="{Binding AddFileCommand}"></Button>
-                        <Button x:Name="addFolder" IsEnabled="True" Text="Add Folder" Command="{Binding AddFolderCommand}"></Button>
-                        <Button x:Name="deleteItem" IsEnabled="False" Text="Delete"></Button>
+                        <Button x:Name="addFile" IsEnabled="True" Text="Add File" Command="{Binding Root.AddFileCommand}"></Button>
+                        <Button x:Name="addFolder" IsEnabled="True" Text="Add Folder" Command="{Binding Root.AddFolderCommand}"></Button>
                     </HorizontalStackLayout>
                 </ScrollView>
             </VerticalStackLayout>
-            <!-- Bind to the FileSystem Items -->
-            <CollectionView Grid.Row="1"
-                            ItemsSource="{Binding FileSystem}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:BestFile">
-                        <views:BestFileTreeView BestFile="{Binding .}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
-        
-        <!-- File Tree Overview Context Menu -->
-        <FlyoutBase.ContextFlyout>
-            <MenuFlyout>
-                <MenuFlyoutItem
-                            IsEnabled="True"
-                            Text="Reload Files"
-                            Command="{Binding RetrieveContentsCommand}"></MenuFlyoutItem>
-            </MenuFlyout>
-        </FlyoutBase.ContextFlyout>
-    </Border>
 
+            <ScrollView Grid.Row="1" Orientation="Both">
+                <Grid RowDefinitions="Auto,*">
+                    
+                    <!-- Bind to the FileSystem Items -->
+                    <CollectionView Grid.Row="0" ItemsSource="{Binding Root.TreeViewItem.SafeChildren}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="viewmodels:BestFileTreeItemViewModel">
+                                <views:BestFileTreeView BindingContext="{Binding .}"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Area for the parent file structure view, drags, context menu -->
+                    <BoxView Grid.Row="1" MinimumHeightRequest="20" Color="Transparent">
+                        <!-- Draggable Area for the Root Directory -->
+                        <BoxView.GestureRecognizers>
+                            <DropGestureRecognizer
+                                DropCommand="{Binding Root.DropCommand}"
+                                DropCommandParameter="{Binding Dragger}" />
+                        </BoxView.GestureRecognizers>
+                        <!-- File Tree Overview Context Menu -->
+                        <FlyoutBase.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem
+                                    IsEnabled="True"
+                                    Text="Reload Files"
+                                    Command="{Binding Root.RetrieveContentsCommand}"></MenuFlyoutItem>
+                            </MenuFlyout>
+                        </FlyoutBase.ContextFlyout>
+                    </BoxView>
+                </Grid>
+            </ScrollView>
+
+        </Grid>
+    </Border>
 </ContentView>

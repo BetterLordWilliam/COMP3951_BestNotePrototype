@@ -14,43 +14,49 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
+             xmlns:syncfusionPopup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
+xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              x:Class="BestNote_3951.Views.EmbeddedPdfView"
              xmlns:local="clr-namespace:BestNote_3951.ViewModels"
              x:DataType="local:EmbeddedPdfViewModel">
 
+    <Border>
+        <Grid RowDefinitions="Auto,*">
 
-    <Grid RowDefinitions="Auto,*">
-        <Grid.BindingContext>
-            <local:EmbeddedPdfViewModel/>
-        </Grid.BindingContext>
 
-        <HorizontalStackLayout x:Name="Toolbar" Grid.Row="0">
-            <Button x:Name="openFile"
-                             Margin="10,10,10,10"
-                             Command="{Binding OpenDocumentCommand}"
-                             HeightRequest="40"
-                             VerticalOptions="Center"
-                             Text="Open PDF"
-                             WidthRequest="100" />
-            <Button x:Name="addLink"
-                             Margin="10,10,10,10"
-                             Command="{Binding CreateResourceLinkCommand}"
-                             HeightRequest="40"
-                             VerticalOptions="Center"
-                             Text="Add Link"
-                             WidthRequest="100" />
-        </HorizontalStackLayout>
 
-        <syncfusion:SfPdfViewer x:Name="pdfViewer"
-                                Grid.Row="1"
-                                VerticalOptions="FillAndExpand"
-                                IsOutlineViewVisible="True"
-                                ShowScrollHead="False"
-                                ShowToolbars="True"
-                                EnableDocumentLinkNavigation="True"
-                                DocumentSource="{Binding PdfDocumentStream}" 
-                                ZoomMode="FitToWidth"
-                                PageNumber ="{Binding PageNum, Mode=TwoWay}"
-                                />
-    </Grid>
+            <HorizontalStackLayout x:Name="Toolbar"
+                                   Grid.Row="0">
+                <Button x:Name="openFile"
+                                 Margin="10,10,10,10"
+                                 Command ="{Binding OpenMovePopupCommand}"
+                                 HeightRequest="40"
+                                 VerticalOptions="Center"
+                                 Text="Open PDF"
+                                 WidthRequest="100" />
+                <Button x:Name="addLink"
+                                 Margin="10,10,10,10"
+                                 Command="{Binding CreateResourceLinkCommand}" 
+                                 HeightRequest="40"
+                                 VerticalOptions="Center"
+                                 Text="Add Link"
+                                 WidthRequest="100" />
+            </HorizontalStackLayout>
+
+
+
+            <syncfusion:SfPdfViewer x:Name="pdfViewer"
+                                    Grid.Row="1"
+                                    VerticalOptions="FillAndExpand"
+                                    IsOutlineViewVisible="True"
+                                    ShowScrollHead="False"
+                                    ShowToolbars="True"
+                                    EnableDocumentLinkNavigation="True"
+                                    ZoomMode="FitToWidth"
+                                    DocumentSource="{Binding PdfDocumentStream}" 
+                                    PageNumber ="{Binding PageNum, Mode=TwoWay}"
+                                    />
+        </Grid>
+    </Border>
 </ContentView>
+

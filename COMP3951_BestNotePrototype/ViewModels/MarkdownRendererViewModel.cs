@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using BestNote_3951.Messages;
 using Markdig;
 using Microsoft.Maui.Controls;
+using BestNote_3951.Services;
 
 /*
  * Sources:
@@ -22,10 +23,9 @@ namespace BestNote_3951.ViewModels
     /// 
     /// This defines the logic that displays the rendered markdown in the MarkdownView file.
     /// Registers the viewmodel with the MarkdownTextChanged messaged so that it can receive real-time
-    /// updates for the text change in the MarkdownEditor. 
+    /// updates for the text change in the MarkdownEditor.
     /// 
     /// Uses a webviewsource to display the rendered markdown.
-    /// 
     /// </summary>
     public partial class MarkdownRendererViewModel : ObservableObject
     {
@@ -35,33 +35,44 @@ namespace BestNote_3951.ViewModels
         [ObservableProperty]
         private HtmlWebViewSource webViewSource;
 
+        private string _currentMarkdown = "";
+
         public MarkdownRendererViewModel()
         {
-            // pipeline gives access to advanced markdown rendering features.
-            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-
             WebViewSource = new HtmlWebViewSource
             {
                 Html = "<html><head><meta charset=\"utf-8\"></head><body></body></html>"
             };
 
             WeakReferenceMessenger.Default.Register<MarkdownTextChangedMessage>(this, (recipient, message) =>
-            {         
-                string text = message.Value;
-                //Debug.WriteLine($"received the message: {text}");
+            {
+                string text      = message.Value;
+                _currentMarkdown = text;
+                // Debug.WriteLine($"received the message: {text}");
 
-                // markdig the text 
-                var htmlBody = Markdown.ToHtml(text, pipeline);
-                var html = $"<html><head><meta charset=\"utf-8\"></head><body>{htmlBody}</body></html>";
+                // markdig the markdown
+                string html = TableOfContentBuilder.TableOfContentizer(text);
+        
 
-                // force UI to update on hte main thread
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    WebViewSource = new HtmlWebViewSource { Html = html };
-                    //Debug.WriteLine($"source HTML: {WebViewSource.Html}");
-                });
+                WebViewSource = new HtmlWebViewSource { Html = html };
+                // Debug.WriteLine($"source HTML: {WebViewSource.Html}");
+
+
             });
-        }
 
+            WeakReferenceMessenger.Default.Register<ThemeChangedMessage>(this, async (recipient, message) =>
+            {
+                string text = _currentMarkdown;
+                // Debug.WriteLine($"received the message: {text}");
+
+                // markdig the markdown
+                string html = TableOfContentBuilder.TableOfContentizer(text);
+
+                WebViewSource = new HtmlWebViewSource { Html = html };
+                // Debug.WriteLine($"source HTML: {WebViewSource.Html}");
+            });
+
+
+        }
     }
 }

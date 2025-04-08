@@ -7,9 +7,15 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using BestNote_3951.Models;
 using Syncfusion.Maui.PdfViewer;
+using CommunityToolkit.Maui.Views;
+using BestNote_3951.Services;
+using CommunityToolkit.Mvvm.Messaging;
+using BestNote_3951.Messages;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// AUTHOR: Olivia Grace worked on the EmbeddedPdfViewModel file
+///         Bryson Lindy pdfviewmodel - markdown renderer messaging
 /// SOURCES:
 /// Followed this YouTube tutorial to open and display the PDF (see OpenDocument and PickAndShow)
 /// https://www.youtube.com/watch?v=E_-g-GcQZRE&list=PL5IWFN3_TaPrE_3Y10N2XReOe57CpnMjy&index=6
@@ -20,8 +26,24 @@ using Syncfusion.Maui.PdfViewer;
 /// </summary>
 namespace BestNote_3951.ViewModels
 {
+    /// <summary>
+    /// ViewModel for displaying the PDF.
+    /// 
+    /// Has methods and properties for opening PDFs from the user's file system and navigating to specific
+    /// pages within a PDF.
+    /// </summary>
     public partial class EmbeddedPdfViewModel : ObservableObject
     {
+
+        /// <summary>
+        /// File Manager Service used for interacting with the file system.
+        /// </summary>
+        private readonly FileManagerService fileManagerService;
+
+        /// <summary>
+        /// Alert Service used to display pop ups and alerts for the user.
+        /// </summary>
+        private readonly AlertService alertService;
 
         /// <summary>
         /// Gets and sets the stream of the currently loaded PDF document. Has a binding relationship
@@ -30,11 +52,16 @@ namespace BestNote_3951.ViewModels
         [ObservableProperty]
         public Stream? _pdfDocumentStream;
 
-
         /// <summary>
         /// Gets and sets the path of the Pdf document.
         /// </summary>
         public String PdfPath;
+
+
+        /// <summary>
+        /// Gets and sets the name of the Pdf document.
+        /// </summary>
+        public String PdfName;
 
 
         /// <summary>
@@ -44,35 +71,84 @@ namespace BestNote_3951.ViewModels
         [ObservableProperty]
         public int _pageNum;
 
-
         /// <summary>
-        /// A collection of ResourceLink objects.
+        /// Property indicating whether the move PDF popup is open or not.
         /// </summary>
-        internal Collection<ResourceLink> ResourceLinks;
-       
+        [ObservableProperty]
+        public partial bool IsOpen { get; set; } = false;
 
         /// <summary>
-        /// Creates a new ResourceLink object and adds it to the ResourceLink collection for this
-        /// PDF.
+        /// Opens a move popup confirmation dialog.
+        /// </summary>
+        [RelayCommand]
+        public void OpenMovePopup()
+        {
+            alertService.ShowConfirmation("Copy PDF to BestNote Resources", "Would you like to copy this PDF file to best notes resources directory?", (result =>
+            {
+                if (result)
+                {
+                    OpenDocumentAndCopy();
+                }
+                else
+                {
+                    OpenDocument();
+                }
+            }));
+        }
+
+        /// <summary>
+        /// Creates a new ResourceLink object and sends it to the views and view models that are registered
+        /// to the PdfBookmarkTomarkdownMessage. This method is bound to the Add Link button.
         /// </summary>
         [RelayCommand]
         internal void CreateResourceLink()
         {
-            if (PdfPath != null && PdfPath != "")
-            {
-                int pageNumber = PageNum;
-                String name = "BestNoteBookmark";
-                ResourceLinks.Add(new ResourceLink(new Bookmark(name, pageNumber), PdfPath));              
-            }
 
+            if (!string.IsNullOrEmpty(PdfPath))
+            {
+                int pageNumber    = PageNum;
+                String name       = PdfName;
+                Bookmark bookmark = new Bookmark(name, pageNumber);
+
+                ResourceLink resource = new ResourceLink(new Bookmark(name, pageNumber), PdfPath);
+
+                // sends to the registered messenger in the markdowneditor viewmodel constructor
+                WeakReferenceMessenger.Default.Send(new PdfBookmarkTomarkdownMessage(resource));
+            }
         }
 
 
         /// <summary>
-	    /// Creates a file picker that allows the user to select a file chos
+        /// Creates a file picker that allows the user to select a PDF file from their file system, copy it to the
+        /// BestNote Resources folder, and then display the copied file in the PDF viewer. This method is binded to
+        /// the Copy to Resources button in the PDF View.
+        /// </summary>
+        [RelayCommand]
+        public async Task OpenDocumentAndCopy()
+        {
+            FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
+            {
+                {DevicePlatform.iOS, new[] {"public.pdf"} },
+                {DevicePlatform.Android, new[] {"application/pdf"} },
+                {DevicePlatform.WinUI, new[] {"pdf"} },
+                {DevicePlatform.MacCatalyst, new[] {"pdf"} }
+        });
+            PickOptions options = new()
+            {
+                PickerTitle = "Please select a PDF file",
+                FileTypes = pdfFileType,
+            };
+            await PickAndShow(options, true);
+        }
+
+
+
+        /// <summary>
+	    /// Creates a file picker that allows the user to select a file from their file system and display it in the
+        /// PDF viewer. This method is binded to the No Thanks! button in the PDF View.
 	    /// </summary>
         [RelayCommand]
-	    async void OpenDocument()
+	    async Task OpenDocument()
 	    {
 		    FilePickerFileType pdfFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<String>>
 		    {
@@ -81,31 +157,39 @@ namespace BestNote_3951.ViewModels
 			    {DevicePlatform.WinUI, new[] {"pdf"} },
 			    {DevicePlatform.MacCatalyst, new[] {"pdf"} }
 		});
-		    PickOptions options = new()
-		    {
-			    PickerTitle = "Please select a PDF file",
-			    FileTypes = pdfFileType,
-		    };
-		    await PickAndShow(options);
+            PickOptions options = new()
+            {
+                PickerTitle = "Please select a PDF file",
+                FileTypes = pdfFileType,
+            };
+		    await PickAndShow(options, false);
 	    }
 
 
         /// <summary>
-        /// Displays a FilePicker object for the user to select a pdf file from. Sets the
-        /// PdfDocumentStream to the chosen PDF file and the PdfPath to the path of the 
-        /// chosen PDF file.
+        /// Displays a FilePicker object for the user to select a PDF file from their file syste. If 
+        /// copyToBestDirectory is True then the selected PDF is copied to the BestNote Resources folder and the
+        /// copied file is used. PdfPath, PdfName, and PdfDocumentStream are all updated to the selected file.
         /// </summary>
-        /// <param name="options"></param>
-        /// <returns></returns>
-        public async Task PickAndShow(PickOptions options)
+        /// <param name="options">a PickOptions object for choosing a PDF file</param>
+        /// <param name="copyToBestDirectory">a bool value indicating if the PDF should be copied to Resources</param>
+        /// <returns>Task</returns>
+        public async Task PickAndShow(PickOptions options, bool copyToBestDirectory)
         {
             try
             {
                 var result = await FilePicker.Default.PickAsync(options);
-                if (result != null)
+                if (result != null && !copyToBestDirectory)
                 {
                     PdfPath = result.FullPath;
+                    PdfName = result.FileName;
                     PdfDocumentStream = await result.OpenReadAsync();
+                } else if (result != null && copyToBestDirectory)
+                {
+                    
+                    String newFilePath = fileManagerService.AddResourceFile(result.FileName, result.FullPath);
+                    PdfName = Path.GetFileName(newFilePath);
+                    OpenPDFFromPath(newFilePath);
                 }
             }
             catch (Exception ex)
@@ -125,16 +209,59 @@ namespace BestNote_3951.ViewModels
 
 
         /// <summary>
-        /// Initializes PageNum to be 0, PdfPath to be an empty string, and ResourceLinks to be
-        /// a new empty collection of ResourceLink objects.
+        /// Displays the PDF passed as a file path in the PDF View.
         /// </summary>
-        public EmbeddedPdfViewModel()
+        /// <param name="pdfPath">a String, the path of the PDF to display</param>
+        public void OpenPDFFromPath(String pdfPath)
+        {
+            try
+            {
+                PdfPath = pdfPath;
+                PdfDocumentStream = new FileStream(pdfPath, FileMode.Open, FileAccess.Read);
+            }
+            catch (Exception ex)
+            {
+                String message;
+                if (ex != null && String.IsNullOrEmpty(ex.Message) == false)
+                {
+                    message = ex.Message;
+                }
+                else
+                {
+                    message = "File open failed";
+                }
+                Application.Current?.MainPage?.DisplayAlert("Error", message, "OK");
+            }
+
+        }
+
+
+        /// <summary>
+        /// Initializes PageNum to be 0, PdfPath and PdfName to be empty strings, and FileManagerService to be the 
+        /// specified FileManagerService object. Registers the MarkdownLinkClickedPathMessage to open the correct
+        /// PDF when a Markdown link is clicked.
+        /// </summary>
+        public EmbeddedPdfViewModel(AlertService alertService, FileManagerService bfs)
         {
             PageNum = 0;
             PdfPath = "";
-            ResourceLinks = new Collection<ResourceLink>();
-        }
+            PdfName = "";
+            fileManagerService = bfs;
+            this.alertService = alertService;
 
+            // Open the specified PDF
+            WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
+            {
+                string filePath = message.Value;
+
+                if (filePath != PdfPath)
+                {
+                    PdfName = Path.GetFileName(filePath);
+                    PdfPath = filePath;
+
+                }
+            });
+        }
 
     }
 }
