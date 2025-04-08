@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BestNote_3951.Resources.Styles.BlueTheme">
 
-    <Color x:Key="ButtonBackground">#004f79</Color>
+    <Color x:Key="ButtonBackground">#55BAE9</Color>
     <Color x:Key="ButtonText">White</Color>
 
-    <Color x:Key="NavBackground">#004f79</Color>
+    <Color x:Key="NavBackground">#55BAE9</Color>
     <Color x:Key="NavText">White</Color>
+    <Color x:Key="ShadowColor">#072838</Color>
 
-    <Color x:Key="PageBackground">#004f79</Color>
+    <Color x:Key="PageBackground">#55BAE9</Color>
 
     <Color x:Key="EditorText">#474747</Color>
 

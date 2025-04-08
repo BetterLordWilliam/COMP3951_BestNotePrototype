@@ -6,7 +6,7 @@
     xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
     x:Class="BestNote_3951.Views.MarkdownEditorView"
     x:DataType="viewmodels:MarkdownEditorViewModel">
-    <Border Style="{StaticResource PaneBorderStyle}">
+    <Border>
         <!-- text editor control, two way mode binding stores the editor text in the view model property -->
         <Grid RowDefinitions="Auto,*">
             <HorizontalStackLayout

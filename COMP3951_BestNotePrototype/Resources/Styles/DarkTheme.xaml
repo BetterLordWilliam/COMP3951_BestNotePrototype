@@ -9,8 +9,9 @@ light and dark mode to align with the OS themes-->
     <Color x:Key="ButtonBackground">#2B0B98</Color>
     <Color x:Key="ButtonText">#E1E1E1</Color>
 
-    <Color x:Key="NavBackground">#1f1f1f</Color>
+    <Color x:Key="NavBackground">#6E6E6E</Color>
     <Color x:Key="NavText">White</Color>
+    <Color x:Key="ShadowColor">#141414</Color>
 
     <Color x:Key="PageBackground">#1f1f1f</Color>
 

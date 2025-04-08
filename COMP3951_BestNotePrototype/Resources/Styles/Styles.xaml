@@ -14,9 +14,22 @@
     </Style>
 
     <Style TargetType="Border">
-        <Setter Property="Stroke" Value="{DynamicResource Key_Gray200_Gray500}" />
-        <Setter Property="StrokeShape" Value="Rectangle"/>
-        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="BackgroundColor" 
+                Value="{DynamicResource BorderBackground}" />
+
+        <Setter Property="Stroke"
+                Value="#474747" />
+        <Setter Property="StrokeThickness"
+                Value="0" />
+
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="4" />
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Padding"
+                Value="5" />
     </Style>
 
     <Style TargetType="BoxView">
@@ -30,7 +43,7 @@
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
-        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="CornerRadius" Value="5"/>
         <Setter Property="Padding" Value="14,10"/>
         <Setter Property="MinimumHeightRequest" Value="44"/>
         <Setter Property="MinimumWidthRequest" Value="44"/>
@@ -420,7 +433,7 @@
 
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>
-        <Setter Property="BackgroundColor" Value="{DynamicResource Key_White_OffBlack}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource PageBackground}" />
     </Style>
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
@@ -438,9 +451,14 @@
 
     <Style TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{DynamicResource NavBackground}" />
-        <Setter Property="BarTextColor" Value="{DynamicResource NavText}" />
+        <Setter Property="BarTextColor" Value="{DynamicResource NavText}"  />
         <Setter Property="IconColor" Value="{DynamicResource Key_Gray200_White}" />
-        
+        <Setter Property="Shadow">
+            <Shadow Brush="{DynamicResource ShadowColor}"
+            Opacity="0.2"
+            Radius="20"
+            Offset="0,2" />
+        </Setter>
     </Style>
 
     <Style TargetType="TabbedPage">
@@ -448,25 +466,5 @@
         <Setter Property="BarTextColor" Value="{DynamicResource Key_Magenta_White}" />
         <Setter Property="UnselectedTabColor" Value="{DynamicResource Key_Gray200_Gray950}" />
         <Setter Property="SelectedTabColor" Value="{DynamicResource Key_Gray950_Gray200}" />
-    </Style>
-
-    <Style x:Key="PaneBorderStyle"
-           TargetType="Border">
-        <Setter Property="BackgroundColor" 
-                Value="{DynamicResource BorderBackground}" />
-
-        <Setter Property="Stroke"
-                Value="#474747" />
-        <Setter Property="StrokeThickness"
-                Value="2" />
-
-        <Setter Property="StrokeShape">
-            <Setter.Value>
-                <RoundRectangle CornerRadius="5" />
-            </Setter.Value>
-        </Setter>
-
-        <Setter Property="Padding"
-                Value="8" />
     </Style>
 </ResourceDictionary>

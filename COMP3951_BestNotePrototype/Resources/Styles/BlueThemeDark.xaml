@@ -3,20 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BestNote_3951.Resources.Styles.BlueThemeDark">
 
-    <Color x:Key="ButtonBackground">#190649</Color>
+    <Color x:Key="ButtonBackground">#12678F</Color>
     <Color x:Key="ButtonText">White</Color>
 
-    <Color x:Key="NavBackground">#190649</Color>
+    <Color x:Key="NavBackground">#12678F</Color>
     <Color x:Key="NavText">White</Color>
+    <Color x:Key="ShadowColor">#0E4E6C</Color>
 
-    <Color x:Key="PageBackground">#190649</Color>
+    <Color x:Key="PageBackground">#12678F</Color>
 
     <Color x:Key="EditorText">#ACACAC</Color>
 
     <Color x:Key="BorderBackground">#212121</Color>
     
     <Color x:Key="Key_Primary_White">#397aab</Color>
-    <Color x:Key="Key_Primary_Tertiary">#190649</Color>    <!-- button color-->
+    <Color x:Key="Key_Primary_Tertiary">#12678F</Color>    <!-- button color-->
     <Color x:Key="Key_Secondary_Gray200">#dfeefb</Color>
 
     <Color x:Key="Key_Gray200_Gray200">#dfeefb</Color>

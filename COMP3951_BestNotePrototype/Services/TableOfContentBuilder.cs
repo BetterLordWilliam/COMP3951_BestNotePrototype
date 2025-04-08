@@ -24,9 +24,9 @@ namespace BestNote_3951.Services
             MarkdownPipeline pipeline          = App.Pipeline;
             MarkdownDocument doc               = Markdown.Parse(markdown, pipeline);
             IEnumerable<HeadingBlock> headings = doc.Descendants<HeadingBlock>();
-            Color color                        = (Color)Application.Current!.Resources["Key_Pane_Color"];
+            Color color                        = (Color)Application.Current!.Resources["BorderBackground"];
             String paneColor                   = color.ToArgbHex(false);
-            color                              = (Color)Application.Current!.Resources["Key_Black_White"];
+            color                              = (Color)Application.Current!.Resources["EditorText"];
             String textColor                   = color.ToArgbHex(false);
 
             int[] counters    = new int[7];

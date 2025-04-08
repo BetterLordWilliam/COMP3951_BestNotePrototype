@@ -7,7 +7,7 @@
     x:Class="BestNote_3951.Views.MarkdownRendererView"
     x:DataType="viewmodels:MarkdownRendererViewModel">
 
-    <Border Style="{StaticResource PaneBorderStyle}">
+    <Border>
         <Grid Padding="10" VerticalOptions="FillAndExpand">
             <Label Text="Markdown Renderer"
                    FontSize="Title"

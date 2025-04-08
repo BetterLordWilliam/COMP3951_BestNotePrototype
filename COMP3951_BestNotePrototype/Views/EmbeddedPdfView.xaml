@@ -20,7 +20,7 @@ xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.M
              xmlns:local="clr-namespace:BestNote_3951.ViewModels"
              x:DataType="local:EmbeddedPdfViewModel">
 
-    <Border Style="{StaticResource PaneBorderStyle}">
+    <Border>
         <Grid RowDefinitions="Auto,*">
 
 

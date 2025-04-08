@@ -11,6 +11,7 @@
 
     <Color x:Key="NavBackground">White</Color>
     <Color x:Key="NavText">#141414</Color>
+    <Color x:Key="ShadowColor">#141414</Color>
 
     <Color x:Key="PageBackground">White</Color>
 
