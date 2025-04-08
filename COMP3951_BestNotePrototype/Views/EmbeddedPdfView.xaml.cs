@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.PdfViewer;
 using Syncfusion.Maui.Popup;
 using BestNote_3951.Messages;
+using Syncfusion.Pdf.Graphics;
 
 
 /// <summary>
@@ -39,9 +40,16 @@ public partial class EmbeddedPdfView : ContentView
             vm.PropertyChanged += OnPropertyChanged;
         }
 
+        // Open the specified PDF
+        WeakReferenceMessenger.Default.Register<MarkdownLinkClickedPathMessage>(this, (recipient, message) =>
+        {
+
+                pdfViewer.LoadDocument(new FileStream(message.Value, FileMode.Open, FileAccess.Read));
+
+        });
+
         WeakReferenceMessenger.Default.Register<MarkdownLinkClickedMessage>(this, (recipient, message) =>
         {
-            
             if (pdfViewer.PageCount > 0 && message.Value > 0)
             {
                 if (pdfViewer.GoToPageCommand.CanExecute(message.Value))
@@ -118,13 +126,4 @@ public partial class EmbeddedPdfView : ContentView
         }
     }
 
-    /// <summary>
-    /// Display the Copy to Resources popup when the Open PDF button is clicked.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    //private void showPopup_Clicked(object sender, EventArgs e)
-    //{
-    //    popup.Show(false);
-    //}
 }

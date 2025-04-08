@@ -35,7 +35,14 @@ namespace BestNote_3951.ViewModels
     public partial class EmbeddedPdfViewModel : ObservableObject
     {
 
+        /// <summary>
+        /// File Manager Service used for interacting with the file system.
+        /// </summary>
         private readonly FileManagerService fileManagerService;
+
+        /// <summary>
+        /// Alert Service used to display pop ups and alerts for the user.
+        /// </summary>
         private readonly AlertService alertService;
 
         /// <summary>
@@ -76,7 +83,6 @@ namespace BestNote_3951.ViewModels
         [RelayCommand]
         public void OpenMovePopup()
         {
-            // IsOpen = true;
             alertService.ShowConfirmation("Copy PDF to BestNote Resources", "Would you like to copy this PDF file to best notes resources directory?", (result =>
             {
                 if (result)
@@ -211,7 +217,7 @@ namespace BestNote_3951.ViewModels
             try
             {
                 PdfPath = pdfPath;
-                PdfDocumentStream = File.OpenRead(pdfPath);
+                PdfDocumentStream = new FileStream(pdfPath, FileMode.Open, FileAccess.Read);
             }
             catch (Exception ex)
             {
@@ -252,8 +258,7 @@ namespace BestNote_3951.ViewModels
                 {
                     PdfName = Path.GetFileName(filePath);
                     PdfPath = filePath;
-                    PdfDocumentStream = File.OpenRead(message.Value);
-                    Thread.Sleep(50);
+
                 }
             });
         }

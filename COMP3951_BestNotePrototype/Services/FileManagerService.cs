@@ -258,7 +258,7 @@ namespace BestNote_3951.Services
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public string ReadFileContents(string filePath)
+        public string ReadFileContents(FileInfo TargetItem)
         {
             //try
             //{
@@ -275,18 +275,10 @@ namespace BestNote_3951.Services
         /// <summary>
         /// Writes to a file.
         /// </summary>
-        /// <param name="filePath"></param>
+        /// <param name="FileInfo"></param>
         /// <param name="content"></param>
-        public void WriteFileContents(string filePath, string content)
+        public void WriteFileContents(FileInfo FileInfo, string content)
         {
-            //try
-            //{
-            //    File.WriteAllText(filePath, content);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine($"Error writing file: {ex.Message}");
-            //}
         }
 
         /// <summary>

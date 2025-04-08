@@ -3,10 +3,14 @@ using CommunityToolkit.Mvvm.Messaging;
 using BestNote_3951.Messages;
 using Syncfusion.Maui.PdfViewer;
 using BestNote_3951.Models;
+using BestNote_3951.Models.FileSystem;
+using BestNote_3951.Services;
+using CommunityToolkit.Mvvm.Input;
 
 /**
  * Authors: Bryson Lindy
  *          Olivia Grace - worked on part of the Pdf link messaging
+ *          Will Otterbein - Opening new files, saving contents of files to the file system.
  */
 namespace BestNote_3951.ViewModels
 {
@@ -18,14 +22,25 @@ namespace BestNote_3951.ViewModels
     /// </summary>
     public partial class MarkdownEditorViewModel : ObservableObject
     {
+        private AlertService AlertService;
+        private IBNFile BestFile;
+
         /// <summary>
         /// Property for the markdown text to be rendered.
         /// </summary>
         [ObservableProperty]
         private string markdownText = "# Hello";
 
-        public MarkdownEditorViewModel()
+        /// <summary>
+        /// Property indicating the saved status of the document.
+        /// </summary>
+        [ObservableProperty]
+        public partial bool Saved { get; set; } = false;
+
+        public MarkdownEditorViewModel(AlertService AlertService)
         {
+            this.AlertService = AlertService;
+
             WeakReferenceMessenger.Default.Register<PdfBookmarkTomarkdownMessage>(this, (recipient, message) =>
             {
                 ResourceLink resource = message.Value;
@@ -37,12 +52,31 @@ namespace BestNote_3951.ViewModels
                 WeakReferenceMessenger.Default.Send(new InsertAtCursorMessage(link));
             });
 
-            WeakReferenceMessenger.Default.Register<ThemeChangedMessage>(this, async (recipient, message) =>
+            WeakReferenceMessenger.Default.Register<FileOpenedMessage>(this, (recipient, message) =>
             {
+                Debug.WriteLine("Message recieved.");
+                AlertService.ShowConfirmation("Open a new file", "Are you sure you would you like to open a new file?", (result) =>
+                {
+                    if (result)
+                    {
+                        Debug.WriteLine("Message recieved, disposition is a success, ovewrite file that we are referencing");
 
+                        // this.MarkdownText = this.BestFile.
+
+                        try
+                        {
+                            this.BestFile = message.Value;
+                            this.MarkdownText = this.BestFile.ReadFileContents();
+
+                            WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(markdownText));
+
+                        } catch (Exception e)
+                        {
+                            Debug.WriteLine($"Something bad has happened {e.Message}");
+                        }
+                    }
+                });
             });
-
-            WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(markdownText));
         }
 
         /// <summary>
@@ -55,6 +89,26 @@ namespace BestNote_3951.ViewModels
         partial void OnMarkdownTextChanged(string? oldValue, string newValue)
         {
             WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(newValue));
+        }
+
+        /// <summary>
+        /// Save the text written to the current referenced file.
+        /// </summary>
+        [RelayCommand]
+        public void SaveWriting()
+        {
+            if (BestFile is null)
+                return;
+
+            try
+            {
+                Debug.WriteLine("Saving text to file...");
+                BestFile.WriteToFile(markdownText);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Something bad has happened {e.Message}");
+            }
         }
     }
 }

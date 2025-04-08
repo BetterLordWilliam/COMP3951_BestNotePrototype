@@ -28,6 +28,8 @@ namespace BestNote_3951
             builder.Logging.AddDebug();
 #endif
 
+
+
             return builder.Build();
         }
     }
