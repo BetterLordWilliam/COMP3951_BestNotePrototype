@@ -9,17 +9,16 @@
     <Border>
         <!-- text editor control, two way mode binding stores the editor text in the view model property -->
         <Grid RowDefinitions="Auto,*">
-            <HorizontalStackLayout
-                Grid.Row="0">
-                <Button Text="Save" Command="{Binding SaveWritingCommand}"></Button>
+            <HorizontalStackLayout Grid.Row="0">
+                <Button Margin="10,10,10,10" Text="Save" Command="{Binding SaveWritingCommand}"></Button>
+                <Label Margin="10,10,10,10" Text="{Binding Saved}" HorizontalOptions="End"/>
             </HorizontalStackLayout>
-            <Editor 
-                x:Name="EditorControl"
-                Grid.Row="1"
-                Text="{Binding MarkdownText, Mode=TwoWay}"
-                AutoSize="Disabled"
-                VerticalOptions="FillAndExpand"
-                Placeholder="marky markdown..." />
+            <Editor Grid.Row="1"
+                    x:Name="EditorControl"
+                    Text="{Binding MarkdownText, Mode=TwoWay}"
+                    AutoSize="Disabled"
+                    VerticalOptions="FillAndExpand"
+                    Placeholder="marky markdown..." />
         </Grid>
     </Border>
 </ContentView>

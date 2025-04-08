@@ -22,6 +22,9 @@ namespace BestNote_3951.ViewModels
     /// </summary>
     public partial class MarkdownEditorViewModel : ObservableObject
     {
+        private static readonly string UNSAVED     = "Unsaved changes";
+        private static readonly string SAVED       = "Changes saved";
+
         private AlertService AlertService;
         private IBNFile BestFile;
 
@@ -29,13 +32,13 @@ namespace BestNote_3951.ViewModels
         /// Property for the markdown text to be rendered.
         /// </summary>
         [ObservableProperty]
-        private string markdownText = "# Hello";
+        private string markdownText = "";
 
         /// <summary>
         /// Property indicating the saved status of the document.
         /// </summary>
         [ObservableProperty]
-        public partial bool Saved { get; set; } = false;
+        public partial string Saved { get; set; } = UNSAVED;
 
         public MarkdownEditorViewModel(AlertService AlertService)
         {
@@ -90,6 +93,7 @@ namespace BestNote_3951.ViewModels
         /// <param name="newValue"></param>
         partial void OnMarkdownTextChanged(string? oldValue, string newValue)
         {
+            Saved = UNSAVED;
             WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(newValue));
         }
 
@@ -106,11 +110,14 @@ namespace BestNote_3951.ViewModels
             {
                 Debug.WriteLine("Saving text to file...");
                 BestFile.WriteToFile(markdownText);
+                Saved = SAVED;
             }
             catch (Exception e)
             {
                 Debug.WriteLine($"Something bad has happened {e.Message}");
             }
         }
+
+
     }
 }
