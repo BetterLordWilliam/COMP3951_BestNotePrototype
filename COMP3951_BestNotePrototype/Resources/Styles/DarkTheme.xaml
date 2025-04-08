@@ -6,6 +6,18 @@
     <!-- Key_LightMode_DarkMode, the key defines what should be there for
 light and dark mode to align with the OS themes-->
 
+    <Color x:Key="ButtonBackground">#2B0B98</Color>
+    <Color x:Key="ButtonText">#E1E1E1</Color>
+
+    <Color x:Key="NavBackground">#1f1f1f</Color>
+    <Color x:Key="NavText">White</Color>
+
+    <Color x:Key="PageBackground">#1f1f1f</Color>
+
+    <Color x:Key="EditorText">White</Color>
+
+    <Color x:Key="BorderBackground">#141414</Color>
+    
     <Color x:Key="Key_Primary_White">White</Color>
     <Color x:Key="Key_Primary_Tertiary">#2B0B98</Color>
     <Color x:Key="Key_Secondary_Gray200">#C8C8C8</Color>

@@ -25,8 +25,8 @@
     </Style>
 
     <Style TargetType="Button">
-        <Setter Property="TextColor" Value="{DynamicResource Key_White_Gray100}" />
-        <Setter Property="BackgroundColor" Value="{DynamicResource Key_Primary_Tertiary}" />
+        <Setter Property="TextColor" Value="{DynamicResource ButtonText}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource ButtonBackground}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
@@ -90,7 +90,7 @@
     </Style>
 
     <Style TargetType="Editor">
-        <Setter Property="TextColor" Value="{DynamicResource Key_Black_White}" />
+        <Setter Property="TextColor" Value="{DynamicResource EditorText}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14" />
@@ -437,8 +437,8 @@
     </Style>
 
     <Style TargetType="NavigationPage">
-        <Setter Property="BarBackgroundColor" Value="{DynamicResource Key_White_OffBlack}" />
-        <Setter Property="BarTextColor" Value="{DynamicResource Key_Gray600_White}" />
+        <Setter Property="BarBackgroundColor" Value="{DynamicResource NavBackground}" />
+        <Setter Property="BarTextColor" Value="{DynamicResource NavText}" />
         <Setter Property="IconColor" Value="{DynamicResource Key_Gray200_White}" />
         
     </Style>
@@ -453,7 +453,7 @@
     <Style x:Key="PaneBorderStyle"
            TargetType="Border">
         <Setter Property="BackgroundColor" 
-                Value="{DynamicResource Key_Pane_Color}" />
+                Value="{DynamicResource BorderBackground}" />
 
         <Setter Property="Stroke"
                 Value="#474747" />
