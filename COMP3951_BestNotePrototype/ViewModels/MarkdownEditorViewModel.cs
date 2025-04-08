@@ -41,6 +41,8 @@ namespace BestNote_3951.ViewModels
         {
             this.AlertService = AlertService;
 
+            WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(markdownText));
+
             WeakReferenceMessenger.Default.Register<PdfBookmarkTomarkdownMessage>(this, (recipient, message) =>
             {
                 ResourceLink resource = message.Value;
@@ -66,9 +68,7 @@ namespace BestNote_3951.ViewModels
                         try
                         {
                             this.BestFile = message.Value;
-                            this.MarkdownText = this.BestFile.ReadFileContents();
-
-                            WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(markdownText));
+                            this.MarkdownText = this.BestFile.ReadFileContents();                            
 
                         } catch (Exception e)
                         {
@@ -77,6 +77,8 @@ namespace BestNote_3951.ViewModels
                     }
                 });
             });
+
+            WeakReferenceMessenger.Default.Send(new MarkdownTextChangedMessage(MarkdownText));
         }
 
         /// <summary>
