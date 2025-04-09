@@ -13,12 +13,14 @@
                 <Button Margin="10,10,10,10" Text="Save" Command="{Binding SaveWritingCommand}"></Button>
                 <Label Margin="10,10,10,10" Text="{Binding Saved}" HorizontalOptions="End"/>
             </HorizontalStackLayout>
-            <Editor Grid.Row="1"
-                    x:Name="EditorControl"
-                    Text="{Binding MarkdownText, Mode=TwoWay}"
-                    AutoSize="Disabled"
-                    VerticalOptions="FillAndExpand"
-                    Placeholder="marky markdown..." />
+            
+            <Editor
+                Grid.Row="1"
+                x:Name="EditorControl"
+                Text="{Binding MarkdownText, Mode=TwoWay}"
+                Placeholder="marky markdown..."
+                MaxLength="100000000"
+                AutoSize="TextChanges"/>
         </Grid>
     </Border>
 </ContentView>
