@@ -1,26 +1,56 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:BestNote_3951.Views"
-             xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
-             x:Class="BestNote_3951.Views.MainPanel"
-             x:DataType="viewmodels:MainPanelViewModel">
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:BestNote_3951.Views"
+    xmlns:viewmodels="clr-namespace:BestNote_3951.ViewModels"
+    x:Class="BestNote_3951.Views.MainPanel"
+    x:DataType="viewmodels:MainPanelViewModel"
+    >
+
     <Border StrokeThickness="1">
-        <Grid ColumnDefinitions="*,*,*"
-              ColumnSpacing="20">
+        <Grid x:Name="MainGrid">
+            <Grid.ColumnDefinitions>
+                <!-- editor -->
+                <ColumnDefinition Width="*" />
+                <!-- splitter #1 -->
+                <ColumnDefinition Width="Auto" />
+                <!-- renderer -->
+                <ColumnDefinition Width="*" />
+                <!-- splitter #2 -->
+                <ColumnDefinition Width="Auto" />
+                <!-- pdf -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
             <views:MarkdownEditorView
-                BindingContext="{Binding MarkdownEditorViewModel}"
-                x:Name="EditorView"
-                Grid.Column="0" />
+                Grid.Column="0"
+                BindingContext="{Binding MarkdownEditorViewModel}" />
+
+            <BoxView x:Name="Splitter1"
+                     Grid.Column="1"
+                     WidthRequest="5"
+                     BackgroundColor="Gray">
+                <BoxView.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="OnPanUpdated_Splitter1" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
             <views:MarkdownRendererView
-                BindingContext="{Binding MarkdownRendererViewModel}"
-                x:Name="RendererView"
-                Grid.Column="1" />
+                Grid.Column="2"
+                BindingContext="{Binding MarkdownRendererViewModel}" />
+
+            <BoxView x:Name="Splitter2"
+                     Grid.Column="3"
+                     WidthRequest="5"
+                     BackgroundColor="Gray">
+                <BoxView.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="OnPanUpdated_Splitter2" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
             <views:EmbeddedPdfView
-                BindingContext="{Binding EmbeddedPdfViewModel}"
-                x:Name="PdfView"
-                Grid.Column="2">
-            </views:EmbeddedPdfView>
+                Grid.Column="4"
+                BindingContext="{Binding EmbeddedPdfViewModel}" />
         </Grid>
     </Border>
 </ContentView>
