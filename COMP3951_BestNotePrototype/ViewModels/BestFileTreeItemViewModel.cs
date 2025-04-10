@@ -212,7 +212,7 @@ namespace BestNote_3951.ViewModels
                     Dragged.TreeViewItem.Move(ParentFolder);
 
                     // Update the state object children contents
-                    ParentFolder.Children.Add(Dragged);
+                    ParentFolder.AddChild(Dragged);
                     Dragged.TreeViewItem.Parent?.RemoveChild(Dragged);
                     Dragged.TreeViewItem.Parent = ParentFolder;
 
